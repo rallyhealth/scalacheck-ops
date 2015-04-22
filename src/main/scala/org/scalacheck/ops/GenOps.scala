@@ -72,7 +72,7 @@ class GenOps[T](val gen: Gen[T]) extends AnyVal {
 }
 
 /**
- * Provides the ability to convert a org.scalacheck.Gen into an scala.collection.Iterator
+ * Provides the ability to convert a [[Gen]] into an [[Iterator]]
  *
  * @note Can't extend AnyVal because of this bug: https://issues.scala-lang.org/browse/SI-7034
  *
@@ -94,10 +94,10 @@ class GenOrThrow[T: ClassTag](val gen: Gen[T]) /* extends AnyVal */ {
   def getOrThrow: T = tryGet(defaultAttempts).get
 
   /**
-   * Try to get a non-empty sample for a given number of tries and return the resulting get attempts in a Try.
+   * Try to get a non-empty sample for a given number of tries and return the resulting get attempts in a [[Try]].
    *
    * @param attempts the number of attempts to get a non-empty sample before returning a Failure.
-   * @return Either a non-empty sample or a Failure with information about what sample was tried.
+   * @return Either a non-empty sample or a [[Failure]] with information about what sample was tried.
    */
   def tryGet(attempts: Int): Try[T] = {
     var attempt = 0
@@ -116,28 +116,28 @@ class GenOrThrow[T: ClassTag](val gen: Gen[T]) /* extends AnyVal */ {
    * An iterator made by continuously sampling the generator.
    *
    * @note If the generator has filters, then this method could return None a lot. If you want a
-   *       safe way to filter the Nones, see toIterator
+   *       safe way to filter the Nones, see [[toIterator]]
    *
    * @return An iterator of Options which are None if the generator's filters ruled out the sample.
    */
   def sampleIterator: Iterator[Option[T]] = Iterator continually gen.sample
 
   /**
-   * Converts this generator to a Iterator in the obvious (but potentially dangerous) way.
+   * Converts this generator to an [[Iterator]] in the obvious (but potentially dangerous) way.
    *
    * @note This pulls an item from the generator one at a time, however, if the generator has too
    * many restrictive filters, this can result in an infinite loop.
    *
-   * @see toIterator for a safer, bounded alternative.
+   * @see [[toIterator]] for a safer, bounded alternative.
    *
-   * @return An Iterator that returns only the defined samples.
+   * @return An [[Iterator]] that returns only the defined samples.
    */
   def toUnboundedIterator: Iterator[T] = sampleIterator collect { case Some(x) => x }
 
   /**
-   * Converts this generator into an infinite Iterator for a more flexible pull-based API.
+   * Converts this generator into an infinite [[Iterator]] for a more flexible pull-based API.
    *
-   * @param attempts the number of attempts to try generating a sample before throwing an exception
+   * @param attempts the number of attempts to try generating a sample before throwing an execption
    *
    * @throws EmptyGenSampleException when samples cannot be generated after the given number of attempts
    * @return An iterator that pulls from this generator or throws an exception
@@ -149,9 +149,9 @@ class GenOrThrow[T: ClassTag](val gen: Gen[T]) /* extends AnyVal */ {
   def toIterator: Iterator[T] = toIterator(defaultAttempts)
 
   /**
-   * Converts this generator into a lazy Iterable so that it can be converted into a collection.
+   * Converts this generator into a lazy [[Iterable]] so that it can be converted into a collection.
    *
-   * @param attempts the number of attempts to try generating a sample before throwing an exception
+   * @param attempts the number of attempts to try generating a sample before throwing an execption
    *
    * @throws EmptyGenSampleException when a sample cannot be generated after the given number of attempts
    * @return A lazy iterable that pulls from this generator or throws an exception
