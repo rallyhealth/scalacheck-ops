@@ -3,7 +3,7 @@ name := "scalacheck-ops"
 
 organization := "me.jeffmay"
 
-version := "0.1.0"
+version := "0.1.1"
 
 crossScalaVersions := Seq("2.10.4", "2.11.6")
 
@@ -23,4 +23,10 @@ libraryDependencies := Seq(
   "org.scalacheck" %% "scalacheck" % "1.12.2",
   "org.scalatest" %% "scalatest" % "2.2.4"
 ).map(_.withSources())
+
+bintraySettings
+
+bintrayPublishSettings
+
+licenses += ("Apache-2.0", url("http://opensource.org/licenses/apache-2.0"))
 
