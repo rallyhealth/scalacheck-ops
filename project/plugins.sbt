@@ -1,6 +1,11 @@
 // See https://wiki.audaxhealth.com/display/ENG/Build+Structure#BuildStructure-Localconfiguration
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
-resolvers += "Rally Plugin Releases" at "https://artifacts.werally.in/artifactory/plugins-release"
+resolvers += Resolver.url("Rally Plugin Releases", url("https://artifacts.werally.in/artifactory/ivy-plugins-release"))(Resolver.ivyStylePatterns)
+ 
+addSbtPlugin("com.rallyhealth" %% "rally-versioning" % "latest.integration") // must appear before rally-sbt-plugin which depends on version.
 
-addSbtPlugin("com.rallyhealth" %% "rally-versioning" % "0.2.0")
+addSbtPlugin("com.rallyhealth" %% "rally-sbt-plugin" % "0.0.3")
+
+addSbtPlugin("com.scalapenos" % "sbt-prompt" % "0.2.1")
+
