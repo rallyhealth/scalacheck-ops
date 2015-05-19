@@ -7,5 +7,3 @@ addSbtPlugin("com.rallyhealth" %% "rally-versioning" % "latest.integration") // 
 
 addSbtPlugin("com.rallyhealth" %% "rally-sbt-plugin" % "0.0.3")
 
-addSbtPlugin("com.scalapenos" % "sbt-prompt" % "0.2.1")
-
