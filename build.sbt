@@ -3,7 +3,7 @@ name := "scalacheck-ops"
 
 organization := "me.jeffmay"
 
-version := "1.0.0"
+version := "1.1.0"
 
 crossScalaVersions := Seq("2.11.6", "2.10.4")
 
@@ -25,9 +25,13 @@ scalacOptions := {
 )
 
 libraryDependencies := Seq(
+  "org.joda" % "joda-convert" % "1.7",
+  "joda-time" % "joda-time" % "2.8",
   "org.scalacheck" %% "scalacheck" % "1.12.2",
   "org.scalatest" %% "scalatest" % "2.2.4"
-).map(_.withSources())
+)
+
+testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
 
 // force scala version
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
