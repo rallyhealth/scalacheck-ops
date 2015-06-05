@@ -5,5 +5,5 @@ resolvers += Resolver.url("Rally Plugin Releases", url("https://artifacts.werall
  
 addSbtPlugin("com.rallyhealth" %% "rally-versioning" % "latest.integration") // must appear before rally-sbt-plugin which depends on version.
 
-addSbtPlugin("com.rallyhealth" %% "rally-sbt-plugin" % "0.0.3")
+addSbtPlugin("com.rallyhealth" %% "rally-sbt-plugin" % "0.1.0")
 
