@@ -65,7 +65,7 @@ with ScalaCheckImplicits {
     }
   }
 
-  behavior of "Gen.genEnum"
+  behavior of "Gen.enumValue"
 
   it should "create a generator from an Enumeration" in {
     forAll(Gen.enumValue(TestValues)) { enum =>
