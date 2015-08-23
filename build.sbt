@@ -24,7 +24,7 @@ scalacOptions := {
   "-encoding", "UTF-8"
 )
 
-libraryDependencies := Seq(
+libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.7",
   "joda-time" % "joda-time" % "2.8",
   "org.scalacheck" %% "scalacheck" % "1.12.2",
