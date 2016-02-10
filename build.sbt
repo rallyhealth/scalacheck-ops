@@ -1,9 +1,8 @@
-
 name := "scalacheck-ops"
-
 organization := "com.rallyhealth"
 
-crossScalaVersions := Seq("2.11.6", "2.10.4")
+scalaVersion := "2.11.7"
+crossScalaVersions := Seq("2.11.7", "2.10.4")
 
 scalacOptions := {
   // the deprecation:false flag is only supported by scala >= 2.11.3, but needed for scala >= 2.11.0 to avoid warnings
@@ -22,11 +21,11 @@ scalacOptions := {
   "-encoding", "UTF-8"
 )
 
-libraryDependencies := Seq(
+libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.7",
   "joda-time" % "joda-time" % "2.8",
-  "org.scalacheck" %% "scalacheck" % "1.12.2",
-  "org.scalatest" %% "scalatest" % "2.2.4"
+  "org.scalacheck" %% "scalacheck" % "1.12.5",
+  "org.scalatest" %% "scalatest" % "2.2.6"
 )
 
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
