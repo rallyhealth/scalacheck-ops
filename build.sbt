@@ -1,6 +1,6 @@
 name := "scalacheck-ops"
 organization := "me.jeffmay"
-version := "1.1.0"
+version := "1.2.0"
 
 scalaVersion := "2.11.7"
 crossScalaVersions := Seq("2.11.7", "2.10.4")
