@@ -1,13 +1,9 @@
-resolvers += Classpaths.sbtPluginReleases
+// See https://wiki.audaxhealth.com/display/ENG/Build+Structure#BuildStructure-Localconfiguration
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
-resolvers += Resolver.url(
-  "bintray-sbt-plugin-releases",
-  url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(
-    Resolver.ivyStylePatterns)
+resolvers += Resolver.url("Rally Plugin Releases", url("https://artifacts.werally.in/artifactory/ivy-plugins-release"))(Resolver.ivyStylePatterns)
+ 
+addSbtPlugin("com.rallyhealth" %% "rally-versioning" % "latest.integration") // must appear before rally-sbt-plugin which depends on version.
 
-addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
-
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.5")
-
-addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.0.3")
+addSbtPlugin("com.rallyhealth" %% "rally-sbt-plugin" % "0.2.0")
 
