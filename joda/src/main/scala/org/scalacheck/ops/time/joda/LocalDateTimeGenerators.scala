@@ -4,7 +4,7 @@ import org.joda.time.{LocalDateTime, ReadableDuration}
 import org.scalacheck.ops.time.joda.ChronologyOps._
 
 sealed trait LocalDateTimeGenerators extends JodaDateTimeGenerators with UTCTimeZoneDefault with ISOChronologyDefault {
-  override type DateTimeType = LocalDateTime
+  override type InstantType = LocalDateTime
 
   override protected[time] def datetime(millis: Long)(implicit params: JodaTimeParams): LocalDateTime =
     new LocalDateTime(millis, params.chronology)

@@ -1,9 +1,9 @@
 package org.scalacheck.ops.time.joda
 
 import org.joda.time.{Chronology, DateTimeZone, ReadableDuration}
-import org.scalacheck.ops.time.AbstractDateTimeGenerators
+import org.scalacheck.ops.time.AbstractTimeGenerators
 
-private[joda] trait JodaDateTimeGenerators extends AbstractDateTimeGenerators {
+private[joda] trait JodaDateTimeGenerators extends AbstractTimeGenerators {
   override type DurationType = ReadableDuration
   override type ParamsType = JodaTimeParams
 

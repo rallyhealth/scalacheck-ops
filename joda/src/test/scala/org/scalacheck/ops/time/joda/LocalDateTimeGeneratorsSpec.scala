@@ -6,7 +6,7 @@ import org.scalacheck.ops.time.GenericDateTimeGeneratorsSpec
 
 import scala.reflect.ClassTag
 
-class LocalDateTimeGeneratorsSpec extends GenericDateTimeGeneratorsSpec(LocalDateTimeGenerators, "LocalDateTimeGenerators") {
+class LocalDateTimeGeneratorsSpec extends GenericDateTimeGeneratorsSpec(LocalDateTimeGenerators) {
   override protected val arbDateTimeType: Arbitrary[LocalDateTime] = implicitly
   override protected val clsTagDateTimeType: ClassTag[LocalDateTime] = implicitly
 }

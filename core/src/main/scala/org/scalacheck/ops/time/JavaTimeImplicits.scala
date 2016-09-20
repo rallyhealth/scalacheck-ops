@@ -12,5 +12,5 @@ trait JavaTimeImplicits {
 
 object JavaTimeGenOps {
 
-  def instant: JavaTimeGenerators = JavaTimeGenerators
+  def instant: JavaInstantGenerators = JavaInstantGenerators
 }
