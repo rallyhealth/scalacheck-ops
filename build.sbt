@@ -17,7 +17,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "scalacheck-ops-root",
     // don't publish the surrounding multi-project root
-    publish := {}
+    publish := {},
+    publishLocal := {}
   )
   .aggregate(`core_1-12`, `core_1-13`)
 
@@ -84,15 +85,17 @@ val coreSettings = commonSettings ++ Seq(
   )
 )
 
-lazy val `core_1-12` = Project("scalacheck-ops", file("core_1.12"))
+lazy val `core_1-12` = (project in file("core_1.12"))
   .settings(coreSettings: _*)
   .settings(
+    name := "scalacheck-ops",
     scalacheckVersion := "1.12.5"
   )
 
-lazy val `core_1-13` = Project("scalacheck-ops_1-13", file("core_1.13"))
+lazy val `core_1-13` = (project in file("core_1.13"))
   .settings(coreSettings: _*)
   .settings(
+    name := "scalacheck-ops_1.13",
     scalacheckVersion := "1.13.2"
   )
 
