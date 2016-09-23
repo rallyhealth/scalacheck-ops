@@ -61,7 +61,7 @@ val commonSettings = commonRootSettings ++ Seq(
     // pull in the specified version of scalacheck
     "org.scalacheck" %% "scalacheck" % scalacheckVersion.value,
     // scalatest 2.2.6 pulls in scalacheck 1.12.5 so it only works with 1.12.5
-    "org.scalatest" %% "scalatest" % basedOnVersion(scalacheckVersion.value, "2.2.6", "3.0.0") % Test
+    "org.scalatest" %% "scalatest" % scalatestVersion.value % Test
   ),
 
   // show full stack traces in test failures ()
@@ -77,25 +77,20 @@ val commonSettings = commonRootSettings ++ Seq(
   publishArtifact in (Compile, packageDoc) := false
 )
 
-def moduleName(projectName: String): SettingsDefinition = {
-  name := basedOnVersion(scalacheckVersion.value, projectName, projectName + "_1.13")
-}
-
 val coreSettings = commonSettings ++ Seq(
-  moduleName("scalacheck-ops"),
   libraryDependencies ++= Seq(
     "org.joda" % "joda-convert" % "1.8",
     "joda-time" % "joda-time" % "2.9.4"
   )
 )
 
-lazy val `core_1-12` = (project in file("core_1.12"))
+lazy val `core_1-12` = Project("scalacheck-ops", file("core_1.12"))
   .settings(coreSettings: _*)
   .settings(
     scalacheckVersion := "1.12.5"
   )
 
-lazy val `core_1-13` = (project in file("core_1.13"))
+lazy val `core_1-13` = Project("scalacheck-ops_1-13", file("core_1.13"))
   .settings(coreSettings: _*)
   .settings(
     scalacheckVersion := "1.13.2"
