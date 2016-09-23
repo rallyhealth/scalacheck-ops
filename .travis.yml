@@ -1,13 +1,14 @@
 language: scala
 scala:
-  - 2.11.7
+  - 2.11.8
+  - 2.10.6
 jdk:
   - oraclejdk8
 
 script:
-  - sbt +clean coverage +test coverageReport
+  - sbt clean coverage test coverageReport
 after_success:
-  - sbt coveralls
+  - sbt 'project core_1-12' coveralls
 
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name "*.lock" | xargs rm
