@@ -1,9 +1,7 @@
 
 val commonRootSettings = Seq(
   name := "scalacheck-ops",
-  organization := "me.jeffmay",
-  organizationName := "Jeff May",
-  version := "1.5.0",
+  organization := "com.rallyhealth",
 
   // scala version for root project
   scalaVersion := "2.11.8",
