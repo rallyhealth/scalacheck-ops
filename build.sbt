@@ -77,13 +77,14 @@ val commonSettings = commonRootSettings ++ Seq(
 )
 
 val coreSettings = commonSettings ++ Seq(
+  sourceDirectory := file("core/src").getAbsoluteFile,
   libraryDependencies ++= Seq(
     "org.joda" % "joda-convert" % "1.8",
     "joda-time" % "joda-time" % "2.9.4"
   )
 )
 
-lazy val `core_1-12` = (project in file("core_1.12"))
+lazy val `core_1-12` = (project in file("core"))
   .settings(coreSettings: _*)
   .settings(
     name := "scalacheck-ops",
