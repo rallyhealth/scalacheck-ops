@@ -5,7 +5,7 @@ import org.scalacheck.Gen
 import scala.language.implicitConversions
 import scala.reflect.ClassTag
 
-trait ScalaCheckImplicits extends ArbitraryAsGen {
+trait ScalaCheckImplicits extends ArbitraryAsGen with ShrinkLargeTuples {
 
   implicit def genToGenOps[T](gen: Gen[T]): GenOps[T] = new GenOps(gen)
 
