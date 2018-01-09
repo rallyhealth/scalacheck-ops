@@ -3,6 +3,8 @@ package org.scalacheck.ops
 import org.scalacheck.Shrink
 import org.scalacheck.Shrink.shrink
 
+// This is copy-pasta from scalacheck and is checked at compile-time. Skipping tests for this.
+// $COVERAGE-OFF$
 trait ShrinkLargeTuples {
 
   implicit def shrinkTuple10[
@@ -325,3 +327,4 @@ trait ShrinkLargeTuples {
       shrink(v).map((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, _))
   }
 }
+// $COVERAGE-ON$
