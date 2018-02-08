@@ -3,11 +3,11 @@ import sbt.Keys._
 
 object Dependencies {
 
-  final val scalaCheck12Version = "1.12.5"
-  final val scalaCheck13Version = "1.13.2"
+  final val scalaCheck12Version = "1.12.6"
+  final val scalaCheck13Version = "1.13.4"
 
   private val scalaTest2Version = "2.2.6"
-  private val scalaTest3Version = "3.0.0"
+  private val scalaTest3Version = "3.0.4"
 
   private val jodaTimeVersion = "1.8"
 
