@@ -7,7 +7,7 @@ publishLocal := {}
 organization in ThisBuild := "me.jeffmay"
 organizationName in ThisBuild := "Jeff May"
 
-semVerLimit in ThisBuild := "1.999.999"
+semVerLimit in ThisBuild := "2.0.999"
 
 scalaVersion in ThisBuild := "2.11.8"
 crossScalaVersions in ThisBuild := Seq("2.11.8", "2.10.6")
