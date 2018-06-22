@@ -97,7 +97,6 @@ def jodaProject(scalaCheckVersion: String): Project = {
     (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
     libraryDependencies ++= Seq(
       Dependencies.scalaCheck(scalaCheckVersion),
-      Dependencies.jodaConvert,
       Dependencies.jodaTime
     ) ++ Seq(
       // Test-only dependencies
