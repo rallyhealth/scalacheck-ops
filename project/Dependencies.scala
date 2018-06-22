@@ -9,10 +9,11 @@ object Dependencies {
   private val scalaTest2Version = "2.2.6"
   private val scalaTest3Version = "3.0.4"
 
-  private val jodaTimeVersion = "1.8"
+  private val jodaTimeVersion = "2.9.4"
 
+  // Necessary to fix an issue with a missing transitive dependency for older versions of ScalaCheck
   val jodaConvert: ModuleID = "org.joda" % "joda-convert" % "1.8"
-  val jodaTime: ModuleID = "joda-time" % "joda-time" % "2.9.4"
+  val jodaTime: ModuleID = "joda-time" % "joda-time" % jodaTimeVersion
 
   def scalaCheck(scalaCheckVersion: String): ModuleID = {
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion

@@ -7,7 +7,7 @@ import org.scalacheck.ops.time.ImplicitJavaTimeGenerators._
 
 import scala.reflect.ClassTag
 
-class JavaInstantGeneratorsSpec extends GenericDateTimeGeneratorsSpec(JavaTimeGenerators, "JavaInstantGenerators") {
+class JavaInstantGeneratorsSpec extends GenericDateTimeGeneratorsSpec(JavaInstantGenerators) {
   override protected val arbDateTimeType: Arbitrary[Instant] = implicitly[Arbitrary[Instant]]
   override protected val clsTagDateTimeType: ClassTag[Instant] = implicitly[ClassTag[Instant]]
 }

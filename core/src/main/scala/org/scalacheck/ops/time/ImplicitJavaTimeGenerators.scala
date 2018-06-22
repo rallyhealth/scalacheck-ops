@@ -46,7 +46,8 @@ trait ImplicitJavaTimeGenerators {
     }
   }
 
-  implicit def arbZonedDateTime(implicit params: JavaTimeParams = JavaTimeGenerators.defaultParams): Arbitrary[ZonedDateTime] = {
+  implicit def arbZonedDateTime(
+    implicit params: JavaTimeParams = JavaInstantGenerators.defaultParams): Arbitrary[ZonedDateTime] = {
     Arbitrary {
       for {
         instant <- arbInstant.arbitrary
