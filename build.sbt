@@ -10,7 +10,6 @@ organizationName in ThisBuild := "Jeff May"
 semVerLimit in ThisBuild := "2.0.999"
 
 scalaVersion in ThisBuild := "2.11.11"
-crossScalaVersions in ThisBuild := Seq("2.11.8", "2.10.6")
 
 licenses in ThisBuild += ("Apache-2.0", url("http://opensource.org/licenses/apache-2.0"))
 
@@ -20,17 +19,9 @@ def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
 
-    scalacOptions := {
-      // the deprecation:false flag is only supported by scala >= 2.11.3, but needed for scala >= 2.11.0 to avoid warnings
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, scalaMinor)) if scalaMinor >= 11 =>
-          // For scala versions >= 2.11.3
-          Seq("-Xfatal-warnings", "-deprecation:false")
-        case Some((2, scalaMinor)) if scalaMinor < 11 =>
-          // For scala versions 2.10.x
-          Seq("-Xfatal-warnings")
-      }
-    } ++ Seq(
+    scalacOptions := Seq(
+      "-Xfatal-warnings",
+      "-deprecation:false",
       "-feature",
       "-Xlint",
       "-Ywarn-dead-code",
