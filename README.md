@@ -42,6 +42,11 @@ incompatibilities. Specifically, when mixing this library with ScalaTest
 java.lang.IncompatibleClassChangeError: Found class org.scalacheck.Gen, but interface was expected
 ```
 
+## Prerequisites
+
+Version of scalacheck-ops >2.x requires JDK >8 and Scala >2.11 as this 
+library expects the java.time standard library module.
+
 # Use Cases
 
 ## Converting Gen to Iterator
