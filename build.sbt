@@ -43,23 +43,16 @@ def commonProject(id: String, artifact: String, path: String): Project = {
   ).enablePlugins(GitVersioningPlugin, SemVerPlugin)
 }
 
+def suffixFor(scalaCheckVersion: String): String = scalaCheckVersion match {
+  case Dependencies.scalaCheck12Version => "_1-12"
+  case Dependencies.scalaCheck13Version => "_1-13"
+  case Dependencies.scalaCheck14Version => "_1-14"
+}
+
 def coreProject(scalaCheckVersion: String): Project = {
-  // TODO: Simplify this by publishing the 1.12 branch as _1-12 and naming the directory the same
-  // All future versions should be > 1.13 and have no suffix
-  val projectPath = s"core"
-  val pathSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => "_1.12"
-    case Dependencies.scalaCheck13Version => "_1.13"
-  }
-  val artifactSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => ""
-    case Dependencies.scalaCheck13Version => "_1-13"
-  }
-  val idSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => "_1-12"
-    case Dependencies.scalaCheck13Version => "_1-13"
-  }
-  commonProject(s"core$idSuffix", s"scalacheck-ops$artifactSuffix", s"$projectPath$pathSuffix").settings(
+  val projectPath = "core"
+  val suffix = suffixFor(scalaCheckVersion)
+  commonProject(s"core$suffix", s"scalacheck-ops$suffix", s"$projectPath$suffix").settings(
     sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
     (sourceDirectory in Compile) := file(s"$projectPath/src/main").getAbsoluteFile,
     (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
@@ -74,24 +67,12 @@ def coreProject(scalaCheckVersion: String): Project = {
 
 lazy val `core_1-12` = coreProject(Dependencies.scalaCheck12Version)
 lazy val `core_1-13` = coreProject(Dependencies.scalaCheck13Version)
+lazy val `core_1-14` = coreProject(Dependencies.scalaCheck14Version)
 
 def jodaProject(scalaCheckVersion: String): Project = {
-  // TODO: Simplify this by publishing the 1.12 branch as _1-12 and naming the directory the same
-  // All future versions should be > 1.13 and have no suffix
-  val projectPath = s"joda"
-  val pathSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => "_1.12"
-    case Dependencies.scalaCheck13Version => "_1.13"
-  }
-  val artifactSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => ""
-    case Dependencies.scalaCheck13Version => "_1-13"
-  }
-  val idSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => "_1-12"
-    case Dependencies.scalaCheck13Version => "_1-13"
-  }
-  commonProject(s"joda$idSuffix", s"scalacheck-ops-joda$artifactSuffix", s"$projectPath$pathSuffix").settings(
+  val projectPath = "joda"
+  val suffix = suffixFor(scalaCheckVersion)
+  commonProject(s"joda$suffix", s"scalacheck-ops-joda$suffix", s"$projectPath$suffix").settings(
     sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
     (sourceDirectory in Compile) := file(s"$projectPath/src/main").getAbsoluteFile,
     (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
@@ -103,10 +84,15 @@ def jodaProject(scalaCheckVersion: String): Project = {
       Dependencies.scalaTest(scalaCheckVersion)
     ).map(_ % Test)
   ).dependsOn(
-    (if (scalaCheckVersion.startsWith("1.12")) `core_1-12` else `core_1-13`) % "compile;test->test"
+    (scalaCheckVersion match {
+      case Dependencies.scalaCheck12Version => `core_1-12`
+      case Dependencies.scalaCheck13Version => `core_1-13`
+      case Dependencies.scalaCheck14Version => `core_1-14`
+    }) % "compile;test->test"
   )
 }
 
 lazy val `joda_1-12` = jodaProject(Dependencies.scalaCheck12Version)
 lazy val `joda_1-13` = jodaProject(Dependencies.scalaCheck13Version)
+lazy val `joda_1-14` = jodaProject(Dependencies.scalaCheck14Version)
 
