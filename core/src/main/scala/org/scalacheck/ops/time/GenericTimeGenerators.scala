@@ -15,29 +15,29 @@ trait GenericTimeGenerators {
   def defaultRange: DurationType
 
   def before(when: InstantType, maxRange: DurationType = defaultRange)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 
-  def beforeNow(implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+  def beforeNow(implicit params: ParamsType = defaultParams): Gen[InstantType]
 
   def beforeNowWithin(maxRange: DurationType)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 
   def after(when: InstantType, maxRange: DurationType = defaultRange)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 
-  def afterNow(implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+  def afterNow(implicit params: ParamsType = defaultParams): Gen[InstantType]
 
   def afterNowWithin(maxRange: DurationType)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 
   def around(when: InstantType, plusOrMinus: DurationType = defaultRange)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 
-  def aroundNow(implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+  def aroundNow(implicit params: ParamsType = defaultParams): Gen[InstantType]
 
   def aroundNowWithin(plusOrMinus: DurationType)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 
   def between(start: InstantType, end: InstantType)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType]
+    (implicit params: ParamsType = defaultParams): Gen[InstantType]
 }

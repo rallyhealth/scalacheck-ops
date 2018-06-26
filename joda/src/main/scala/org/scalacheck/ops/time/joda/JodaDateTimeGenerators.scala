@@ -1,20 +1,36 @@
 package org.scalacheck.ops.time.joda
 
-import org.joda.time.{Chronology, DateTimeZone, ReadableDuration}
-import org.scalacheck.ops.time.AbstractTimeGenerators
+import org.joda.time.DateTime
+import org.scalacheck.ops.time.joda.ChronologyOps._
 
-private[joda] trait JodaDateTimeGenerators extends AbstractTimeGenerators {
-  override type DurationType = ReadableDuration
+sealed trait JodaDateTimeGenerators extends JodaAbstractDateTimeGenerators
+  with UTCTimeZoneDefault
+  with ISOChronologyDefault {
+  override type InstantType = DateTime
   override type ParamsType = JodaTimeParams
 
-  def defaultDateTimeZone: DateTimeZone
+  override protected[time] def asInstant(millis: Long)(implicit params: JodaTimeParams): DateTime = {
+    new DateTime(millis, params.chronology)
+  }
 
-  def defaultChronology(implicit dateTimeZone: DateTimeZone = defaultDateTimeZone): Chronology
+  override protected[time] def asLong(instant: DateTime)(implicit params: JodaTimeParams): Long = instant.getMillis
 
-  override val defaultParams: JodaTimeParams =
-    new JodaTimeParams(defaultChronology(defaultDateTimeZone), defaultDateTimeZone)
+  override protected[time] def addToCeil(instant: InstantType, duration: DurationType)
+    (implicit params: ParamsType): InstantType = {
+    try instant plus duration
+    catch {
+      case tooLarge: ArithmeticException => params.chronology.maxDateTime
+    }
+  }
 
-  override protected[time] def duration(millis: Long): ReadableDuration = org.joda.time.Duration.millis(millis)
+  override protected[time] def subtractToFloor(instant: InstantType, duration: DurationType)
+    (implicit params: ParamsType): InstantType = {
+    try instant minus duration
+    catch {
+      case tooSmall: ArithmeticException => params.chronology.minDateTime
+    }
+  }
 
-  override protected[time] def millis(duration: ReadableDuration): Long = duration.getMillis
 }
+
+object JodaDateTimeGenerators extends JodaDateTimeGenerators

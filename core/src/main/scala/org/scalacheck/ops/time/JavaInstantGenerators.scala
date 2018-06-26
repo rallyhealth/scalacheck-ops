@@ -1,43 +1,63 @@
 package org.scalacheck.ops.time
 
-import java.time.temporal._
-import java.time.{Duration, Instant}
+import java.time.{Clock, Duration, Instant}
+
+import org.scalacheck.Gen
 
 object JavaInstantGenerators extends JavaInstantGenerators
 trait JavaInstantGenerators extends AbstractTimeGenerators {
   override type InstantType = Instant
-  override type DurationType = TemporalAmount
-  override type ParamsType = JavaTimeParams
+  override type DurationType = Duration
+  override type ParamsType = Clock
 
-  override protected[time] def datetime(millis: Long)
-    (implicit params: JavaTimeParams): Instant = Instant.ofEpochMilli(millis)
+  override val defaultRange: Duration = Duration.ofDays(365)
 
-  override protected[time] def duration(millis: Long): TemporalAmount = Duration.ofMillis(millis)
+  override val defaultParams: Clock = Clock.systemUTC()
 
-  override protected[time] def millis(duration: TemporalAmount): Long = duration.get(ChronoUnit.NANOS) / 1000
+  override protected[time] def now(implicit clock: Clock): Instant = Instant.now(clock)
 
-  override protected[time] def millis(datetime: Instant)
-    (implicit params: JavaTimeParams): Long = datetime.toEpochMilli
+  import JavaLocalTimeGenerators.MAX_NANOS
+
+  override def between(start: Instant, end: Instant)(implicit params: Clock): Gen[Instant] = {
+    val startSeconds = start.getEpochSecond
+    val endSeconds = end.getEpochSecond
+    if (startSeconds == endSeconds) {
+      for {
+        nanos <- Gen.choose(start.getNano, end.getNano)
+      } yield Instant.ofEpochSecond(startSeconds, nanos)
+    }
+    else {
+      for {
+        seconds <- Gen.choose(startSeconds, endSeconds)
+        nanos <- seconds match {
+          case `startSeconds` =>
+            Gen.choose(start.getNano, MAX_NANOS)
+          case `endSeconds` =>
+            Gen.choose(0, end.getNano)
+          case _ =>
+            Gen.choose(0, MAX_NANOS)
+        }
+      } yield Instant.ofEpochSecond(seconds, nanos)
+    }
+  }
 
   override protected[time] def addToCeil(
-    datetime: Instant,
-    duration: TemporalAmount
-  )(implicit params: JavaTimeParams): Instant = {
-    try datetime plus duration
+    instant: Instant,
+    duration: Duration
+  )(implicit params: Clock): Instant = {
+    try instant plus duration
     catch {
       case ex: ArithmeticException => Instant.MAX
     }
   }
 
   override protected[time] def subtractToFloor(
-    datetime: Instant,
-    duration: TemporalAmount
-  )(implicit params: JavaTimeParams): Instant = {
-    try datetime minus duration
+    instant: Instant,
+    duration: Duration
+  )(implicit params: Clock): Instant = {
+    try instant minus duration
     catch {
       case ex: ArithmeticException => Instant.MIN
     }
   }
-
-  override def defaultParams: JavaTimeParams = JavaTimeParams.isoUTC
 }
