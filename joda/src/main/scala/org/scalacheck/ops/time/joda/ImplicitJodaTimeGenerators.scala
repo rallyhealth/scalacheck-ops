@@ -33,12 +33,12 @@ trait ImplicitJodaTimeGenerators {
     }
   }
 
-  implicit def arbDateTime(implicit params: JodaTimeParams = DateTimeGenerators.defaultParams): Arbitrary[DateTime] = {
+  implicit def arbDateTime(implicit params: JodaTimeParams = JodaDateTimeGenerators.defaultParams): Arbitrary[DateTime] = {
     val maxMillis = params.chronology.maxMillis
     Arbitrary(chooseNum(0, maxMillis).flatMap(new DateTime(_, params.chronology)))
   }
 
-  implicit def arbLocalDateTime(implicit params: JodaTimeParams = LocalDateTimeGenerators.defaultParams): Arbitrary[LocalDateTime] = {
+  implicit def arbLocalDateTime(implicit params: JodaTimeParams = JodaLocalDateTimeGenerators.defaultParams): Arbitrary[LocalDateTime] = {
     val maxMillis = params.chronology.maxMillis
     Arbitrary(chooseNum(0, maxMillis).flatMap(new LocalDateTime(_, params.chronology)))
   }

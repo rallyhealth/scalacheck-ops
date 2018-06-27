@@ -32,7 +32,7 @@ object GenOps {
 
   def setOfN[T: ClassTag](size: Int, maxFailures: Int, tGen: Gen[T]): Gen[Set[T]] = {
     for {
-      gen <- Gen.const(tGen)
+      _ <- Gen.const(tGen)
     } yield {
       var failures = 0
       var total = 0
@@ -47,7 +47,10 @@ object GenOps {
         }
       }
       if (failures >= maxFailures) {
-        throw new IllegalArgumentException(s"Provided generator of ${classTag[T].runtimeClass}")
+        throw new IllegalArgumentException(
+          s"Gen[Set[${classTag[T].runtimeClass}]] of size $size exceeded maximum failed attempts ($maxFailures) " +
+          s"after generating a set of size $total"
+        )
       }
       set.toSet[T]
     }

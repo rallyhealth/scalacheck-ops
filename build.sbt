@@ -7,10 +7,9 @@ publishLocal := {}
 organization in ThisBuild := "me.jeffmay"
 organizationName in ThisBuild := "Jeff May"
 
-semVerLimit in ThisBuild := "1.999.999"
+semVerLimit in ThisBuild := "2.0.999"
 
-scalaVersion in ThisBuild := "2.11.8"
-crossScalaVersions in ThisBuild := Seq("2.11.8", "2.10.6")
+scalaVersion in ThisBuild := "2.11.11"
 
 licenses in ThisBuild += ("Apache-2.0", url("http://opensource.org/licenses/apache-2.0"))
 
@@ -20,17 +19,9 @@ def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
 
-    scalacOptions := {
-      // the deprecation:false flag is only supported by scala >= 2.11.3, but needed for scala >= 2.11.0 to avoid warnings
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, scalaMinor)) if scalaMinor >= 11 =>
-          // For scala versions >= 2.11.3
-          Seq("-Xfatal-warnings", "-deprecation:false")
-        case Some((2, scalaMinor)) if scalaMinor < 11 =>
-          // For scala versions 2.10.x
-          Seq("-Xfatal-warnings")
-      }
-    } ++ Seq(
+    scalacOptions := Seq(
+      "-Xfatal-warnings",
+      "-deprecation:false",
       "-feature",
       "-Xlint",
       "-Ywarn-dead-code",
@@ -49,30 +40,24 @@ def commonProject(id: String, artifact: String, path: String): Project = {
     // disable publishing empty ScalaDocs
     publishArtifact in (Compile, packageDoc) := false
 
-  ).enablePlugins(SemVerPlugin)
+  ).enablePlugins(GitVersioningPlugin, SemVerPlugin)
+}
+
+def suffixFor(scalaCheckVersion: String): String = scalaCheckVersion match {
+  case Dependencies.scalaCheck12Version => "_1-12"
+  case Dependencies.scalaCheck13Version => "_1-13"
+  case Dependencies.scalaCheck14Version => "_1-14"
 }
 
 def coreProject(scalaCheckVersion: String): Project = {
-  // TODO: Simplify this by publishing the 1.12 branch as _1-12 and naming the directory the same
-  // All future versions should be > 1.13 and have no suffix
-  val pathSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => ""
-    case Dependencies.scalaCheck13Version => "_1.13"
-  }
-  val artifactSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => ""
-    case Dependencies.scalaCheck13Version => "_1-13"
-  }
-  val idSuffix = scalaCheckVersion match {
-    case Dependencies.scalaCheck12Version => "_1-12"
-    case Dependencies.scalaCheck13Version => "_1-13"
-  }
-  commonProject(s"core$idSuffix", s"scalacheck-ops$artifactSuffix", s"core$pathSuffix").settings(
-    sourceDirectory := file("core/src").getAbsoluteFile,
+  val projectPath = "core"
+  val suffix = suffixFor(scalaCheckVersion)
+  commonProject(s"core$suffix", s"scalacheck-ops$suffix", s"$projectPath$suffix").settings(
+    sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
+    (sourceDirectory in Compile) := file(s"$projectPath/src/main").getAbsoluteFile,
+    (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
     libraryDependencies ++= Seq(
-      Dependencies.scalaCheck(scalaCheckVersion),
-      Dependencies.jodaConvert,
-      Dependencies.jodaTime
+      Dependencies.scalaCheck(scalaCheckVersion)
     ) ++ Seq(
       // Test-only dependencies
       Dependencies.scalaTest(scalaCheckVersion)
@@ -82,4 +67,32 @@ def coreProject(scalaCheckVersion: String): Project = {
 
 lazy val `core_1-12` = coreProject(Dependencies.scalaCheck12Version)
 lazy val `core_1-13` = coreProject(Dependencies.scalaCheck13Version)
+lazy val `core_1-14` = coreProject(Dependencies.scalaCheck14Version)
+
+def jodaProject(scalaCheckVersion: String): Project = {
+  val projectPath = "joda"
+  val suffix = suffixFor(scalaCheckVersion)
+  commonProject(s"joda$suffix", s"scalacheck-ops-joda$suffix", s"$projectPath$suffix").settings(
+    sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
+    (sourceDirectory in Compile) := file(s"$projectPath/src/main").getAbsoluteFile,
+    (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
+    libraryDependencies ++= Seq(
+      Dependencies.scalaCheck(scalaCheckVersion),
+      Dependencies.jodaTime
+    ) ++ Seq(
+      // Test-only dependencies
+      Dependencies.scalaTest(scalaCheckVersion)
+    ).map(_ % Test)
+  ).dependsOn(
+    (scalaCheckVersion match {
+      case Dependencies.scalaCheck12Version => `core_1-12`
+      case Dependencies.scalaCheck13Version => `core_1-13`
+      case Dependencies.scalaCheck14Version => `core_1-14`
+    }) % "compile;test->test"
+  )
+}
+
+lazy val `joda_1-12` = jodaProject(Dependencies.scalaCheck12Version)
+lazy val `joda_1-13` = jodaProject(Dependencies.scalaCheck13Version)
+lazy val `joda_1-14` = jodaProject(Dependencies.scalaCheck14Version)
 

@@ -6,8 +6,10 @@
 </a>
 <table>
   <tr>
-    <th>scalacheck-ops</th>
+    <th>scalacheck-ops (1.x)</th>
+    <th>scalacheck-ops_1-12</th>
     <th>scalacheck-ops_1-13</th>
+    <th>scalacheck-ops_1-14</th>
   </tr>
   <tr>
     <td>
@@ -16,31 +18,72 @@
       </a>
     </td>
     <td>
+      <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-12/_latestVersion'>
+        <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops_1-12/images/download.svg'>
+      </a>
+    </td>
+    <td>
       <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-13/_latestVersion'>
         <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops_1-13/images/download.svg'>
+      </a>
+    </td>
+    <td>
+      <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-14/_latestVersion'>
+        <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops_1-14/images/download.svg'>
       </a>
     </td>
   </tr>
 </table>
 
-# scalacheck-ops
+# Summary
 
-Common [ScalaCheck](https://www.scalacheck.org/) implicits and helper 
+A library that provides [ScalaCheck](https://www.scalacheck.org/) implicits and helper 
 methods made available via:
 ```scala
 import org.scalacheck.ops._
 ```
 
-## scalacheck-ops_1-13
+See the [use cases section](#use-cases) for use cases and operations that are enabled 
+with scalacheck-ops.
 
-The additional `scalacheck-ops_1-13` library is compiled against 
-ScalaCheck 1.13.x branch because it contains some binary 
-incompatibilities. Specifically, when mixing this library with ScalaTest
-3.x you might notice the following exception:
+# Installation
+
+### Compatibility
+
+**NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.11 as this 
+library expects the java.time standard library module.
+
+**NOTE** As of `scalacheck-ops` >=2.0, the version of scalacheck is always
+included in the artifact name. Prior to this change, `scalacheck-ops` with
+no version suffix would pull in ScalaCheck version 1.12.6. 
+
+| Artifact Name       | Version Limit  | ScalaCheck | Supported JDK | Supported Scala |
+| :-----------------: | :------------: | :--------: | :-----------: | :-------------: |
+| scalacheck-ops_1-14 | x >= 2.0       |     1.14.0 | 8             | 2.11            |
+| scalacheck-ops_1-13 | x >= 2.0       |     1.13.4 | 8             | 2.11            |
+| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |     1.13.4 | 6 - 8         | 2.10 - 2.11     |
+| scalacheck-ops_1-12 | x >= 2.0       |     1.12.6 | 8             | 2.11            |
+| scalacheck-ops      | x < 2.0        |     1.12.6 | 6 - 8         | 2.10 - 2.11     |
+
+The same source code is compiled against specific versions of Scala and ScalaCheck. 
+We use separate artifacts to avoid causing issues with transitive dependencies on
+ScalaCheck being evicted with binary incompatible versions.
+
+### ScalaTest Compatibility
+
+Specifically, when using this library with ScalaTest you might notice the 
+following exception:
 
 ```
 java.lang.IncompatibleClassChangeError: Found class org.scalacheck.Gen, but interface was expected
 ```
+
+This is because you need `scalacheck-ops_1-13` for ScalaTest 3.0.x
+
+| ScalaTest Version | ScalaCheck Version |
+| :---------------: | :----------------: |
+|             2.2.x |             1.12.6 |
+|             3.0.x |             1.13.4 |
 
 # Use Cases
 

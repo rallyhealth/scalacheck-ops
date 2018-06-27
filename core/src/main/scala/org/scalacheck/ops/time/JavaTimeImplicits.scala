@@ -12,5 +12,12 @@ trait JavaTimeImplicits {
 
 object JavaTimeGenOps {
 
-  def instant: JavaTimeGenerators = JavaTimeGenerators
+  @deprecated("Use .javaInstant instead.", "2.0.0")
+  def instant: JavaInstantGenerators = JavaInstantGenerators
+
+  def javaInstant: JavaInstantGenerators = JavaInstantGenerators
+
+  def javaLocalDate: JavaLocalDateGenerators = JavaLocalDateGenerators
+
+  def javaLocalDateTime: JavaLocalDateTimeGenerators = JavaLocalDateTimeGenerators
 }

@@ -5,37 +5,39 @@ import org.scalacheck.ops._
 import org.scalatest.FlatSpec
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
+import org.scalatest.Matchers._
 import scala.reflect.ClassTag
 
-abstract class GenericDateTimeGeneratorsSpec[Generators <: AbstractDateTimeGenerators](
-  protected val gen: Generators,
-  protected val genClassName: String
-) extends FlatSpec
+private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: AbstractTimeGenerators](
+  protected val gen: Generators
+)(implicit classTag: ClassTag[Generators]) extends FlatSpec
   with GeneratorDrivenPropertyChecks {
 
-  protected def arbDateTimeType: Arbitrary[gen.DateTimeType]
-  protected def clsTagDateTimeType: ClassTag[gen.DateTimeType]
+  protected val genClassName: String = classTag.runtimeClass.getSimpleName.stripSuffix("$")
+  protected def arbInstantType: Arbitrary[gen.InstantType]
+  protected def clsTagInstantType: ClassTag[gen.InstantType]
+  protected def orderingInstantType: Ordering[gen.InstantType]
 
   // set the local implicits
-  private implicit def localArbDateTimeType = arbDateTimeType
-  private implicit def localClsTagDateTimeType = clsTagDateTimeType
-  private implicit def localParams = gen.defaultParams
+  private implicit def localArbDateTimeType: Arbitrary[gen.InstantType] = arbInstantType
+  private implicit def localClsTagDateTimeType: ClassTag[gen.InstantType] = clsTagInstantType
+  private implicit def localParams: gen.ParamsType = gen.defaultParams
+  private implicit def localOrderingInstantType: Ordering[gen.InstantType] = orderingInstantType
 
   behavior of s"$genClassName.before"
 
   it should "not generate errors" in {
-    forAll() { (start: gen.DateTimeType) =>
+    forAll() { start: gen.InstantType =>
       val sampleIter = gen.before(start).sampleIterator
       val samples = sampleIter.take(10).toSeq
       assert(samples.forall(_.isDefined))
     }
   }
 
-  it should "always generate DateTimes that are less than the given time" in {
-    forAll() { (start: gen.DateTimeType) =>
-      val startMillis = gen.millis(start)
-      forAll() { (before: gen.DateTimeType) =>
-        gen.millis(before) < startMillis
+  it should s"always generate $genClassName instances less than the given instant" in {
+    forAll() { start: gen.InstantType =>
+      forAll(gen.before(start)) { before: gen.InstantType =>
+        before should be <= start
       }
     }
   }
@@ -43,18 +45,17 @@ abstract class GenericDateTimeGeneratorsSpec[Generators <: AbstractDateTimeGener
   behavior of s"$genClassName.after"
 
   it should "not generate errors" in {
-    forAll() { (start: gen.DateTimeType) =>
+    forAll() { start: gen.InstantType =>
       val sampleIter = gen.after(start).sampleIterator
       val samples = sampleIter.take(10).toSeq
       assert(samples.forall(_.isDefined))
     }
   }
 
-  it should "always generate DateTimes that are greater than the given time" in {
-    forAll() { (start: gen.DateTimeType) =>
-      val startMillis = gen.millis(start)
-      forAll() { (after: gen.DateTimeType) =>
-        gen.millis(after) > startMillis
+  it should s"always generate $genClassName instances greater than the given instant" in {
+    forAll() { start: gen.InstantType =>
+      forAll(gen.after(start)) { after: gen.InstantType =>
+        after should be >= start
       }
     }
   }
@@ -62,21 +63,20 @@ abstract class GenericDateTimeGeneratorsSpec[Generators <: AbstractDateTimeGener
   behavior of s"$genClassName.around"
 
   it should "not generate errors" in {
-    forAll() { (start: gen.DateTimeType) =>
+    forAll() { start: gen.InstantType =>
       val sampleIter = gen.around(start).sampleIterator
       val samples = sampleIter.take(10).toSeq
       assert(samples.forall(_.isDefined))
     }
   }
 
-  it should "always generate DateTimes that are within the given range of the given time" in {
-    val defaultRangeMillis = gen.millis(gen.defaultRange)
-    forAll() { (start: gen.DateTimeType) =>
-      val startMillis = gen.millis(start)
-      forAll(gen.around(start, gen.defaultRange)) { (around: gen.DateTimeType) =>
-        val aroundMillis = gen.millis(around)
-        aroundMillis > startMillis - defaultRangeMillis &&
-          aroundMillis < startMillis + defaultRangeMillis
+  it should s"always generate $genClassName that are within the given range of the given time" in {
+    forAll() { start: gen.InstantType =>
+      forAll(gen.around(start, gen.defaultRange)) { around =>
+        around should (
+          be >= gen.subtractToFloor(start, gen.defaultRange) and
+          be <= gen.addToCeil(start, gen.defaultRange)
+        )
       }
     }
   }
