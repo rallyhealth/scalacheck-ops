@@ -4,16 +4,15 @@ name := "scalacheck-ops-root"
 publish := {}
 publishLocal := {}
 
-organization in ThisBuild := "me.jeffmay"
-organizationName in ThisBuild := "Jeff May"
+organization in ThisBuild := "com.rallyhealth"
+organizationName in ThisBuild := "Rally Health"
 
 semVerLimit in ThisBuild := "2.0.999"
-
 scalaVersion in ThisBuild := "2.11.11"
+licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-licenses in ThisBuild += ("Apache-2.0", url("http://opensource.org/licenses/apache-2.0"))
-
-resolvers in ThisBuild += "jeffmay" at "https://dl.bintray.com/jeffmay/maven"
+bintrayOrganization in ThisBuild := Some("rallyhealth")
+bintrayRepository in ThisBuild := "ivy-scala-libs"
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
