@@ -1,3 +1,4 @@
+
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
 // don't publish the aggregate root project
@@ -12,7 +13,7 @@ scalaVersion in ThisBuild := "2.11.11"
 licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
 bintrayOrganization in ThisBuild := Some("rallyhealth")
-bintrayRepository in ThisBuild := "ivy-scala-libs"
+bintrayRepository := "ivy-scala-libs"
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
@@ -35,6 +36,9 @@ def commonProject(id: String, artifact: String, path: String): Project = {
 
     // disable compilation of ScalaDocs, since this always breaks on links and isn't as helpful as source
     sources in(Compile, doc) := Seq.empty,
+
+    // required to address a weird bug where sbt-bintray forces this to be "maven"
+    bintrayRepository := "ivy-scala-libs",
 
     // disable publishing empty ScalaDocs
     publishArtifact in (Compile, packageDoc) := false
