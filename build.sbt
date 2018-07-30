@@ -14,8 +14,8 @@ licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
 val bintrayOrg = "rallyhealth"
 
-bintrayOrganization in ThisBuild := Some(bintrayOrg)
-bintrayRepository in ThisBuild := "ivy-scala-libs"
+bintrayOrganization := Some(bintrayOrg)
+bintrayRepository := "ivy-scala-libs"
 
 resolvers in ThisBuild += Resolver.bintrayRepo(bintrayOrg, bintrayRepository.value)
 
