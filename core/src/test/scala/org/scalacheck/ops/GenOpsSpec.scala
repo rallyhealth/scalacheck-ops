@@ -19,6 +19,35 @@ with ScalaCheckImplicits {
     }
   }
 
+  behavior of "Gen.collect"
+
+  it should "use suchThat when retryUntilMatch is false" in {
+    val collectEven = Gen.collect(Gen.chooseNum(1, 10), retryUntilMatch = false) {
+      case x if x % 2 == 0 => x
+    }
+    val examples = collectEven.sampleIterator.take(100).toSeq
+    examples should contain (None)
+    assert(examples forall (_ forall (_ % 2 == 0)))
+  }
+
+  it should "use retryUntil when retryUntilMatch is true" in {
+    val collectEven = Gen.collect(Gen.chooseNum(1, 10), retryUntilMatch = true) {
+      case x if x % 2 == 0 => x
+    }
+    val examples = collectEven.sampleIterator.take(100).toSeq
+    examples should not contain None
+    assert(examples forall (_ exists (_ % 2 == 0)))
+  }
+
+  it should "avoid infinite recursion by default" in {
+    val collectNegative = Gen.collect(Gen.chooseNum(1, 10)) {
+      case x if x < 0 => x
+    }
+    an [EmptyGenSampleException[Int]] shouldBe thrownBy {
+      collectNegative.getOrThrow
+    }
+  }
+
   behavior of "Gen.setOfN"
 
   it should "be able to generate a certain size" in {

@@ -8,7 +8,7 @@ publishLocal := {}
 organization in ThisBuild := "com.rallyhealth"
 organizationName in ThisBuild := "Rally Health"
 
-semVerLimit in ThisBuild := "2.0.999"
+semVerLimit in ThisBuild := "2.1.999"
 scalaVersion in ThisBuild := "2.11.11"
 licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
