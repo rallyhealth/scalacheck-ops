@@ -12,8 +12,12 @@ semVerLimit in ThisBuild := "2.1.999"
 scalaVersion in ThisBuild := "2.11.11"
 licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-bintrayOrganization in ThisBuild := Some("rallyhealth")
-bintrayRepository := "ivy-scala-libs"
+val bintrayOrg = "rallyhealth"
+
+bintrayOrganization in ThisBuild := Some(bintrayOrg)
+bintrayRepository in ThisBuild := "ivy-scala-libs"
+
+resolvers in ThisBuild += Resolver.bintrayRepo(bintrayOrg, bintrayRepository.value)
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
