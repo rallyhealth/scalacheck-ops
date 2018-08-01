@@ -14,10 +14,10 @@ licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
 val bintrayOrg = "rallyhealth"
 
-bintrayOrganization := Some(bintrayOrg)
+bintrayOrganization in ThisBuild := Some(bintrayOrg)
 bintrayRepository := "ivy-scala-libs"
 
-resolvers in ThisBuild += Resolver.bintrayRepo(bintrayOrg, bintrayRepository.value)
+resolvers in ThisBuild += Resolver.bintrayRepo(bintrayOrg, bintrayOrg)
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
