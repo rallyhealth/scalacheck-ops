@@ -13,6 +13,13 @@ object GenOps {
   def bits(size: Int): Gen[BitSet] = Gen.listOfN(size, binary).map(BitSet(_: _*))
   def bits: Gen[BitSet] = Gen.sized(bits)
 
+  def collect[T, U](gen: Gen[T], retryUntilMatch: Boolean = false)(pf: PartialFunction[T, U]): Gen[U] = {
+    {
+      if (retryUntilMatch) gen.retryUntil(pf.isDefinedAt)
+      else gen.suchThat(pf.isDefinedAt)
+    } map pf
+  }
+
   def enumValue[E <: Enumeration](enum: E): Gen[enum.Value] =
     Gen.oneOf[enum.Value](enum.values.toSeq)
 

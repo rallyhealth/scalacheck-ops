@@ -8,12 +8,16 @@ publishLocal := {}
 organization in ThisBuild := "com.rallyhealth"
 organizationName in ThisBuild := "Rally Health"
 
-semVerLimit in ThisBuild := "2.0.999"
+semVerLimit in ThisBuild := "2.1.999"
 scalaVersion in ThisBuild := "2.11.11"
 licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-bintrayOrganization in ThisBuild := Some("rallyhealth")
+val bintrayOrg = "rallyhealth"
+
+bintrayOrganization := Some(bintrayOrg)
 bintrayRepository := "ivy-scala-libs"
+
+resolvers in ThisBuild += Resolver.bintrayRepo(bintrayOrg, bintrayRepository.value)
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(

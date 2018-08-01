@@ -1,8 +1,8 @@
-<a href='https://travis-ci.org/gloriousfutureio/scalacheck-ops'>
-  <img src='https://travis-ci.org/gloriousfutureio/scalacheck-ops.svg?branch=master' alt='Build Status' />
+<a href='https://travis-ci.org/rallyhealth/scalacheck-ops'>
+  <img src='https://travis-ci.org/rallyhealth/scalacheck-ops.svg?branch=master' alt='Build Status' />
 </a>
-<a href='https://coveralls.io/github/gloriousfutureio/scalacheck-ops?branch=master'>
-  <img src='https://coveralls.io/repos/github/gloriousfutureio/scalacheck-ops/badge.svg?branch=master' alt='Coverage Status' />
+<a href='https://coveralls.io/github/rallyhealth/scalacheck-ops?branch=master'>
+  <img src='https://coveralls.io/repos/github/rallyhealth/scalacheck-ops/badge.svg?branch=master' alt='Coverage Status' />
 </a>
 <table>
   <tr>
@@ -19,17 +19,17 @@
     </td>
     <td>
       <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-12/_latestVersion'>
-        <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops_1-12/images/download.svg'>
+        <img src='https://api.bintray.com/packages/rallyhealth/ivy-scala-libs/scalacheck-ops_1-12/images/download.svg'>
       </a>
     </td>
     <td>
       <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-13/_latestVersion'>
-        <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops_1-13/images/download.svg'>
+        <img src='https://api.bintray.com/packages/rallyhealth/ivy-scala-libs/scalacheck-ops_1-13/images/download.svg'>
       </a>
     </td>
     <td>
       <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-14/_latestVersion'>
-        <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops_1-14/images/download.svg'>
+        <img src='https://api.bintray.com/packages/rallyhealth/ivy-scala-libs/scalacheck-ops_1-14/images/download.svg'>
       </a>
     </td>
   </tr>
@@ -49,6 +49,9 @@ with scalacheck-ops.
 # Installation
 
 ### Compatibility
+
+**NOTE** Version 1.x lives under the `"me.jeffmay"` organization. Version 2.x lives
+under `"com.rallyhealth"`
 
 **NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.11 as this 
 library expects the java.time standard library module.
