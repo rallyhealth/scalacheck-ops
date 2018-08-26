@@ -18,18 +18,18 @@
       </a>
     </td>
     <td>
-      <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-12/_latestVersion'>
-        <img src='https://api.bintray.com/packages/rallyhealth/ivy-scala-libs/scalacheck-ops_1-12/images/download.svg'>
+      <a href='https://bintray.com/rallyhealth/maven/scalacheck-ops_1-12/_latestVersion'>
+        <img src='https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-12/images/download.svg'>
       </a>
     </td>
     <td>
-      <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-13/_latestVersion'>
-        <img src='https://api.bintray.com/packages/rallyhealth/ivy-scala-libs/scalacheck-ops_1-13/images/download.svg'>
+      <a href='https://bintray.com/rallyhealth/maven/scalacheck-ops_1-13/_latestVersion'>
+        <img src='https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-13/images/download.svg'>
       </a>
     </td>
     <td>
-      <a href='https://bintray.com/jeffmay/maven/scalacheck-ops_1-14/_latestVersion'>
-        <img src='https://api.bintray.com/packages/rallyhealth/ivy-scala-libs/scalacheck-ops_1-14/images/download.svg'>
+      <a href='https://bintray.com/rallyhealth/maven/scalacheck-ops_1-14/_latestVersion'>
+        <img src='https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-14/images/download.svg'>
       </a>
     </td>
   </tr>
