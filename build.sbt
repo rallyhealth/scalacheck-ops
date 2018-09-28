@@ -1,25 +1,46 @@
+import Dependencies._
 
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
+
+ThisBuild / organization := "com.rallyhealth"
+ThisBuild / organizationName := "Rally Health"
+
+ThisBuild / scalaVersion := Scala_2_11
+ThisBuild / licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
+
+ThisBuild / bintrayOrganization := Some("rallyhealth")
+ThisBuild / bintrayRepository := "maven"
+
+resolvers in ThisBuild += Resolver.bintrayRepo("rallyhealth", "maven")
+
+/**
+  * Semantic versioning attempts to validate that the version generated makes sense relative to previous
+  * versions released. We are introducing support for new Scala versions in this release, so the semVerCheck
+  * will fail. This setting will ensure that we don't forget to re-enable it after this release.
+  */
+val suppressSemVerCheckOfNewScalaVersionsUntilNextVersion = semVerCheck := {
+  version.value.split('.') match {
+    case Array("2", "2", "0", _*) => Def.task {}
+    case Array("2", "1", _*) => Def.task {}
+    case _ =>
+      throw new RuntimeException(s"Version bump! Time to remove the suppression of semver checking.")
+  }
+  Def.taskDyn {
+    if (scalaVersion.value.startsWith("2.11")) semVerCheck
+    else Def.task {}
+  }
+}
+
 // don't publish the aggregate root project
 publish := {}
 publishLocal := {}
 
-organization in ThisBuild := "com.rallyhealth"
-organizationName in ThisBuild := "Rally Health"
-
-semVerLimit in ThisBuild := "2.1.999"
-scalaVersion in ThisBuild := "2.11.11"
-licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
-
-bintrayOrganization := Some("rallyhealth")
-bintrayRepository := "maven"
-
-resolvers in ThisBuild += Resolver.bintrayRepo("rallyhealth", "maven")
-
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
+
+    suppressSemVerCheckOfNewScalaVersionsUntilNextVersion,
 
     scalacOptions := Seq(
       "-Xfatal-warnings",
@@ -31,73 +52,77 @@ def commonProject(id: String, artifact: String, path: String): Project = {
     ),
 
     // show full stack traces in test failures ()
-    testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
-
-    // force scala version
-    ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
 
     // disable compilation of ScalaDocs, since this always breaks on links and isn't as helpful as source
-    sources in(Compile, doc) := Seq.empty,
-
-    // required to address a weird bug where sbt-bintray forces this to be "maven"
-    bintrayRepository := "ivy-scala-libs",
+    Compile / doc / sources := Seq.empty,
 
     // disable publishing empty ScalaDocs
-    publishArtifact in (Compile, packageDoc) := false
+    Compile / packageDoc / publishArtifact := false
 
   ).enablePlugins(GitVersioningPlugin, SemVerPlugin)
 }
 
-def suffixFor(scalaCheckVersion: String): String = scalaCheckVersion match {
-  case Dependencies.scalaCheck12Version => "_1-12"
-  case Dependencies.scalaCheck13Version => "_1-13"
-  case Dependencies.scalaCheck14Version => "_1-14"
+def scSuffix(scalaCheckVersion: String): String = scalaCheckVersion match {
+  case ScalaCheck_1_12 => "_1-12"
+  case ScalaCheck_1_13 => "_1-13"
+  case ScalaCheck_1_14 => "_1-14"
+}
+
+def scalaVersions(scalaCheckVersion: String): Seq[String] = scalaCheckVersion match {
+  case ScalaCheck_1_12 => Seq(Scala_2_11)
+  case ScalaCheck_1_13 => Seq(Scala_2_11, Scala_2_12)
+  case ScalaCheck_1_14 => Seq(Scala_2_11, Scala_2_12, Scala_2_13)
 }
 
 def coreProject(scalaCheckVersion: String): Project = {
   val projectPath = "core"
-  val suffix = suffixFor(scalaCheckVersion)
+  val suffix = scSuffix(scalaCheckVersion)
   commonProject(s"core$suffix", s"scalacheck-ops$suffix", s"$projectPath$suffix").settings(
+    scalaVersion := crossScalaVersions.value.head,
+    crossScalaVersions := scalaVersions(scalaCheckVersion),
     sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
-    (sourceDirectory in Compile) := file(s"$projectPath/src/main").getAbsoluteFile,
-    (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
+    Compile / sourceDirectory := file(s"$projectPath/src/main").getAbsoluteFile,
+    Test / sourceDirectory := file(s"$projectPath/src/test").getAbsoluteFile,
     libraryDependencies ++= Seq(
-      Dependencies.scalaCheck(scalaCheckVersion)
+      scalaCheck(scalaCheckVersion)
     ) ++ Seq(
       // Test-only dependencies
-      Dependencies.scalaTest(scalaCheckVersion)
+      scalaTest(scalaCheckVersion)
     ).map(_ % Test)
   )
 }
 
-lazy val `core_1-12` = coreProject(Dependencies.scalaCheck12Version)
-lazy val `core_1-13` = coreProject(Dependencies.scalaCheck13Version)
-lazy val `core_1-14` = coreProject(Dependencies.scalaCheck14Version)
+lazy val `core_1-12` = coreProject(ScalaCheck_1_12)
+lazy val `core_1-13` = coreProject(ScalaCheck_1_13)
+lazy val `core_1-14` = coreProject(ScalaCheck_1_14)
 
 def jodaProject(scalaCheckVersion: String): Project = {
   val projectPath = "joda"
-  val suffix = suffixFor(scalaCheckVersion)
+  val suffix = scSuffix(scalaCheckVersion)
   commonProject(s"joda$suffix", s"scalacheck-ops-joda$suffix", s"$projectPath$suffix").settings(
+    scalaVersion := crossScalaVersions.value.head,
+    crossScalaVersions := scalaVersions(scalaCheckVersion),
     sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
-    (sourceDirectory in Compile) := file(s"$projectPath/src/main").getAbsoluteFile,
-    (sourceDirectory in Test) := file(s"$projectPath/src/test").getAbsoluteFile,
+    Compile / sourceDirectory := file(s"$projectPath/src/main").getAbsoluteFile,
+    Test / sourceDirectory := file(s"$projectPath/src/test").getAbsoluteFile,
     libraryDependencies ++= Seq(
-      Dependencies.scalaCheck(scalaCheckVersion),
-      Dependencies.jodaTime
+      scalaCheck(scalaCheckVersion),
+      jodaTime
     ) ++ Seq(
       // Test-only dependencies
-      Dependencies.scalaTest(scalaCheckVersion)
+      scalaTest(scalaCheckVersion)
     ).map(_ % Test)
   ).dependsOn(
     (scalaCheckVersion match {
-      case Dependencies.scalaCheck12Version => `core_1-12`
-      case Dependencies.scalaCheck13Version => `core_1-13`
-      case Dependencies.scalaCheck14Version => `core_1-14`
+      case ScalaCheck_1_12 => `core_1-12`
+      case ScalaCheck_1_13 => `core_1-13`
+      case ScalaCheck_1_14 => `core_1-14`
     }) % "compile;test->test"
   )
 }
 
-lazy val `joda_1-12` = jodaProject(Dependencies.scalaCheck12Version)
-lazy val `joda_1-13` = jodaProject(Dependencies.scalaCheck13Version)
-lazy val `joda_1-14` = jodaProject(Dependencies.scalaCheck14Version)
+lazy val `joda_1-12` = jodaProject(ScalaCheck_1_12)
+lazy val `joda_1-13` = jodaProject(ScalaCheck_1_13)
+lazy val `joda_1-14` = jodaProject(ScalaCheck_1_14)
 

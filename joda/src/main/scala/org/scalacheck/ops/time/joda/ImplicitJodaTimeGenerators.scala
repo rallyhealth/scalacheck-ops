@@ -1,16 +1,17 @@
 package org.scalacheck.ops.time.joda
 
 import org.joda.time.chrono._
-import org.joda.time.{Chronology, DateTimeZone, DateTime, LocalDateTime}
+import org.joda.time.{Chronology, DateTime, DateTimeZone, LocalDateTime}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen._
 import org.scalacheck.ops.time.joda.ChronologyOps._
-import scala.collection.JavaConversions._
+
+import scala.collection.JavaConverters._
 
 trait ImplicitJodaTimeGenerators {
 
   implicit val arbDateTimeZone: Arbitrary[DateTimeZone] = {
-    val ids = DateTimeZone.getAvailableIDs.toSeq
+    val ids = DateTimeZone.getAvailableIDs.asScala.toSeq
     val zones = ids map DateTimeZone.forID
     Arbitrary(oneOf(zones))
   }
