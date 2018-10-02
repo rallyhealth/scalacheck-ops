@@ -1,39 +1,9 @@
-<a href='https://travis-ci.org/rallyhealth/scalacheck-ops'>
-  <img src='https://travis-ci.org/rallyhealth/scalacheck-ops.svg?branch=master' alt='Build Status' />
-</a>
-<a href='https://coveralls.io/github/rallyhealth/scalacheck-ops?branch=master'>
-  <img src='https://coveralls.io/repos/github/rallyhealth/scalacheck-ops/badge.svg?branch=master' alt='Coverage Status' />
-</a>
-<table>
-  <tr>
-    <th>scalacheck-ops (1.x)</th>
-    <th>scalacheck-ops_1-12</th>
-    <th>scalacheck-ops_1-13</th>
-    <th>scalacheck-ops_1-14</th>
-  </tr>
-  <tr>
-    <td>
-      <a href='https://bintray.com/jeffmay/maven/scalacheck-ops/_latestVersion'>
-        <img src='https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops/images/download.svg'>
-      </a>
-    </td>
-    <td>
-      <a href='https://bintray.com/rallyhealth/maven/scalacheck-ops_1-12/_latestVersion'>
-        <img src='https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-12/images/download.svg'>
-      </a>
-    </td>
-    <td>
-      <a href='https://bintray.com/rallyhealth/maven/scalacheck-ops_1-13/_latestVersion'>
-        <img src='https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-13/images/download.svg'>
-      </a>
-    </td>
-    <td>
-      <a href='https://bintray.com/rallyhealth/maven/scalacheck-ops_1-14/_latestVersion'>
-        <img src='https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-14/images/download.svg'>
-      </a>
-    </td>
-  </tr>
-</table>
+[![Build Status](https://travis-ci.org/rallyhealth/scalacheck-ops.svg?branch=master)](https://travis-ci.org/rallyhealth/scalacheck-ops)
+[![codecov](https://codecov.io/gh/rallyhealth/scalacheck-ops/branch/master/graph/badge.svg)](https://codecov.io/gh/rallyhealth/scalacheck-ops)
+
+| scalacheck-ops (1.x) | scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 |
+| :------------------: | :-----------------: | :-----------------: | :-----------------: |
+| [ ![Download](https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops/images/download.svg) ](https://bintray.com/jeffmay/maven/scalacheck-ops/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-12/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-12/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-13/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-13/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-14/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-14/_latestVersion) |
 
 # Summary
 
