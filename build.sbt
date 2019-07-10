@@ -14,24 +14,6 @@ ThisBuild / bintrayRepository := "maven"
 
 resolvers in ThisBuild += Resolver.bintrayRepo("rallyhealth", "maven")
 
-/**
-  * Semantic versioning attempts to validate that the version generated makes sense relative to previous
-  * versions released. We are introducing support for new Scala versions in this release, so the semVerCheck
-  * will fail. This setting will ensure that we don't forget to re-enable it after this release.
-  */
-val suppressSemVerCheckOfNewScalaVersionsUntilNextVersion = semVerCheck := {
-  version.value.split('.') match {
-    case Array("2", "2", "0", _*) => Def.task {}
-    case Array("2", "1", _*) => Def.task {}
-    case _ =>
-      throw new RuntimeException(s"Version bump! Time to remove the suppression of semver checking.")
-  }
-  Def.taskDyn {
-    if (scalaVersion.value.startsWith("2.11")) semVerCheck
-    else Def.task {}
-  }
-}
-
 // don't publish the aggregate root project
 publish := {}
 publishLocal := {}
@@ -39,8 +21,6 @@ publishLocal := {}
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
-
-    suppressSemVerCheckOfNewScalaVersionsUntilNextVersion,
 
     scalacOptions := Seq(
       "-Xfatal-warnings",
