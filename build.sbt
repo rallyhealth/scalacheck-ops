@@ -1,4 +1,5 @@
 import Dependencies._
+import sbt.librarymanagement.VersionNumber.SemVer
 
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
@@ -20,15 +21,16 @@ resolvers in ThisBuild += Resolver.bintrayRepo("rallyhealth", "maven")
   * will fail. This setting will ensure that we don't forget to re-enable it after this release.
   */
 val suppressSemVerCheckOfNewScalaVersionsUntilNextVersion = semVerCheck := {
-  version.value.split('.') match {
-    case Array("2", "2", "0", _*) => Def.task {}
-    case Array("2", "1", _*) => Def.task {}
+  version.value match {
+    case VersionNumber(Seq(2, x, y, _*), _, _) if (x < 2) || (x == 2 && y <= 1) => Def.task {}
     case _ =>
       throw new RuntimeException(s"Version bump! Time to remove the suppression of semver checking.")
   }
   Def.taskDyn {
-    if (scalaVersion.value.startsWith("2.11")) semVerCheck
-    else Def.task {}
+    scalaVersion.value match {
+      case VersionNumber(Seq(2, 11 | 12, _*), _, _) => semVerCheck
+      case _ => Def.task {}
+    }
   }
 }
 
@@ -43,7 +45,7 @@ def commonProject(id: String, artifact: String, path: String): Project = {
     suppressSemVerCheckOfNewScalaVersionsUntilNextVersion,
 
     scalacOptions := Seq(
-      "-Xfatal-warnings",
+      // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
       "-deprecation:false",
       "-feature",
       "-Xlint",

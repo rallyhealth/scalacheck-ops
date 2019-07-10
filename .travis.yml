@@ -1,8 +1,9 @@
 language: scala
 scala:
-  - 2.11.11
+  - 2.11.12
 jdk:
   - openjdk8
+  - openjdk11
 
 script:
   - sbt clean coverage +test coverageReport && sbt coverageAggregate
