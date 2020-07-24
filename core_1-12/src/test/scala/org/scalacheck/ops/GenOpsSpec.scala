@@ -1,14 +1,12 @@
 package org.scalacheck.ops
 
 import org.scalacheck.Gen
-import org.scalacheck.rng.Seed
+import org.scalatest.prop.GeneratorDrivenPropertyChecks._
 import org.scalatest.{FlatSpec, Matchers}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import scala.util.Try
 
 class GenOpsSpec extends FlatSpec
-  with ScalaCheckPropertyChecks
   with Matchers
   with ScalaCheckImplicits {
 
@@ -20,14 +18,6 @@ class GenOpsSpec extends FlatSpec
     forAll(Gen.setOf(Gen.choose(0, 1))) { setOfDigits =>
       assert(setOfDigits.size <= 2)
     }
-  }
-
-  it should "generate the same samples when called twice with the same seed" in {
-    val gen = Gen.setOf(Gen.choose(0, 1))
-    val seed = Seed(1)
-    val a = gen.getOrThrow(seed)
-    val b = gen.getOrThrow(seed)
-    assert(a == b)
   }
 
   behavior of "Gen.collect"
@@ -66,15 +56,6 @@ class GenOpsSpec extends FlatSpec
     forAll(Gen.setOfN(n, genDigits)) { digits =>
       assertResult(n)(digits.size)
     }
-  }
-
-  it should "generate the same samples when called twice with the same seed" in {
-    val n = 10
-    val gen = Gen.setOfN(n, genDigits)
-    val seed = Seed(n)
-    val a = gen.getOrThrow(seed)
-    val b = gen.getOrThrow(seed)
-    assert(a == b)
   }
 
   private val genOnesIter: Gen[Iterator[Int]] = {
