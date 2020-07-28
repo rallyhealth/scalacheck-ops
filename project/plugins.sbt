@@ -7,7 +7,7 @@ resolvers += Resolver.url(
 
 resolvers += Resolver.url(
   "bintray-sbt-plugin-releases",
-  url("http://dl.bintray.com/content/sbt/sbt-plugin-releases")
+  url("https://dl.bintray.com/content/sbt/sbt-plugin-releases")
 )(Resolver.ivyStylePatterns)
 
 addSbtPlugin("com.rallyhealth.sbt" %% "sbt-git-versioning" % "1.2.0")
