@@ -1,6 +1,7 @@
 package org.scalacheck.ops
 
 import org.scalacheck.Gen
+import org.scalacheck.rng.Seed
 import org.scalactic.anyvals.PosZInt
 import org.scalatest.FreeSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks._
@@ -22,6 +23,23 @@ class GenConfigSpec extends FreeSpec {
     val c = GenConfig(p)
     assertResult(GenConfig.default.retries)(c.retries)
     assertResult(GenConfig.default.seed)(c.seed)
+  }
+
+  s"$it should use the default number of retries and the given seed and maxSize" in {
+    val s = Seed(5)
+    val maxSize = 10
+    val c = GenConfig(s, 10)
+    assertResult(GenConfig.default.retries)(c.retries)
+    assertResult(s)(c.seed)
+    assertResult(maxSize)(c.params.size)
+  }
+
+  s"$it should use the default number of retries and maxSize and the given seed" in {
+    val s = Seed(10)
+    val c = GenConfig(s)
+    assertResult(GenConfig.default.retries)(c.retries)
+    assertResult(s)(c.seed)
+    assertResult(GenConfig.default.params.size)(c.params.size)
   }
 
   s"$it should keep the same number of retries when updating the params" in {
