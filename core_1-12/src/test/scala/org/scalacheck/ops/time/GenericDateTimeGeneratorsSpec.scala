@@ -3,14 +3,15 @@ package org.scalacheck.ops.time
 import org.scalacheck.Arbitrary
 import org.scalacheck.ops._
 import org.scalatest.FlatSpec
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks._
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 import org.scalatest.Matchers._
 import scala.reflect.ClassTag
 
 private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: AbstractTimeGenerators](
   protected val gen: Generators
-)(implicit classTag: ClassTag[Generators]) extends FlatSpec {
+)(implicit classTag: ClassTag[Generators]) extends FlatSpec
+  with GeneratorDrivenPropertyChecks {
 
   protected val genClassName: String = classTag.runtimeClass.getSimpleName.stripSuffix("$")
   protected def arbInstantType: Arbitrary[gen.InstantType]
