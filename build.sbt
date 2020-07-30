@@ -12,7 +12,7 @@ ThisBuild / licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 ThisBuild / bintrayOrganization := Some("rallyhealth")
 ThisBuild / bintrayRepository := "maven"
 
-resolvers in ThisBuild += Resolver.bintrayRepo("rallyhealth", "maven")
+ThisBuild / resolvers += Resolver.bintrayRepo("rallyhealth", "maven")
 
 // don't publish the aggregate root project
 publish := {}
