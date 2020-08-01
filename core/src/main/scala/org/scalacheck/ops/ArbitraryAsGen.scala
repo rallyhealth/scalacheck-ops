@@ -12,14 +12,18 @@ trait ArbitraryAsGen {
   // $COVERAGE-ON$
 
   /**
-   * Converts a [[Gen]] to an [[Arbitrary]] so that you can pass a [[Gen]] anywhere
-   * that requires implicit [[Arbitrary]] as arguments.
-   *
-   * @note this does not convert implicit [[Gen]]s, since making a [[Gen]] implicit
-   *       is not a standard pattern, and it would be easy and more obvious to just do
-   *       {{{
-   *         implicit val arbThing = Arbitrary(genThing)
-   *       }}}
-   */
+    * Converts a [[Gen]] to an [[Arbitrary]] so that you can pass a [[Gen]] anywhere
+    * that requires an [[Arbitrary]].
+    *
+    * This seems like a good default:
+    *
+    * {{{
+    *   implicit val arbThing: Arbitrary[T] = genThing
+    * }}}
+    *
+    * @note this does not implicitly convert implicit [[Gen]]s into [[Arbitrary]],
+    *       (1) this would undermine the purpose of having a separate [[Arbitrary]] type
+    *       (2) making a [[Gen]] implicit is not a standard pattern anyway
+    */
   implicit def genArbitrary[T](gen: Gen[T]): Arbitrary[T] = Arbitrary(gen)
 }

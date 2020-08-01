@@ -3,6 +3,8 @@ import Dependencies._
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
 
+ThisBuild / gitVersioningSnapshotLowerBound := "2.4.0"
+
 ThisBuild / organization := "com.rallyhealth"
 ThisBuild / organizationName := "Rally Health"
 
@@ -65,7 +67,8 @@ def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
     Compile / sourceDirectory := (srcPath / "src" / "main").getAbsoluteFile,
     Test / sourceDirectory := (srcPath / "src" / "test").getAbsoluteFile,
     libraryDependencies ++= Seq(
-      scalaCheck(scalaCheckVersion)
+      scalaCheck(scalaCheckVersion),
+      tagging
     ) ++ Seq(
       // Test-only dependencies
       scalaTest(scalaCheckVersion)
