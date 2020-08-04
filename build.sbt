@@ -77,6 +77,9 @@ def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
 }
 
 lazy val `core_1-12` = coreProject(file("core_1-12"), ScalaCheck_1_12)
+  .settings(
+    semVerEnforceAfterVersion := Some("2.4.1"),
+  )
 lazy val `core_1-13` = coreProject(file("core"), ScalaCheck_1_13)
 lazy val `core_1-14` = coreProject(file("core"), ScalaCheck_1_14)
 
