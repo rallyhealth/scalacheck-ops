@@ -15,7 +15,7 @@ class SeedExtractorSpec extends FreeSpec {
 
   private val it = classOf[SeedExtractor[_]].getName
 
-  private val collisionCheckParams = Seq(MinSize(1000), SizeRange(4000), Workers(4))
+  private val collisionCheckParams = Seq(Workers(4))
 
   private def groupCollisions[A](values: Seq[A])(implicit extractor: SeedExtractor[A]): Map[Long, Set[A]] = {
     values.view
@@ -30,7 +30,7 @@ class SeedExtractorSpec extends FreeSpec {
 
   "verify this test catches collisions" in {
     implicit val collisionProneSeedExtractor: SeedExtractor[Int] = SeedExtractor.fromLong(_ % 2)
-    forAll(collisionCheckParams: _*) { ints: Seq[Int] =>
+    forAll(Gen.listOfN(1000, arbitrary[Int]), collisionCheckParams: _*) { ints: Seq[Int] =>
       whenever(ints.nonEmpty) {
         val collisions = groupCollisions(ints)
         assert(collisions.nonEmpty)
@@ -52,7 +52,7 @@ class SeedExtractorSpec extends FreeSpec {
     }
 
     s"$it[$typeName]$suffix should avoid collisions" in {
-      forAll(collisionCheckParams: _*) { as: Seq[A] =>
+      forAll(Gen.listOfN(1000, arbitrary[A]), collisionCheckParams: _*) { as: Seq[A] =>
         val collisions = groupCollisions(as)
         collisions should have size 0
       }
