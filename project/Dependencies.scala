@@ -14,8 +14,10 @@ object Dependencies {
   private val ScalaTest_3 = "3.0.8"
 
   private val JodaTimeVersion = "2.10"
+  private val TaggingVersion = "2.2.1"
 
   val jodaTime: ModuleID = "joda-time" % "joda-time" % JodaTimeVersion
+  val tagging: ModuleID = "com.softwaremill.common" %% "tagging" % TaggingVersion
 
   def scalaCheck(scalaCheckVersion: String): ModuleID = {
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion

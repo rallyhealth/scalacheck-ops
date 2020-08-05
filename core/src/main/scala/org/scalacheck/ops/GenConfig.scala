@@ -49,5 +49,5 @@ object GenConfig {
     GenConfig(seed, default.params.size, default.retries)
   }
 
-  val default: GenConfig = GenConfig(Seed(0), 6, 100)
+  implicit val default: GenConfig = GenConfig(Seed(0), 6, 100)
 }
