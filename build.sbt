@@ -3,7 +3,7 @@ import Dependencies._
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
 
-ThisBuild / gitVersioningSnapshotLowerBound := "2.4.0"
+ThisBuild / gitVersioningSnapshotLowerBound := "2.5.0"
 
 ThisBuild / organization := "com.rallyhealth"
 ThisBuild / organizationName := "Rally Health"
@@ -78,7 +78,7 @@ def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
 
 lazy val `core_1-12` = coreProject(file("core_1-12"), ScalaCheck_1_12)
   .settings(
-    semVerEnforceAfterVersion := Some("2.4.1"),
+    semVerEnforceAfterVersion := Some("2.5.1"),
   )
 lazy val `core_1-13` = coreProject(file("core"), ScalaCheck_1_13)
 lazy val `core_1-14` = coreProject(file("core"), ScalaCheck_1_14)
