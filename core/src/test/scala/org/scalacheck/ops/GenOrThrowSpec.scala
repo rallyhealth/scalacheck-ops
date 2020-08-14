@@ -88,6 +88,12 @@ class GenOrThrowSpec extends FreeSpec
 
   generatesTheSameValueWhenCalledTwice("getOrThrow (given the same Seed)", _.getOrThrow(Seed(0)))
 
+  generatesTheSameValueWhenCalledTwice("getOrThrowPure", _.getOrThrowPure)
+  throwsAnErrorWhenFiltered(
+    "getOrThrowPure",
+    implicit c => _.getOrThrowPure
+  )
+
   generatesUniqueRandomValues("randomOrThrow", _.randomOrThrow())
   throwsAnErrorWhenFiltered(
     "randomOrThrow()",

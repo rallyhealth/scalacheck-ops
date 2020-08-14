@@ -68,10 +68,30 @@ class GenOrThrow[T: ClassTag](val gen: Gen[T]) {
    * @throws EmptyGenSampleException when samples cannot be generated after a default number of attempts
    */
   @deprecated("The meaning of this method will change in the next major version. " +
-    "If you need a random sample on each call, you should use .randomOrThrow() instead",
+    "If you need a random sample on each call, you should use .getOrThrowPure or .randomOrThrow() instead",
     "2.3.0")
   def getOrThrow: T = getOrThrow(GenConfig.default.withSeed(Seed.random()))
 
+  /**
+    * Get the next instance of this generate with the given configuration.
+    *
+    * @note this is a stateless function and calling this method with
+    *       the same config will always produce the same result.
+    *
+    * @note This is the syntax that will replace the parameterless
+    *       [[getOrThrow]] in the next major version.
+    */
+  def getOrThrowPure(implicit c: GenConfig): T = getOrThrow(c)
+
+  /**
+    * Get a random element from this generator using the default seed.
+    * Generators can run out of samples and will return an empty result.
+    *
+    * Typically this will be the result of bad Gen Parameters or having too many
+    * suchThat() restrictions that reduce the sample size to 0.
+    *
+    * @throws EmptyGenSampleException when samples cannot be generated after a default number of attempts
+    */
   def randomOrThrow()(implicit c: GenConfig = GenConfig.default): T = {
     getOrThrow(c.withSeed(Seed.random()))
   }
