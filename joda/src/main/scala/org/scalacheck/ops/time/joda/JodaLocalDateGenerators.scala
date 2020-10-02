@@ -33,15 +33,30 @@ sealed trait JodaLocalDateGenerators extends AbstractTimeGenerators {
   override def between(start: LocalDate, end: LocalDate)(implicit params: Chronology): Gen[LocalDate] = {
     val startYear = start.getYear
     val startMonthOfYear = start.getMonthOfYear
+    val endYear = end.getYear
+    val endMonthOfYear = end.getMonthOfYear
     for {
-      year <- Gen.choose(startYear, end.getYear)
+      year <- Gen.choose(startYear, endYear)
+
       monthOfYear <- {
-        if (year == startYear) Gen.choose(start.getMonthOfYear, end.getMonthOfYear)
-        else Gen.choose(params.monthOfYear.getMinimumValue, params.monthOfYear.getMaximumValue)
+        val minMonth =
+          if (year == startYear) startMonthOfYear
+          else params.monthOfYear.getMinimumValue
+        val maxMonth =
+          if (year == endYear) endMonthOfYear
+          else params.monthOfYear.getMaximumValue
+        Gen.choose(minMonth, maxMonth)
       }
+
       dayOfMonth <- {
-        if (year == startYear && monthOfYear == startMonthOfYear) Gen.choose(startMonthOfYear, end.getDayOfMonth)
-        else Gen.choose(params.dayOfMonth.getMinimumValue, params.dayOfMonth.getMaximumValue)
+        val firstOfSelectedMonth = new LocalDate(year, monthOfYear, params.dayOfMonth.getMinimumValue, params)
+        val minDay =
+          if (year == startYear && monthOfYear == startMonthOfYear) start.getDayOfMonth
+          else firstOfSelectedMonth.getDayOfMonth
+        val maxDay =
+          if (year == endYear && monthOfYear == endMonthOfYear) end.getDayOfMonth
+          else firstOfSelectedMonth.dayOfMonth.getMaximumValue // last day of selected month
+        Gen.choose(minDay, maxDay)
       }
     } yield new LocalDate(year, monthOfYear, dayOfMonth, params)
   }
