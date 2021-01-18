@@ -3,7 +3,7 @@ import sbt._
 object Dependencies {
 
   final val Scala_2_11 = "2.11.12"
-  final val Scala_2_12 = "2.12.6"
+  final val Scala_2_12 = "2.12.13"
   final val Scala_2_13 = "2.13.0"
 
   final val ScalaCheck_1_12 = "1.12.6"
