@@ -49,12 +49,14 @@ def scSuffix(scalaCheckVersion: String): String = scalaCheckVersion match {
   case ScalaCheck_1_12 => "_1-12"
   case ScalaCheck_1_13 => "_1-13"
   case ScalaCheck_1_14 => "_1-14"
+  case ScalaCheck_1_15 => "_1-15"
 }
 
 def scalaVersions(scalaCheckVersion: String): Seq[String] = scalaCheckVersion match {
   case ScalaCheck_1_12 => Seq(Scala_2_11)
   case ScalaCheck_1_13 => Seq(Scala_2_11, Scala_2_12)
   case ScalaCheck_1_14 => Seq(Scala_2_11, Scala_2_12, Scala_2_13)
+  case ScalaCheck_1_15 => Seq(Scala_2_11, Scala_2_12, Scala_2_13)
 }
 
 def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
@@ -77,11 +79,13 @@ def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
 }
 
 lazy val `core_1-12` = coreProject(file("core_1-12"), ScalaCheck_1_12)
-  .settings(
-    semVerEnforceAfterVersion := Some("2.5.1"),
-  )
 lazy val `core_1-13` = coreProject(file("core"), ScalaCheck_1_13)
 lazy val `core_1-14` = coreProject(file("core"), ScalaCheck_1_14)
+lazy val `core_1-15` = coreProject(file("core"), ScalaCheck_1_15)
+  .settings(
+    semVerEnforceAfterVersion := Some("2.5.2"),
+  )
+
 
 def jodaProject(scalaCheckVersion: String): Project = {
   val projectPath = "joda"
@@ -104,6 +108,7 @@ def jodaProject(scalaCheckVersion: String): Project = {
       case ScalaCheck_1_12 => `core_1-12`
       case ScalaCheck_1_13 => `core_1-13`
       case ScalaCheck_1_14 => `core_1-14`
+      case ScalaCheck_1_15 => `core_1-15`
     }) % "compile;test->test"
   )
 }
@@ -111,4 +116,7 @@ def jodaProject(scalaCheckVersion: String): Project = {
 lazy val `joda_1-12` = jodaProject(ScalaCheck_1_12)
 lazy val `joda_1-13` = jodaProject(ScalaCheck_1_13)
 lazy val `joda_1-14` = jodaProject(ScalaCheck_1_14)
-
+lazy val `joda_1-15` = jodaProject(ScalaCheck_1_15)
+  .settings(
+    semVerEnforceAfterVersion := Some("2.5.2"),
+  )
