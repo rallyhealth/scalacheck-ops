@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/rallyhealth/scalacheck-ops.svg?branch=master)](https://travis-ci.org/rallyhealth/scalacheck-ops)
 [![codecov](https://codecov.io/gh/rallyhealth/scalacheck-ops/branch/master/graph/badge.svg)](https://codecov.io/gh/rallyhealth/scalacheck-ops)
 
-| scalacheck-ops (1.x) | scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 |
-| :------------------: | :-----------------: | :-----------------: | :-----------------: |
-| [ ![Download](https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops/images/download.svg) ](https://bintray.com/jeffmay/maven/scalacheck-ops/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-12/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-12/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-13/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-13/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-14/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-14/_latestVersion) |
+| scalacheck-ops (1.x) | scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 | scalacheck-ops_1-15 |
+| :------------------: | :-----------------: | :-----------------: | :-----------------: | :-----------------: |
+| [ ![Download](https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops/images/download.svg) ](https://bintray.com/jeffmay/maven/scalacheck-ops/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-12/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-12/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-13/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-13/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-14/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-14/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-15/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-15/_latestVersion) |
 
 # Summary
 
@@ -30,13 +30,14 @@ library expects the java.time standard library module.
 included in the artifact name. Prior to this change, `scalacheck-ops` with
 no version suffix would pull in ScalaCheck version 1.12.6. 
 
-| Artifact Name       | Version Limit  | ScalaCheck | Supported JDK | Supported Scala |
-| :-----------------: | :------------: | :--------: | :-----------: | :-------------: |
-| scalacheck-ops_1-14 | x >= 2.0       |     1.14.0 | 8             | 2.11            |
-| scalacheck-ops_1-13 | x >= 2.0       |     1.13.4 | 8             | 2.11            |
-| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |     1.13.4 | 6 - 8         | 2.10 - 2.11     |
-| scalacheck-ops_1-12 | x >= 2.0       |     1.12.6 | 8             | 2.11            |
-| scalacheck-ops      | x < 2.0        |     1.12.6 | 6 - 8         | 2.10 - 2.11     |
+| Artifact Name       | Version Limit  | ScalaCheck | Supported JDK | Supported Scala  |
+| :-----------------: | :------------: | :--------: | :-----------: | :--------------: |
+| scalacheck-ops_1-15 | x >= 2.5.2     |     1.15.2 | 8             | 2.11, 2.12, 2.13 |
+| scalacheck-ops_1-14 | x >= 2.0       |     1.14.3 | 8             | 2.11, 2.12, 2.13 |
+| scalacheck-ops_1-13 | x >= 2.0       |     1.13.5 | 8             | 2.11, 2.12       |
+| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |     1.13.4 | 6 - 8         | 2.10 - 2.11      |
+| scalacheck-ops_1-12 | x >= 2.0       |     1.12.6 | 8             | 2.11             |
+| scalacheck-ops      | x < 2.0        |     1.12.6 | 6 - 8         | 2.10 - 2.11      |
 
 The same source code is compiled against specific versions of Scala and ScalaCheck. 
 We use separate artifacts to avoid causing issues with transitive dependencies on
