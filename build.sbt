@@ -1,4 +1,5 @@
 import Dependencies._
+import sbt.Test
 
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
@@ -39,15 +40,17 @@ def commonProject(id: String, artifact: String, path: String): Project = {
       "-encoding", "UTF-8"
     ),
 
-    // show full stack traces in test failures ()
+    // show full stack traces in test failures
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
 
     // disable compilation of ScalaDocs, since this always breaks on links and isn't as helpful as source
     Compile / doc / sources := Seq.empty,
 
     // disable publishing empty ScalaDocs
-    Compile / packageDoc / publishArtifact := false
+    Compile / packageDoc / publishArtifact := false,
 
+    // Don't publish the test artifacts, nobody should depend on these
+    Test / publishArtifact := false,
   )
 }
 
