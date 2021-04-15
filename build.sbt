@@ -3,20 +3,23 @@ import sbt.Test
 
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
+scalaVersion := Scala_2_13
 
 ThisBuild / organization := "com.rallyhealth"
 ThisBuild / organizationName := "Rally Health"
 
-scalaVersion := Scala_2_13
-licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
+ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 
 // reload sbt when the build files change
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-ThisBuild / bintrayOrganization := Some("rallyhealth")
-ThisBuild / bintrayRepository := "maven"
-
+// TODO: Remove this after it is no longer needed for checking binary compatibility
 ThisBuild / resolvers += Resolver.bintrayRepo("rallyhealth", "maven")
+
+developers := List(
+  Developer(id = "jeffmay", name = "Jeff May", email = "jeff.n.may@gmail.com", url = url("https://github.com/jeffmay")),
+)
 
 // don't look for previous versions of the root project, they don't exist
 mimaFailOnNoPrevious := false
