@@ -3,26 +3,32 @@ import Dependencies._
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
 
-ThisBuild / gitVersioningSnapshotLowerBound := "2.5.0"
-
 ThisBuild / organization := "com.rallyhealth"
 ThisBuild / organizationName := "Rally Health"
 
-ThisBuild / scalaVersion := Scala_2_11
-ThisBuild / licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
+scalaVersion := Scala_2_13
+licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
+
+// reload sbt when the build files change
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / bintrayOrganization := Some("rallyhealth")
 ThisBuild / bintrayRepository := "maven"
 
 ThisBuild / resolvers += Resolver.bintrayRepo("rallyhealth", "maven")
 
+// don't look for previous versions of the root project, they don't exist
+mimaFailOnNoPrevious := false
+
 // don't publish the aggregate root project
-publish := {}
-publishLocal := {}
+skip / publish := true
+skip / publishLocal := true
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
+
+    mimaPreviousArtifacts := Set(organization.value %% artifact % "2.5.2"),
 
     scalacOptions := Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
@@ -42,7 +48,7 @@ def commonProject(id: String, artifact: String, path: String): Project = {
     // disable publishing empty ScalaDocs
     Compile / packageDoc / publishArtifact := false
 
-  ).enablePlugins(GitVersioningPlugin, SemVerPlugin)
+  )
 }
 
 def scSuffix(scalaCheckVersion: String): String = scalaCheckVersion match {
@@ -65,7 +71,6 @@ def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
   commonProject(targetPath, s"scalacheck-ops$suffix", targetPath).settings(
     scalaVersion := crossScalaVersions.value.head,
     crossScalaVersions := scalaVersions(scalaCheckVersion),
-    sourceDirectory := (srcPath / "src").getAbsoluteFile,
     Compile / sourceDirectory := (srcPath / "src" / "main").getAbsoluteFile,
     Test / sourceDirectory := (srcPath / "src" / "test").getAbsoluteFile,
     libraryDependencies ++= Seq(
@@ -82,9 +87,6 @@ lazy val `core_1-12` = coreProject(file("core_1-12"), ScalaCheck_1_12)
 lazy val `core_1-13` = coreProject(file("core"), ScalaCheck_1_13)
 lazy val `core_1-14` = coreProject(file("core"), ScalaCheck_1_14)
 lazy val `core_1-15` = coreProject(file("core"), ScalaCheck_1_15)
-  .settings(
-    semVerEnforceAfterVersion := Some("2.5.2"),
-  )
 
 
 def jodaProject(scalaCheckVersion: String): Project = {
@@ -93,7 +95,6 @@ def jodaProject(scalaCheckVersion: String): Project = {
   commonProject(s"joda$suffix", s"scalacheck-ops-joda$suffix", s"$projectPath$suffix").settings(
     scalaVersion := crossScalaVersions.value.head,
     crossScalaVersions := scalaVersions(scalaCheckVersion),
-    sourceDirectory := file(s"$projectPath/src").getAbsoluteFile,
     Compile / sourceDirectory := file(s"$projectPath/src/main").getAbsoluteFile,
     Test / sourceDirectory := file(s"$projectPath/src/test").getAbsoluteFile,
     libraryDependencies ++= Seq(
@@ -117,6 +118,3 @@ lazy val `joda_1-12` = jodaProject(ScalaCheck_1_12)
 lazy val `joda_1-13` = jodaProject(ScalaCheck_1_13)
 lazy val `joda_1-14` = jodaProject(ScalaCheck_1_14)
 lazy val `joda_1-15` = jodaProject(ScalaCheck_1_15)
-  .settings(
-    semVerEnforceAfterVersion := Some("2.5.2"),
-  )

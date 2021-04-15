@@ -1,23 +1,30 @@
 language: scala
 scala:
-  - 2.11.12
+  - 2.13.5
 jdk:
   - openjdk8
   - openjdk11
 
-script:
-  - sbt clean coverage +test coverageReport && sbt coverageAggregate
-after_success:
-  # Upload coverage reports to codecov.io
-  - bash <(curl -s https://codecov.io/bash) -t 50d829ce-40d0-4fa4-8479-2e0f3864a07f
+before_script:
+  # Download sbt because Travis can't find it automatically :(
+  - mkdir -p $HOME/.sbt/launchers/1.5.0/
+  - curl -L -o $HOME/.sbt/launchers/1.5.0/sbt-launch.jar https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.5.0/sbt-launch-1.5.0.jar
 
-  # Tricks to avoid unnecessary cache updates
-  - find $HOME/.sbt -name "*.lock" | xargs rm
-  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+script:
+  - sbt clean coverage +test coverageAggregate
+  # Upload coverage reports to codecov.io before checking binary compatibility
+  - bash <(curl -s https://codecov.io/bash)
+  - sbt +mimaReportBinaryIssues
+
+# Avoid unnecessary cache updates
+before_cache:
+  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
 
 # These directories are cached to S3 at the end of the build
 cache:
   directories:
+    - $HOME/.cache/coursier
     - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
-
+    - $HOME/.sbt
