@@ -1,9 +1,9 @@
 package org.scalacheck.ops
 
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.FreeSpec
 
-class ArbitraryAsGenSpec extends AnyFreeSpec {
+class ArbitraryAsGenSpec extends FreeSpec {
 
   private val it = classOf[ArbitraryAsGen].getSimpleName
 

@@ -3,9 +3,9 @@ package org.scalacheck.ops
 import java.util.UUID
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
-import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.FreeSpec
 
-class GenOrThrowSpec extends AnyFreeSpec
+class GenOrThrowSpec extends FreeSpec
   with ScalaCheckImplicits {
 
   type MethodCall[A] = Gen[A] => Any

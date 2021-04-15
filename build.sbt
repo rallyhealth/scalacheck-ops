@@ -65,28 +65,37 @@ def scalaVersions(scalaCheckVersion: String): Seq[String] = scalaCheckVersion ma
   case ScalaCheck_1_15 => Seq(Scala_2_11, Scala_2_12, Scala_2_13)
 }
 
-def coreProject(srcPath: File, scalaCheckVersion: String): Project = {
+def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Project = {
   val suffix = scSuffix(scalaCheckVersion)
   val targetPath = s"core$suffix"
   commonProject(targetPath, s"scalacheck-ops$suffix", targetPath).settings(
     scalaVersion := crossScalaVersions.value.head,
     crossScalaVersions := scalaVersions(scalaCheckVersion),
     Compile / sourceDirectory := (srcPath / "src" / "main").getAbsoluteFile,
-    Test / sourceDirectory := (srcPath / "src" / "test").getAbsoluteFile,
+    Test / sourceDirectory := (testPath / "src" / "test").getAbsoluteFile,
     libraryDependencies ++= Seq(
       scalaCheck(scalaCheckVersion),
-      tagging
-    ) ++ Seq(
+      tagging,
+    ) ++ {
       // Test-only dependencies
-      scalaTest(scalaCheckVersion)
-    ).map(_ % Test)
+      Seq(
+        scalaTest(scalaCheckVersion),
+      ) ++ {
+        scalaCheckVersion match {
+          case ScalaCheck_1_12 | ScalaCheck_1_13 => Seq()
+          case ScalaCheck_1_14 | ScalaCheck_1_15 => Seq(
+            scalaTestPlusScalaCheck(scalaCheckVersion),
+          )
+        }
+      }
+    }.map(_ % Test)
   )
 }
 
-lazy val `core_1-12` = coreProject(file("core_1-12"), ScalaCheck_1_12)
-lazy val `core_1-13` = coreProject(file("core"), ScalaCheck_1_13)
-lazy val `core_1-14` = coreProject(file("core"), ScalaCheck_1_14)
-lazy val `core_1-15` = coreProject(file("core"), ScalaCheck_1_15)
+lazy val `core_1-12` = coreProject(file("core_1-12"), file("core_1-12"), ScalaCheck_1_12)
+lazy val `core_1-13` = coreProject(file("core"), file("core-1-13-test"), ScalaCheck_1_13)
+lazy val `core_1-14` = coreProject(file("core"), file("core"), ScalaCheck_1_14)
+lazy val `core_1-15` = coreProject(file("core"), file("core"), ScalaCheck_1_15)
 
 
 def jodaProject(scalaCheckVersion: String): Project = {
@@ -97,13 +106,10 @@ def jodaProject(scalaCheckVersion: String): Project = {
     crossScalaVersions := scalaVersions(scalaCheckVersion),
     Compile / sourceDirectory := file(s"$projectPath/src/main").getAbsoluteFile,
     Test / sourceDirectory := file(s"$projectPath/src/test").getAbsoluteFile,
+    // don't include dependencies that come from scalacheck-ops core project
     libraryDependencies ++= Seq(
-      scalaCheck(scalaCheckVersion),
-      jodaTime
-    ) ++ Seq(
-      // Test-only dependencies
-      scalaTest(scalaCheckVersion)
-    ).map(_ % Test)
+      jodaTime,
+    )
   ).dependsOn(
     (scalaCheckVersion match {
       case ScalaCheck_1_12 => `core_1-12`
