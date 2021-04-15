@@ -2,9 +2,9 @@ package org.scalacheck.ops
 
 import org.scalacheck.{Gen, Test}
 import org.scalacheck.rng.Seed
-import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.FreeSpec
 
-class SeededGenSpec extends AnyFreeSpec {
+class SeededGenSpec extends FreeSpec {
 
   private val it = classOf[SeededGen[_, _, _]].getSimpleName
 

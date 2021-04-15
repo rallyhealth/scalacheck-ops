@@ -2,13 +2,13 @@ package org.scalacheck.ops
 
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks._
+import org.scalatest.FlatSpec
+import org.scalatest.Matchers._
+import org.scalatest.prop.GeneratorDrivenPropertyChecks._
 
 import scala.util.Try
 
-class GenOpsSpec extends AnyFlatSpec
+class GenOpsSpec extends FlatSpec
   with ScalaCheckImplicits {
 
   private def genDigits: Gen[Int] = Gen.choose(0, 100)

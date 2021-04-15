@@ -2,14 +2,14 @@ package org.scalacheck.ops
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.should.Matchers._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks._
+import org.scalatest.FreeSpec
+import org.scalatest.Matchers._
+import org.scalatest.prop.GeneratorDrivenPropertyChecks._
 
 import java.util.UUID
 import scala.reflect.{ClassTag, classTag}
 
-class SeedExtractorSpec extends AnyFreeSpec {
+class SeedExtractorSpec extends FreeSpec {
   import SeedExtractorSpec._
 
   private val it = classOf[SeedExtractor[_]].getName
