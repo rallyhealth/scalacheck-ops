@@ -17,7 +17,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 // TODO: Remove this after it is no longer needed for checking binary compatibility
 ThisBuild / resolvers += Resolver.bintrayRepo("rallyhealth", "maven")
 
-developers := List(
+ThisBuild / developers := List(
   Developer(id = "jeffmay", name = "Jeff May", email = "jeff.n.may@gmail.com", url = url("https://github.com/jeffmay")),
 )
 
@@ -25,8 +25,7 @@ developers := List(
 mimaFailOnNoPrevious := false
 
 // don't publish the aggregate root project
-skip / publish := true
-skip / publishLocal := true
+publish / skip := true
 
 def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
