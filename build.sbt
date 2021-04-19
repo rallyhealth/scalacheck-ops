@@ -14,9 +14,6 @@ ThisBuild / licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 // reload sbt when the build files change
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-// TODO: Remove this after it is no longer needed for checking binary compatibility
-ThisBuild / resolvers += Resolver.bintrayRepo("rallyhealth", "maven")
-
 ThisBuild / developers := List(
   Developer(id = "jeffmay", name = "Jeff May", email = "jeff.n.may@gmail.com", url = url("https://github.com/jeffmay")),
 )
@@ -31,7 +28,7 @@ def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
 
-    mimaPreviousArtifacts := Set(organization.value %% artifact % "2.5.2"),
+    mimaPreviousArtifacts := Set(organization.value %% artifact % "2.6.0"),
 
     scalacOptions := Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
