@@ -5,6 +5,7 @@ import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
 import org.scalatest.freespec.AnyFreeSpec
 
+// TODO: Remove this after GenOrThrow is removed in the next major version
 class GenOrThrowSpec extends AnyFreeSpec
   with ScalaCheckImplicits {
 
@@ -46,7 +47,7 @@ class GenOrThrowSpec extends AnyFreeSpec
         count += 1
         count > retries + 1
       })
-      val ex = intercept[EmptyGenSampleException[UUID]] {
+      val ex = intercept[GenExceededRetryLimit] {
         methodCall(GenConfig.default.withRetries(retries))(gen)
       }
       assertResult(retries)(ex.attempts)
@@ -76,63 +77,63 @@ class GenOrThrowSpec extends AnyFreeSpec
     }
   }
 
-  generatesUniqueRandomValues("getOrThrow", _.getOrThrow)
+  generatesUniqueRandomValues("getOrThrow", gen => new GenOrThrow(gen).getOrThrow)
   throwsAnErrorWhenFiltered(
     "getOrThrow",
-    _ => _.getOrThrow,
+    _ => gen => new GenOrThrow(gen).getOrThrow,
     minRetryLimit = 100
   )
 
-  generatesTheSameValueWhenCalledTwice("getOrThrow (given the same Seed)", _.getOrThrow(Seed(0)))
+  generatesTheSameValueWhenCalledTwice("getOrThrow (given the same Seed)", gen => new GenOrThrow(gen).getOrThrow(Seed(0)))
 
-  generatesTheSameValueWhenCalledTwice("getOrThrowPure", _.getOrThrowPure)
+  generatesTheSameValueWhenCalledTwice("getOrThrowPure", gen => new GenOrThrow(gen).getOrThrowPure)
   throwsAnErrorWhenFiltered(
     "getOrThrowPure",
     implicit c => _.getOrThrowPure
   )
 
-  generatesUniqueRandomValues("randomOrThrow", _.randomOrThrow())
+  generatesUniqueRandomValues("randomOrThrow", gen => new GenOrThrow(gen).randomOrThrow())
   throwsAnErrorWhenFiltered(
     "randomOrThrow()",
-    implicit c => _.randomOrThrow()
+    implicit c => gen => new GenOrThrow(gen).randomOrThrow()
   )
 
-  generatesUniqueRandomValues("tryGet.get", _.tryGet.get)
+  generatesUniqueRandomValues("tryGet.get", gen => new GenOrThrow(gen).tryGet.get)
   throwsAnErrorWhenFiltered(
     "tryGet.get",
-    _ => _.tryGet.get,
+    _ => gen => new GenOrThrow(gen).tryGet.get,
     minRetryLimit = 100
   )
 
-  generatesTheSameValueWhenCalledTwice("tryGet (given the same Seed)", _.tryGet(Seed(0)).get)
+  generatesTheSameValueWhenCalledTwice("tryGet (given the same Seed)", gen => new GenOrThrow(gen).tryGet(Seed(0)).get)
 
-  generatesUniqueRandomValues("sampleIterator.next()", _.sampleIterator.next())
+  generatesUniqueRandomValues("sampleIterator.next()", gen => new GenOrThrow(gen).sampleIterator.next())
   doesNotThrowAnErrorWhenFiltered(
     "sampleIterator.next()",
-    _ => _.sampleIterator.next(),
+    _ => gen => new GenOrThrow(gen).sampleIterator.next(),
     minRetryLimit = 100
   )
 
-  generatesUniqueRandomValues("toUnboundedIterator.next()", _.toUnboundedIterator.next())
+  generatesUniqueRandomValues("toUnboundedIterator.next()", gen => new GenOrThrow(gen).toUnboundedIterator.next())
   doesNotThrowAnErrorWhenFiltered(
     "toUnboundedIterator.next()",
-    _ => _.toUnboundedIterator.next(),
+    _ => gen => new GenOrThrow(gen).toUnboundedIterator.next(),
     minRetryLimit = 100
   )
 
-  generatesTheSameValueWhenCalledTwice("toIterator.next()", _.toIterator.next())
-  generatesTheSameValueWhenCalledTwice("toIterator.take(3).toSeq", _.toIterator.take(3).toSeq)
+  generatesTheSameValueWhenCalledTwice("toIterator.next()", gen => new GenOrThrow(gen).toIterator.next())
+  generatesTheSameValueWhenCalledTwice("toIterator.take(3).toSeq", gen => new GenOrThrow(gen).toIterator.take(3).toSeq)
   throwsAnErrorWhenFiltered(
     "toIterator.next()",
-    _ => _.toIterator.next(),
+    _ => gen => new GenOrThrow(gen).toIterator.next(),
     minRetryLimit = 100
   )
 
-  generatesTheSameValueWhenCalledTwice("iterator.next()", _.iterator.next())
-  generatesTheSameValueWhenCalledTwice("iterator.take(3).toSeq", _.iterator.take(3).toSeq)
+  generatesTheSameValueWhenCalledTwice("iterator.next()", gen => new GenOrThrow(gen).iterator.next())
+  generatesTheSameValueWhenCalledTwice("iterator.take(3).toSeq", gen => new GenOrThrow(gen).iterator.take(3).toSeq)
   throwsAnErrorWhenFiltered(
     "iterator.next()",
-    implicit c => _.iterator.next()
+    implicit c => gen => new GenOrThrow(gen).iterator.next()
   )
 
 }

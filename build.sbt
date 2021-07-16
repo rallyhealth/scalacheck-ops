@@ -76,6 +76,7 @@ def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Proje
     Compile / sourceDirectory := (srcPath / "src" / "main").getAbsoluteFile,
     Test / sourceDirectory := (testPath / "src" / "test").getAbsoluteFile,
     libraryDependencies ++= Seq(
+      izumiReflect,
       scalaCheck(scalaCheckVersion),
       tagging,
     ) ++ {

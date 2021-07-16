@@ -8,6 +8,7 @@ import scala.reflect.ClassTag
 
 trait ScalaCheckImplicits
   extends ArbitraryAsGen
+  with ImplicitGenFromConfig
   with JavaTimeImplicits
   with ImplicitJavaTimeGenerators
   with ShrinkLargeTuples {
@@ -16,6 +17,8 @@ trait ScalaCheckImplicits
 
   implicit def genObjectToGenOps(gen: Gen.type): GenOps.type = GenOps
 
-  implicit def genToGenOrThrow[T: ClassTag](generator: Gen[T]): GenOrThrow[T] = new GenOrThrow[T](generator)
+  // No longer an implicit, but leaving this here for binary compatibility
+  @deprecated("Use implicit conversion to GenFromConfig instead.", "2.7.0")
+  def genToGenOrThrow[T: ClassTag](generator: Gen[T]): GenOrThrow[T] = new GenOrThrow[T](generator)
 
 }

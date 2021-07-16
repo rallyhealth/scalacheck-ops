@@ -8,8 +8,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks._
 
 import scala.util.Try
 
-class GenOpsSpec extends AnyFlatSpec
-  with ScalaCheckImplicits {
+class GenOpsSpec extends AnyFlatSpec {
 
   private def genDigits: Gen[Int] = Gen.choose(0, 100)
 
@@ -24,8 +23,9 @@ class GenOpsSpec extends AnyFlatSpec
   it should "generate the same samples when called twice with the same seed" in {
     val gen = Gen.setOf(Gen.choose(0, 1))
     val seed = Seed(1)
-    val a = gen.getOrThrow(seed)
-    val b = gen.getOrThrow(seed)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
     assert(a == b)
   }
 
@@ -53,8 +53,8 @@ class GenOpsSpec extends AnyFlatSpec
     val collectNegative = Gen.collect(Gen.chooseNum(1, 10)) {
       case x if x < 0 => x
     }
-    an [EmptyGenSampleException[Int]] shouldBe thrownBy {
-      collectNegative.randomOrThrow()
+    an [GenExceededRetryLimit] shouldBe thrownBy {
+      collectNegative.nextRandom()
     }
   }
 
@@ -71,13 +71,14 @@ class GenOpsSpec extends AnyFlatSpec
     val n = 10
     val gen = Gen.setOfN(n, genDigits)
     val seed = Seed(n)
-    val a = gen.getOrThrow(seed)
-    val b = gen.getOrThrow(seed)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
     assert(a == b)
   }
 
   private val genOnesIter: Gen[Iterator[Int]] = {
-    Gen.const(Gen.oneOf(0, 1)).flatMap(_.filter(Set(1)).toUnboundedIterator)
+    Gen.const(Gen.oneOf(0, 1)).flatMap(_.filter(Set(1)).iterator)
   }
 
   it should "(when filtered) always generate the same number of samples" in {

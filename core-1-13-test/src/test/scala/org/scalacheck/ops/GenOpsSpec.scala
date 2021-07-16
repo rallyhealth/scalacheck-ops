@@ -8,8 +8,7 @@ import org.scalatest.prop.GeneratorDrivenPropertyChecks._
 
 import scala.util.Try
 
-class GenOpsSpec extends FlatSpec
-  with ScalaCheckImplicits {
+class GenOpsSpec extends FlatSpec {
 
   private def genDigits: Gen[Int] = Gen.choose(0, 100)
 
@@ -24,8 +23,8 @@ class GenOpsSpec extends FlatSpec
   it should "generate the same samples when called twice with the same seed" in {
     val gen = Gen.setOf(Gen.choose(0, 1))
     val seed = Seed(1)
-    val a = gen.getOrThrow(seed)
-    val b = gen.getOrThrow(seed)
+    val a = gen.valueFor(seed)
+    val b = gen.valueFor(seed)
     assert(a == b)
   }
 
@@ -53,8 +52,8 @@ class GenOpsSpec extends FlatSpec
     val collectNegative = Gen.collect(Gen.chooseNum(1, 10)) {
       case x if x < 0 => x
     }
-    an [EmptyGenSampleException[Int]] shouldBe thrownBy {
-      collectNegative.randomOrThrow()
+    an [GenExceededRetryLimit] shouldBe thrownBy {
+      collectNegative.nextRandom()
     }
   }
 
@@ -71,8 +70,8 @@ class GenOpsSpec extends FlatSpec
     val n = 10
     val gen = Gen.setOfN(n, genDigits)
     val seed = Seed(n)
-    val a = gen.getOrThrow(seed)
-    val b = gen.getOrThrow(seed)
+    val a = gen.valueFor(seed)
+    val b = gen.valueFor(seed)
     assert(a == b)
   }
 

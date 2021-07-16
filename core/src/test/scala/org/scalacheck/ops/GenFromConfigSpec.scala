@@ -3,10 +3,9 @@ package org.scalacheck.ops
 import java.util.UUID
 import org.scalacheck.Gen
 import org.scalacheck.rng.Seed
-import org.scalatest.FreeSpec
+import org.scalatest.freespec.AnyFreeSpec
 
-class GenOrThrowSpec extends FreeSpec
-  with ScalaCheckImplicits {
+class GenFromConfigSpec extends AnyFreeSpec {
 
   type MethodCall[A] = Gen[A] => Any
 
@@ -76,63 +75,46 @@ class GenOrThrowSpec extends FreeSpec
     }
   }
 
-  generatesUniqueRandomValues("getOrThrow", gen => new GenOrThrow(gen).getOrThrow)
+  generatesTheSameValueWhenCalledTwice("head", _.head)
+  throwsAnErrorWhenFiltered(
+    "head",
+    implicit c => _.head,
+    minRetryLimit = 100
+  )
+
+  generatesTheSameValueWhenCalledTwice("valueFor(Seed(10))", _.valueFor(Seed(10)))
+  throwsAnErrorWhenFiltered(
+    "valueFor(Seed(10))",
+    implicit c => _.valueFor(Seed(10)),
+    minRetryLimit = 100
+  )
+
+  generatesUniqueRandomValues("nextRandom()", _.nextRandom())
+  throwsAnErrorWhenFiltered(
+    "nextRandom()",
+    implicit c => _.nextRandom()
+  )
+
+  // Coverage for deprecated method placeholders
+
+  generatesUniqueRandomValues("getOrThrow", _.getOrThrow)
   throwsAnErrorWhenFiltered(
     "getOrThrow",
-    _ => gen => new GenOrThrow(gen).getOrThrow,
+    _ => _.getOrThrow,
     minRetryLimit = 100
   )
 
-  generatesTheSameValueWhenCalledTwice("getOrThrow (given the same Seed)", gen => new GenOrThrow(gen).getOrThrow(Seed(0)))
-
-  generatesTheSameValueWhenCalledTwice("getOrThrowPure", gen => new GenOrThrow(gen).getOrThrowPure)
-  throwsAnErrorWhenFiltered(
-    "getOrThrowPure",
-    implicit c => _.getOrThrowPure
-  )
-
-  generatesUniqueRandomValues("randomOrThrow", gen => new GenOrThrow(gen).randomOrThrow())
-  throwsAnErrorWhenFiltered(
-    "randomOrThrow()",
-    implicit c => gen => new GenOrThrow(gen).randomOrThrow()
-  )
-
-  generatesUniqueRandomValues("tryGet.get", gen => new GenOrThrow(gen).tryGet.get)
-  throwsAnErrorWhenFiltered(
-    "tryGet.get",
-    _ => gen => new GenOrThrow(gen).tryGet.get,
-    minRetryLimit = 100
-  )
-
-  generatesTheSameValueWhenCalledTwice("tryGet (given the same Seed)", gen => new GenOrThrow(gen).tryGet(Seed(0)).get)
-
-  generatesUniqueRandomValues("sampleIterator.next()", gen => new GenOrThrow(gen).sampleIterator.next())
+  generatesUniqueRandomValues("sampleIterator.next()", _.sampleIterator.next())
   doesNotThrowAnErrorWhenFiltered(
     "sampleIterator.next()",
-    _ => gen => new GenOrThrow(gen).sampleIterator.next(),
+    _ => _.sampleIterator.next(),
     minRetryLimit = 100
   )
 
-  generatesUniqueRandomValues("toUnboundedIterator.next()", gen => new GenOrThrow(gen).toUnboundedIterator.next())
-  doesNotThrowAnErrorWhenFiltered(
-    "toUnboundedIterator.next()",
-    _ => gen => new GenOrThrow(gen).toUnboundedIterator.next(),
-    minRetryLimit = 100
-  )
-
-  generatesTheSameValueWhenCalledTwice("toIterator.next()", gen => new GenOrThrow(gen).toIterator.next())
-  generatesTheSameValueWhenCalledTwice("toIterator.take(3).toSeq", gen => new GenOrThrow(gen).toIterator.take(3).toSeq)
-  throwsAnErrorWhenFiltered(
-    "toIterator.next()",
-    _ => gen => new GenOrThrow(gen).toIterator.next(),
-    minRetryLimit = 100
-  )
-
-  generatesTheSameValueWhenCalledTwice("iterator.next()", gen => new GenOrThrow(gen).iterator.next())
-  generatesTheSameValueWhenCalledTwice("iterator.take(3).toSeq", gen => new GenOrThrow(gen).iterator.take(3).toSeq)
+  generatesTheSameValueWhenCalledTwice("iterator.next()", _.iterator.next())
+  generatesTheSameValueWhenCalledTwice("iterator.take(3).toSeq", _.iterator.take(3).toSeq)
   throwsAnErrorWhenFiltered(
     "iterator.next()",
-    implicit c => gen => new GenOrThrow(gen).iterator.next()
+    implicit c => _.iterator.next()
   )
-
 }
