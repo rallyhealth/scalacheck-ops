@@ -4,7 +4,7 @@ object Dependencies {
 
   final val Scala_2_11 = "2.11.12"
   final val Scala_2_12 = "2.12.12"
-  final val Scala_2_13 = "2.13.5"
+  final val Scala_2_13 = "2.13.6"
 
   final val ScalaCheck_1_12 = "1.12.6"
   final val ScalaCheck_1_13 = "1.13.5"
@@ -18,7 +18,7 @@ object Dependencies {
   // Once we no longer support ScalaCheck 1.13.x, we can upgrade to the latest version of
   // ScalaTest and always pull in the appropriate ScalaTestPlus artifact for ScalaCheck >= 1.14
   final private val ScalaTest_3_0 = "3.0.5"
-  final private val ScalaTest_3_2 = "3.2.7"
+  final private val ScalaTest_3_2 = "3.2.9"
 
   final private val ScalaTestPlusScalaCheckVersion = "3.2.2.0"
 
