@@ -37,6 +37,7 @@ object GenOps {
     } yield new String(arr)
   }
 
+  // TODO: Switch this to TypeName in the next major version
   def setOfN[T: ClassTag](size: Int, maxFailures: Int, tGen: Gen[T]): Gen[Set[T]] = {
     for {
       _ <- Gen.const(tGen)
@@ -44,7 +45,7 @@ object GenOps {
       var failures = 0
       var total = 0
       val set = mutable.Set.empty[T]
-      val iter = tGen.toIterator
+      val iter = new GenFromConfig(tGen, GenConfig.default, classTag[T].runtimeClass.getName).iterator
       while(failures < maxFailures && total < size) {
         if (set.add(iter.next())) {
           total += 1
