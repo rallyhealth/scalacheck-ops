@@ -75,14 +75,30 @@ def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Proje
     crossScalaVersions := scalaVersions(scalaCheckVersion),
     Compile / sourceDirectory := (srcPath / "src" / "main").getAbsoluteFile,
     Test / sourceDirectory := (testPath / "src" / "test").getAbsoluteFile,
-    libraryDependencies ++= Seq(
-      izumiReflect,
-      scalaCheck(scalaCheckVersion),
-      tagging,
-    ) ++ {
+    scalacOptions ++= {
+      scalaVersion.value match {
+        case Scala_2_13 => Seq("-Ymacro-annotations")
+        case _ => Seq()
+      }
+    },
+    libraryDependencies ++= {
+      Seq(
+        izumiReflect,
+        scalaCheck(scalaCheckVersion),
+        tagging,
+      ) ++ {
+        scalaVersion.value match {
+          case Scala_2_11 | Scala_2_12 => Seq(
+            compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+          )
+          case _ => Seq()
+        }
+      }
+    } ++ {
       // Test-only dependencies
       Seq(
         scalaTest(scalaCheckVersion),
+        newtype,
       ) ++ {
         scalaCheckVersion match {
           case ScalaCheck_1_12 | ScalaCheck_1_13 => Seq()
@@ -90,8 +106,9 @@ def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Proje
             scalaTestPlusScalaCheck(scalaCheckVersion),
           )
         }
-      }
-    }.map(_ % Test)
+
+      }.map(_ % Test)
+    }
   )
 }
 
