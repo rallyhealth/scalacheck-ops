@@ -24,9 +24,11 @@ object Dependencies {
 
   final private val IzumiReflectVersion = "1.1.2"
   final private val JodaTimeVersion = "2.10.10"
+  final private val NewtypeVersion = "0.4.4"
   final private val TaggingVersion = "2.3.0"
 
   val izumiReflect: ModuleID = "dev.zio" %% "izumi-reflect" % IzumiReflectVersion
+  val newtype: ModuleID = "io.estatico" %% "newtype" % NewtypeVersion
   val jodaTime: ModuleID = "joda-time" % "joda-time" % JodaTimeVersion
   val tagging: ModuleID = "com.softwaremill.common" %% "tagging" % TaggingVersion
 
