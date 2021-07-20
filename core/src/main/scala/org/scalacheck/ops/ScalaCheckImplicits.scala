@@ -1,16 +1,16 @@
 package org.scalacheck.ops
 
 import org.scalacheck.Gen
-import org.scalacheck.ops.time.{ImplicitJavaTimeGenerators, JavaTimeImplicits, TruncatedJavaTimeImplicits}
+import org.scalacheck.ops.time.{ImplicitJavaTimeGenerators, JavaTimeImplicits}
 
 import scala.language.implicitConversions
 import scala.reflect.ClassTag
 
+// TODO: Move everything to the package object to prevent inheritance here. It is bad for binary compatibility.
+@deprecated("Don't extend ScalaCheckImplicits. Import from org.scalacheck.ops._ instead.", "2.7.0")
 trait ScalaCheckImplicits
   extends ArbitraryAsGen
-  with ImplicitGenFromConfig
   with JavaTimeImplicits
-  with TruncatedJavaTimeImplicits
   with ImplicitJavaTimeGenerators
   with ShrinkLargeTuples {
 
