@@ -107,8 +107,8 @@ def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Proje
           )
         }
 
-      }.map(_ % Test)
-    }
+      }
+    }.map(_ % Test)
   )
 }
 
