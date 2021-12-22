@@ -28,7 +28,10 @@ def commonProject(id: String, artifact: String, path: String): Project = {
   Project(id, file(path)).settings(
     name := artifact,
 
-    mimaPreviousArtifacts := Set(organization.value %% artifact % "2.6.0"),
+    mimaPreviousArtifacts := (
+      if (scalaBinaryVersion.value == "3") Set.empty // remove once _3 is published
+      else Set(organization.value %% artifact % "2.6.0")
+    ),
 
     scalacOptions := Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
