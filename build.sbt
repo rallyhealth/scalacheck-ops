@@ -34,10 +34,12 @@ def commonProject(id: String, artifact: String, path: String): Project = {
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
       "-deprecation:false",
       "-feature",
+      "-encoding", "UTF-8"
+    ) ++ (if (scalaBinaryVersion.value == "3") Seq.empty else Seq(
       "-Xlint",
       "-Ywarn-dead-code",
-      "-encoding", "UTF-8"
-    ),
+    )),
+
 
     // show full stack traces in test failures
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
@@ -64,7 +66,7 @@ def scalaVersions(scalaCheckVersion: String): Seq[String] = scalaCheckVersion ma
   case ScalaCheck_1_12 => Seq(Scala_2_11)
   case ScalaCheck_1_13 => Seq(Scala_2_11, Scala_2_12)
   case ScalaCheck_1_14 => Seq(Scala_2_11, Scala_2_12, Scala_2_13)
-  case ScalaCheck_1_15 => Seq(Scala_2_11, Scala_2_12, Scala_2_13)
+  case ScalaCheck_1_15 => Seq(Scala_2_12, Scala_2_13, Scala_3)
 }
 
 def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Project = {
@@ -103,7 +105,7 @@ def coreProject(srcPath: File, testPath: File, scalaCheckVersion: String): Proje
         scalaCheckVersion match {
           case ScalaCheck_1_12 | ScalaCheck_1_13 => Seq()
           case ScalaCheck_1_14 | ScalaCheck_1_15 => Seq(
-            scalaTestPlusScalaCheck(scalaCheckVersion),
+            scalaTestPlusScalaCheck(scalaCheckVersion, scalaVersion.value),
           )
         }
 

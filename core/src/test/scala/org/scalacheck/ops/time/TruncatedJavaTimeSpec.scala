@@ -14,7 +14,7 @@ class TruncatedJavaTimeSpec extends AnyFreeSpec {
     val it = "Gen[Instant]"
 
     s"$it.truncatedToMillis removes all nanoseconds and milliseconds" in {
-      forAll(Gen.javaInstant.beforeNow.truncatedToMillis) { instant: Instant =>
+      forAll(Gen.javaInstant.beforeNow.truncatedToMillis) { (instant: Instant) =>
         assertResult(0)(instant.getLong(ChronoField.NANO_OF_SECOND) % 1000)
       }
     }
@@ -24,25 +24,25 @@ class TruncatedJavaTimeSpec extends AnyFreeSpec {
     val it = "Gen[LocalDateTime]"
 
     s"$it.truncatedToMillis removes all nanoseconds and milliseconds" in {
-      forAll(Gen.javaLocalDateTime.beforeNow.truncatedToMillis) { datetime: LocalDateTime =>
+      forAll(Gen.javaLocalDateTime.beforeNow.truncatedToMillis) { (datetime: LocalDateTime) =>
         assertResult(0)(datetime.getLong(ChronoField.NANO_OF_SECOND) % 1000)
       }
     }
 
     s"$it.truncatedTo(ChronoUnit.SECONDS) removes all milliseconds" in {
-      forAll(Gen.javaLocalDateTime.beforeNow.truncatedTo(ChronoUnit.SECONDS)) { datetime: LocalDateTime =>
+      forAll(Gen.javaLocalDateTime.beforeNow.truncatedTo(ChronoUnit.SECONDS)) { (datetime: LocalDateTime) =>
         assertResult(0)(datetime.getLong(ChronoField.MILLI_OF_SECOND))
       }
     }
 
     s"$it.truncatedTo(ChronoUnit.MINUTES) removes all seconds" in {
-      forAll(Gen.javaLocalDateTime.beforeNow.truncatedTo(ChronoUnit.MINUTES)) { datetime: LocalDateTime =>
+      forAll(Gen.javaLocalDateTime.beforeNow.truncatedTo(ChronoUnit.MINUTES)) { (datetime: LocalDateTime) =>
         assertResult(0)(datetime.getLong(ChronoField.SECOND_OF_MINUTE))
       }
     }
 
     s"$it.truncatedTo(ChronoUnit.HOURS) removes all seconds" in {
-      forAll(Gen.javaLocalDateTime.beforeNow.truncatedTo(ChronoUnit.HOURS)) { datetime: LocalDateTime =>
+      forAll(Gen.javaLocalDateTime.beforeNow.truncatedTo(ChronoUnit.HOURS)) { (datetime: LocalDateTime) =>
         assertResult(0)(datetime.getLong(ChronoField.MINUTE_OF_HOUR))
       }
     }

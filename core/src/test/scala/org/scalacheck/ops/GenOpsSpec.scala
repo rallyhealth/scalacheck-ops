@@ -102,9 +102,9 @@ class GenOpsSpec extends AnyFlatSpec {
   behavior of "Gen.enumValue"
 
   it should "create a generator from an Enumeration" in {
-    forAll(Gen.enumValue(TestValues)) { enum =>
+    forAll(Gen.enumValue(TestValues)) { (enumeration: TestValues.Value) =>
       // Should be of the expected type
-      assert(enum == TestValues.withName(enum.toString))
+      assert(enumeration == TestValues.withName(enumeration.toString))
     }
   }
 }

@@ -29,7 +29,7 @@ class SeedExtractorSpec extends AnyFreeSpec {
 
   "verify this test catches collisions" in {
     implicit val collisionProneSeedExtractor: SeedExtractor[Int] = SeedExtractor.fromLong(_ % 2)
-    forAll(Gen.listOfN(1000, arbitrary[Int]), collisionCheckParams: _*) { ints: Seq[Int] =>
+    forAll(Gen.listOfN(1000, arbitrary[Int]), collisionCheckParams: _*) { (ints: Seq[Int]) =>
       whenever(ints.nonEmpty) {
         val collisions = groupCollisions(ints)
         assert(collisions.nonEmpty)
@@ -45,13 +45,13 @@ class SeedExtractorSpec extends AnyFreeSpec {
     val typeName = classTag[A].runtimeClass.getSimpleName
 
     s"$it[$typeName]$suffix should extract a consistent seed" in {
-      forAll { a: A =>
+      forAll { (a: A) =>
         assert(extractor.seed(a) == extractor.seed(a))
       }
     }
 
     s"$it[$typeName]$suffix should avoid collisions" in {
-      forAll(Gen.listOfN(1000, arbitrary[A]), collisionCheckParams: _*) { as: Seq[A] =>
+      forAll(Gen.listOfN(1000, arbitrary[A]), collisionCheckParams: _*) { (as: Seq[A]) =>
         val collisions = groupCollisions(as)
         collisions should have size 0
       }
