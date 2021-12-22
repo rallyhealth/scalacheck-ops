@@ -2,12 +2,10 @@ import sbt._
 
 object Dependencies {
 
-  final val Scala_2_11 = "2.11.12"
   final val Scala_2_12 = "2.12.12"
   final val Scala_2_13 = "2.13.6"
   final val Scala_3 = "3.1.0"
 
-  final val ScalaCheck_1_12 = "1.12.6"
   final val ScalaCheck_1_13 = "1.13.5"
   final val ScalaCheck_1_14 = "1.14.3"
   final val ScalaCheck_1_15 = "1.15.4"
@@ -42,7 +40,6 @@ object Dependencies {
 
   def scalaTest(scalaCheckVersion: String): ModuleID = {
     val scalaTestVersion = scalaCheckVersion match {
-      case ScalaCheck_1_12 => ScalaTest_2
       case ScalaCheck_1_13 => ScalaTest_3_0
       case ScalaCheck_1_14 | ScalaCheck_1_15 => ScalaTest_3_2
     }

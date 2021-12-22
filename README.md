@@ -23,7 +23,7 @@ with scalacheck-ops.
 **NOTE** Version 1.x lives under the `"me.jeffmay"` organization. Version 2.x lives
 under `"com.rallyhealth"`
 
-**NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.11 as this 
+**NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.12 as this 
 library expects the java.time standard library module.
 
 **NOTE** As of `scalacheck-ops` >=2.0, the version of scalacheck is always
@@ -33,11 +33,8 @@ no version suffix would pull in ScalaCheck version 1.12.6.
 | Artifact Name       | Version Limit  | ScalaCheck | Supported JDK |   Supported Scala   |
 | :-----------------: | :------------: |:----------:| :-----------: |:-------------------:|
 | scalacheck-ops_1-15 | x >= 2.5.2     |   1.15.4   | 8             | 2.12, 2.13, 3 |
-| scalacheck-ops_1-14 | x >= 2.0       |   1.14.3   | 8             |  2.11, 2.12, 2.13   |
-| scalacheck-ops_1-13 | x >= 2.0       |   1.13.5   | 8             |     2.11, 2.12      |
-| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |   1.13.4   | 6 - 8         |     2.10 - 2.11     |
-| scalacheck-ops_1-12 | x >= 2.0       |   1.12.6   | 8             |        2.11         |
-| scalacheck-ops      | x < 2.0        |   1.12.6   | 6 - 8         |     2.10 - 2.11     |
+| scalacheck-ops_1-14 | x >= 2.0       |   1.14.3   | 8             |  2.12, 2.13   |
+| scalacheck-ops_1-13 | x >= 2.0       |   1.13.5   | 8             |     2.12      |
 
 The same source code is compiled against specific versions of Scala and ScalaCheck. 
 We use separate artifacts to avoid causing issues with transitive dependencies on
