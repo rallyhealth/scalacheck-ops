@@ -32,7 +32,7 @@ no version suffix would pull in ScalaCheck version 1.12.6.
 
 | Artifact Name       | Version Limit  | ScalaCheck | Supported JDK | Supported Scala  |
 | :-----------------: | :------------: | :--------: | :-----------: | :--------------: |
-| scalacheck-ops_1-15 | x >= 2.5.2     |     1.15.2 | 8             | 2.11, 2.12, 2.13 |
+| scalacheck-ops_1-15 | x >= 2.5.2     |     1.15.4 | 8             | 2.12, 2.13, 3    |
 | scalacheck-ops_1-14 | x >= 2.0       |     1.14.3 | 8             | 2.11, 2.12, 2.13 |
 | scalacheck-ops_1-13 | x >= 2.0       |     1.13.5 | 8             | 2.11, 2.12       |
 | scalacheck-ops_1-13 | 1.5 <= x < 2.0 |     1.13.4 | 6 - 8         | 2.10 - 2.11      |

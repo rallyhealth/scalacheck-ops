@@ -26,7 +26,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   behavior of s"$genClassName.before"
 
   it should "not generate errors" in {
-    forAll() { start: gen.InstantType =>
+    forAll() { (start: gen.InstantType) =>
       val sampleIter = gen.before(start).sampleIterator
       val samples = sampleIter.take(10).toSeq
       assert(samples.forall(_.isDefined))
@@ -34,8 +34,8 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   }
 
   it should s"always generate $genClassName instances less than the given instant" in {
-    forAll() { start: gen.InstantType =>
-      forAll(gen.before(start)) { before: gen.InstantType =>
+    forAll() { (start: gen.InstantType) =>
+      forAll(gen.before(start)) { (before: gen.InstantType) =>
         before should be <= start
       }
     }
@@ -44,7 +44,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   behavior of s"$genClassName.after"
 
   it should "not generate errors" in {
-    forAll() { start: gen.InstantType =>
+    forAll() { (start: gen.InstantType) =>
       val sampleIter = gen.after(start).sampleIterator
       val samples = sampleIter.take(10).toSeq
       assert(samples.forall(_.isDefined))
@@ -52,8 +52,8 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   }
 
   it should s"always generate $genClassName instances greater than the given instant" in {
-    forAll() { start: gen.InstantType =>
-      forAll(gen.after(start)) { after: gen.InstantType =>
+    forAll() { (start: gen.InstantType) =>
+      forAll(gen.after(start)) { (after: gen.InstantType) =>
         after should be >= start
       }
     }
@@ -62,7 +62,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   behavior of s"$genClassName.around"
 
   it should "not generate errors" in {
-    forAll() { start: gen.InstantType =>
+    forAll() { (start: gen.InstantType) =>
       val sampleIter = gen.around(start).sampleIterator
       val samples = sampleIter.take(10).toSeq
       assert(samples.forall(_.isDefined))
@@ -70,7 +70,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   }
 
   it should s"always generate $genClassName that are within the given range of the given time" in {
-    forAll() { start: gen.InstantType =>
+    forAll() { (start: gen.InstantType) =>
       forAll(gen.around(start, gen.defaultRange)) { around =>
         around should (
           be >= gen.subtractToFloor(start, gen.defaultRange) and

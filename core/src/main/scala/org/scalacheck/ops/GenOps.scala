@@ -20,8 +20,8 @@ object GenOps {
     } map pf
   }
 
-  def enumValue[E <: Enumeration](enum: E): Gen[enum.Value] =
-    Gen.oneOf[enum.Value](enum.values.toSeq)
+  def enumValue[E <: Enumeration](enumuration: E): Gen[enumuration.Value] =
+    Gen.oneOf[enumuration.Value](enumuration.values.toSeq)
 
   def boolean: Gen[Boolean] = Gen.oneOf(true, false)
 
