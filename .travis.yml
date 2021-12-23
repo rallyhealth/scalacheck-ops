@@ -1,19 +1,27 @@
 language: scala
 scala:
-  - 2.13.6
+  - 2.13.7
 jdk:
   - openjdk8
   - openjdk11
 
 before_script:
   # Download sbt because Travis can't find it automatically :(
-  - mkdir -p $HOME/.sbt/launchers/1.5.3/
-  - curl -L -o $HOME/.sbt/launchers/1.5.3/sbt-launch.jar https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.5.3/sbt-launch-1.5.3.jar
+  - mkdir -p $HOME/.sbt/launchers/1.5.8/
+  - curl -L -o $HOME/.sbt/launchers/1.5.8/sbt-launch.jar https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.5.8/sbt-launch-1.5.8.jar
 
 script:
   - sbt clean coverage test coverageAggregate
   # Upload coverage reports to codecov.io before checking binary compatibility
-  - bash <(curl -s https://codecov.io/bash)
+  - curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+  - curl -Os https://uploader.codecov.io/latest/linux/codecov
+  - curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+  - curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+  - gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+  - shasum -a 256 -c codecov.SHA256SUM
+  - chmod +x codecov
+  - ./codecov -t ${CODECOV_TOKEN}
+  # Check for binary compatibility issues
   - sbt mimaReportBinaryIssues
 
 # Avoid unnecessary cache updates
