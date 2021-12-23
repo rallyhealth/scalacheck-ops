@@ -24,43 +24,49 @@ mimaFailOnNoPrevious := false
 // don't publish the aggregate root project
 publish / skip := true
 
-def commonSettings(artifact: String): Seq[Setting[_]] = Seq(
-  name := artifact,
+def commonSettings(artifact: String): Seq[Setting[_]] =
+  Seq(
+    name := artifact,
 
-  mimaPreviousArtifacts := (
-    if (scalaBinaryVersion.value == "3") Set.empty // remove once _3 is published
-    else Set(organization.value %% artifact % "2.6.0")
-    )
-)
+    mimaPreviousArtifacts := (
+      if (scalaBinaryVersion.value == "3") Set.empty // remove once _3 is published
+      else Set(organization.value %% artifact % "2.6.0")
+      ),
 
-scalacOptions := Seq(
-  // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
-  "-deprecation:false",
-  "-feature",
-  "-encoding", "UTF-8"
-) ++ (if (scalaBinaryVersion.value == "3") Seq.empty else Seq(
-  "-Xlint",
-  "-Ywarn-dead-code",
-))
+    scalacOptions ++= Seq(
+      // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
+      "-deprecation:false",
+      "-feature",
+      "-encoding", "UTF-8"
+    ) ++ (if (scalaBinaryVersion.value == "3") Seq.empty else Seq(
+      "-Xlint",
+      "-Ywarn-dead-code",
+    )),
 
-// show full stack traces in test failures
-Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
+    // show full stack traces in test failures
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
 
-// disable compilation of ScalaDocs, since this always breaks on links and isn't as helpful as source
-Compile / doc / sources := Seq.empty
+    // disable compilation of ScalaDocs, since this always breaks on links and isn't as helpful as source
+    Compile / doc / sources := Seq.empty,
 
-// disable publishing empty ScalaDocs
-Compile / packageDoc / publishArtifact := false
+    // disable publishing empty ScalaDocs
+    Compile / packageDoc / publishArtifact := false,
 
-// Don't publish the test artifacts, nobody should depend on these
-Test / publishArtifact := false
+    // Don't publish the test artifacts, nobody should depend on these
+    Test / publishArtifact := false
+  )
 
 lazy val `core` = projectMatrix
   .settings(
+    // default locations, overridden in custom rows where needed
+    Compile / sourceDirectory := (file("core") / "src" / "main").getAbsoluteFile,
+    Test / sourceDirectory := (file("core") / "src" / "test").getAbsoluteFile,
+
     scalacOptions ++= (scalaVersion.value match {
       case Scala_2_13 => Seq("-Ymacro-annotations")
       case _ => Seq()
     }),
+
     libraryDependencies ++= Seq(
       izumiReflect,
       tagging,
@@ -70,10 +76,7 @@ lazy val `core` = projectMatrix
         compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
       )
       case _ => Seq()
-    }),
-    // default locations, overridden in custom rows where needed
-    Compile / sourceDirectory := (file("core") / "src" / "main").getAbsoluteFile,
-    Test / sourceDirectory := (file("core") / "src" / "test").getAbsoluteFile
+    })
   )
   .customRow(
     scalaVersions = Seq(Scala_2_11),
@@ -151,20 +154,21 @@ lazy val `joda` = projectMatrix
   .settings(
     Compile / sourceDirectory := file(s"joda/src/main").getAbsoluteFile,
     Test / sourceDirectory := file(s"joda/src/test").getAbsoluteFile,
+
     // don't include dependencies that come from scalacheck-ops core project
     libraryDependencies += jodaTime
   )
   .customRow(
     scalaVersions = Seq(Scala_2_11),
     axisValues = Seq(ScalaCheckAxis.v1_12, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_12.subArtifact("joda"))
-      :+ (coverageEnabled := false) // Scala 2.11
+    settings = commonSettings(ScalaCheckAxis.v1_12.subArtifact("joda")) :+
+      (coverageEnabled := false) // Scala 2.11
   )
   .customRow(
     scalaVersions = Seq(Scala_2_11),
     axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_13.subArtifact("joda"))
-      :+ (coverageEnabled := false) // Scala 2.11
+    settings = commonSettings(ScalaCheckAxis.v1_13.subArtifact("joda")) :+
+      (coverageEnabled := false) // Scala 2.11
   )
   .customRow(
     scalaVersions = Seq(Scala_2_12),
@@ -174,8 +178,8 @@ lazy val `joda` = projectMatrix
   .customRow(
     scalaVersions = Seq(Scala_2_11),
     axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_14.subArtifact("joda"))
-      :+ (coverageEnabled := false) // Scala 2.11
+    settings = commonSettings(ScalaCheckAxis.v1_14.subArtifact("joda")) :+
+      (coverageEnabled := false) // Scala 2.11
   )
   .customRow(
     scalaVersions = Seq(Scala_2_12, Scala_2_13),
