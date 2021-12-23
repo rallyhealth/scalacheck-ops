@@ -4,7 +4,7 @@ import org.scalatest.freespec.AnyFreeSpec
 
 class NewtypeTypeNameSpec extends AnyFreeSpec {
   /*
-   * Note differences in type name emited by Scala 3 vs. Scala 2
+   * Note differences in type name emitted by Scala 3 vs. Scala 2
    */
   "Find a TypeName of a newtype" in {
     assertResult("org.scalacheck.ops.NewtypeExample$IdType") {
