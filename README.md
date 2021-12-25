@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/rallyhealth/scalacheck-ops.svg?branch=master)](https://travis-ci.org/rallyhealth/scalacheck-ops)
-[![codecov](https://codecov.io/gh/rallyhealth/scalacheck-ops/branch/master/graph/badge.svg)](https://codecov.io/gh/rallyhealth/scalacheck-ops)
+[![Build Status](https://img.shields.io/travis/com/rallyhealth/scalacheck-ops)](https://app.travis-ci.com/github/rallyhealth/scalacheck-ops)
+[![CodeCov](https://img.shields.io/codecov/c/github/rallyhealth/scalacheck-ops)](https://codecov.io/gh/rallyhealth/scalacheck-ops)
 
-| scalacheck-ops (1.x) | scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 | scalacheck-ops_1-15 |
-| :------------------: | :-----------------: | :-----------------: | :-----------------: | :-----------------: |
-| [ ![Download](https://api.bintray.com/packages/jeffmay/maven/scalacheck-ops/images/download.svg) ](https://bintray.com/jeffmay/maven/scalacheck-ops/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-12/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-12/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-13/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-13/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-14/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-14/_latestVersion) | [ ![Download](https://api.bintray.com/packages/rallyhealth/maven/scalacheck-ops_1-15/images/download.svg) ](https://bintray.com/rallyhealth/maven/scalacheck-ops_1-15/_latestVersion) |
+| scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 | scalacheck-ops_1-15 |
+| :-----------------: | :-----------------: | :-----------------: | :-----------------: | 
+| ![Download for ScalaCheck 1.12 & Scala 2.11](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-12_2.11/badge.svg?style=flat) | ![Download for ScalaCheck 1.13 & Scala 2.12](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-13_2.12/badge.svg?style=flat) | ![Download for ScalaCheck 1.14 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-14_2.13/badge.svg?style=flat) | ![Download for ScalaCheck 1.15 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-15_2.13/badge.svg?style=flat) |
 
 # Summary
 
