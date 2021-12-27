@@ -15,7 +15,7 @@ ThisBuild / licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / developers := List(
-  Developer(id = "jeffmay", name = "Jeff May", email = "jeff.n.may@gmail.com", url = url("https://github.com/jeffmay")),
+  Developer(id = "jeffmay", name = "Jeff May", email = "jeff.n.may@gmail.com", url = url("https://github.com/jeffmay"))
 )
 
 // don't look for previous versions of the root project, they don't exist
@@ -24,39 +24,44 @@ mimaFailOnNoPrevious := false
 // don't publish the aggregate root project
 publish / skip := true
 
-def commonSettings(artifact: String): Seq[Setting[_]] =
-  Seq(
-    name := artifact,
+def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
+  val artifact = ScalaCheckAxis.current(_.artifact(subProject))
+  val mimaPreviousVersion = scalaBinaryVersion(v => if (v == "3") "2.8.0" else "2.6.0")
 
-    mimaPreviousArtifacts := (
-      if (scalaBinaryVersion.value == "3") Set.empty // remove once _3 is published
-      else Set(organization.value %% artifact % "2.6.0")
-      ),
+  Seq(
+    name := artifact.value,
+
+    mimaPreviousArtifacts := Set(organization.value %% artifact.value % mimaPreviousVersion.value),
 
     scalacOptions ++= Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
       "-deprecation:false",
       "-feature",
       "-encoding", "UTF-8"
-    ) ++ (if (scalaBinaryVersion.value == "3") Seq.empty else Seq(
+    ) ++ (if (scalaBinaryVersion.value == "3") Nil else Seq(
       "-Xlint",
-      "-Ywarn-dead-code",
+      "-Ywarn-dead-code"
     )),
 
     // show full stack traces in test failures
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
 
     // disable compilation of ScalaDocs, since this always breaks on links and isn't as helpful as source
-    Compile / doc / sources := Seq.empty,
+    Compile / doc / sources := Nil,
 
     // disable publishing empty ScalaDocs
     Compile / packageDoc / publishArtifact := false,
 
     // Don't publish the test artifacts, nobody should depend on these
-    Test / publishArtifact := false
+    Test / publishArtifact := false,
+
+    // Disable coverage for Scala 2.11 -- sbt-scoverage no longer supports it
+    coverageEnabled := scalaBinaryVersion.value != "2.11"
   )
+}
 
 lazy val `core` = projectMatrix
+  .settings(commonSettings(subProject = None))
   .settings(
     // default locations, overridden in custom rows where needed
     Compile / sourceDirectory := (file("core") / "src" / "main").getAbsoluteFile,
@@ -64,92 +69,56 @@ lazy val `core` = projectMatrix
 
     scalacOptions ++= (scalaVersion.value match {
       case Scala_2_13 => Seq("-Ymacro-annotations")
-      case _ => Seq()
+      case _ => Nil
     }),
 
     libraryDependencies ++= Seq(
       izumiReflect,
       tagging,
-      newtype // Test-only
+      ScalaCheckAxis.current.value.scalaCheck,
+      newtype, // Test-only
+      ScalaCheckAxis.current.value.scalaTest // Test-only
     ) ++ (scalaVersion.value match {
       case Scala_2_11 | Scala_2_12 => Seq(
         compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
       )
-      case _ => Seq()
+      case _ => Nil
     })
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_11),
+    scalaVersions = ScalaCheckAxis.v1_12.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_12, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_12.artifact) ++ Seq(
-      coverageEnabled := false, // Scala 2.11
+    settings = Seq(
       Compile / sourceDirectory := (file("core_1-12") / "src" / "main").getAbsoluteFile,
-      Test / sourceDirectory := (file("core_1-12") / "src" / "test").getAbsoluteFile,
-      libraryDependencies ++= Seq(
-        ScalaCheckAxis.v1_12.scalaCheck,
-        ScalaCheckAxis.v1_12.scalaTest
-      )
+      Test / sourceDirectory := (file("core_1-12") / "src" / "test").getAbsoluteFile
     )
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_11),
+    scalaVersions = ScalaCheckAxis.v1_13.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_13.artifact) ++ Seq(
-      coverageEnabled := false, // Scala 2.11
-      Test / sourceDirectory := (file("core-1-13-test") / "src" / "test").getAbsoluteFile,
-      libraryDependencies ++= Seq(
-        ScalaCheckAxis.v1_13.scalaCheck,
-        ScalaCheckAxis.v1_13.scalaTest
-      )
+    settings = Seq(
+      Test / sourceDirectory := (file("core-1-13-test") / "src" / "test").getAbsoluteFile
     )
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_12),
-    axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_13.artifact) ++ Seq(
-      Test / sourceDirectory := (file("core-1-13-test") / "src" / "test").getAbsoluteFile,
-      libraryDependencies ++= Seq(
-        ScalaCheckAxis.v1_13.scalaCheck,
-        ScalaCheckAxis.v1_13.scalaTest
-      )
-    )
-  )
-  .customRow(
-    scalaVersions = Seq(Scala_2_11),
+    scalaVersions = ScalaCheckAxis.v1_14.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_14.artifact) ++ Seq(
-      coverageEnabled := false, // Scala 2.11
-      libraryDependencies ++= Seq(
-        ScalaCheckAxis.v1_14.scalaCheck,
-        ScalaCheckAxis.v1_14.scalaTest,
-        ScalaCheckAxis.v1_14.scalaTestPlusScalaCheck(scalaVersion.value)
-      )
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_12, Scala_2_13),
-    axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_14.artifact) ++ Seq(
-      libraryDependencies ++= Seq(
-        ScalaCheckAxis.v1_14.scalaCheck,
-        ScalaCheckAxis.v1_14.scalaTest,
-        ScalaCheckAxis.v1_14.scalaTestPlusScalaCheck(scalaVersion.value)
-      )
-    )
-  )
-  .customRow(
-    scalaVersions = Seq(Scala_2_12, Scala_2_13, Scala_3),
+    scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_15.artifact) ++ Seq(
-      libraryDependencies ++= Seq(
-        ScalaCheckAxis.v1_15.scalaCheck,
-        ScalaCheckAxis.v1_15.scalaTest,
-        ScalaCheckAxis.v1_15.scalaTestPlusScalaCheck(scalaVersion.value)
-      )
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
   )
 
 lazy val `joda` = projectMatrix
+  .settings(commonSettings(subProject = Some("joda")))
   .dependsOn(`core` % "compile;test->test")
   .settings(
     Compile / sourceDirectory := file(s"joda/src/main").getAbsoluteFile,
@@ -159,35 +128,22 @@ lazy val `joda` = projectMatrix
     libraryDependencies += jodaTime
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_11),
+    scalaVersions = ScalaCheckAxis.v1_12.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_12, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_12.subArtifact("joda")) :+
-      (coverageEnabled := false) // Scala 2.11
+    settings = Nil
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_11),
+    scalaVersions = ScalaCheckAxis.v1_13.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_13.subArtifact("joda")) :+
-      (coverageEnabled := false) // Scala 2.11
+    settings = Nil
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_12),
-    axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_13.subArtifact("joda"))
-  )
-  .customRow(
-    scalaVersions = Seq(Scala_2_11),
+    scalaVersions = ScalaCheckAxis.v1_14.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_14.subArtifact("joda")) :+
-      (coverageEnabled := false) // Scala 2.11
+    settings = Nil
   )
   .customRow(
-    scalaVersions = Seq(Scala_2_12, Scala_2_13),
-    axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_14.subArtifact("joda"))
-  )
-  .customRow(
-    scalaVersions = Seq(Scala_2_12, Scala_2_13, Scala_3),
+    scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15, VirtualAxis.jvm),
-    settings = commonSettings(ScalaCheckAxis.v1_15.subArtifact("joda"))
+    settings = Nil
   )

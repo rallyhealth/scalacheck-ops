@@ -1,4 +1,7 @@
 import sbt._
+import sbtprojectmatrix.ProjectMatrixPlugin.autoImport.virtualAxes
+
+import scala.reflect.ClassTag
 
 object Dependencies {
 
@@ -7,7 +10,7 @@ object Dependencies {
   final val Scala_2_13 = "2.13.6"
   final val Scala_3 = "3.1.0"
 
-  final private val ScalaTest_2 = "2.2.6"
+  final private val ScalaTest_2_2 = "2.2.6"
 
   // Newer versions of ScalaTest separate the scalatestplus %% scalacheck-1-X dependencies,
   // but do not support ScalaCheck 1.13.x
@@ -32,31 +35,43 @@ object Dependencies {
   val tagging: ModuleID = "com.softwaremill.common" %% "tagging" % TaggingVersion
 
   case class ScalaCheckAxis(
-    idSuffix: String,
-    version: String,
-    scalaTestVersion: String
+    id: String,
+    scalaCheckVersion: String,
+    scalaTestVersion: String,
+    scalaVersions: Seq[String]
   ) extends VirtualAxis.WeakAxis {
-    override def directorySuffix: String = s"-$idSuffix"
 
-    def artifact = s"scalacheck-ops_$idSuffix"
+    override def idSuffix: String = s"_$id"
 
-    def subArtifact(sub: String) = s"scalacheck-ops-${sub}_$idSuffix"
+    override def directorySuffix: String = s"-$id"
+
+    def artifact(subProject: Option[String]): String = subProject match {
+      case Some(sub) => s"scalacheck-ops-${sub}_$id"
+      case None => s"scalacheck-ops_$id"
+    }
 
     def scalaCheck: ModuleID =
-      "org.scalacheck" %% "scalacheck" % version
+      "org.scalacheck" %% "scalacheck" % scalaCheckVersion
 
     def scalaTest: ModuleID =
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
     def scalaTestPlusScalaCheck(scalaVer: String): ModuleID =
-      "org.scalatestplus" %% s"scalacheck-${idSuffix}" % scalaTestPlusScalaCheckVersion(scalaVer) % Test
+      "org.scalatestplus" %% s"scalacheck-$id" % scalaTestPlusScalaCheckVersion(scalaVer) % Test
   }
 
-  object ScalaCheckAxis {
-    val v1_12 = ScalaCheckAxis("1-12", "1.12.6", ScalaTest_2)
-    val v1_13 = ScalaCheckAxis("1-13", "1.13.5", ScalaTest_3_0)
-    val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2)
-    val v1_15 = ScalaCheckAxis("1-15", "1.15.4", ScalaTest_3_2)
+  object ScalaCheckAxis extends CurrentAxis[ScalaCheckAxis] {
+    val v1_12 = ScalaCheckAxis("1-12", "1.12.6", ScalaTest_2_2, Seq(Scala_2_11))
+    val v1_13 = ScalaCheckAxis("1-13", "1.13.5", ScalaTest_3_0, Seq(Scala_2_11, Scala_2_12))
+    val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2, Seq(Scala_2_11, Scala_2_12, Scala_2_13))
+    val v1_15 = ScalaCheckAxis("1-15", "1.15.4", ScalaTest_3_2, Seq(Scala_2_12, Scala_2_13, Scala_3))
+  }
+
+  abstract class CurrentAxis[T: ClassTag] {
+
+    def current: Def.Initialize[T] = Def.setting {
+      virtualAxes.value.collectFirst { case a: T => a }.get
+    }
   }
 
   def for3Use2(m: ModuleID) = m.cross(CrossVersion.for3Use2_13)
