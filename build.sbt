@@ -50,7 +50,7 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
     Test / publishArtifact := false,
 
     // Disable coverage for Scala 2.11 -- sbt-scoverage no longer supports it
-    coverageEnabled := scalaBinaryVersion.value != "2.11"
+    coverageEnabled := (if (scalaBinaryVersion.value == "2.11") false else coverageEnabled.value)
   )
 }
 
