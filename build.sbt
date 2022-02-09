@@ -1,4 +1,5 @@
 import Dependencies._
+import com.typesafe.tools.mima.core.{ProblemFilters, ReversedMissingMethodProblem}
 import sbt.Test
 
 // Aggregate root project settings only
@@ -51,6 +52,12 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
       else
         Set(organization.value %% artifact.value % mimaPreviousVersion.value)
     },
+
+    mimaBinaryIssueFilters ++= Seq(
+      ProblemFilters.exclude[ReversedMissingMethodProblem](
+        "org.scalacheck.ops.time.ImplicitJavaTimeGenerators.arbOffsetDateTime"
+      )
+    ),
 
     scalacOptions ++= Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
