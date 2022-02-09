@@ -8,7 +8,7 @@ object Dependencies {
   final val Scala_2_11 = "2.11.12"
   final val Scala_2_12 = "2.12.12"
   final val Scala_2_13 = "2.13.6"
-  final val Scala_3 = "3.1.0"
+  final val Scala_3 = "3.1.1"
 
   final private val ScalaTest_2_2 = "2.2.6"
 
