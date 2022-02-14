@@ -7,8 +7,8 @@ jdk:
 
 before_script:
   # Download sbt because Travis can't find it automatically :(
-  - mkdir -p $HOME/.sbt/launchers/1.5.8/
-  - curl -L -o $HOME/.sbt/launchers/1.5.8/sbt-launch.jar https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.5.8/sbt-launch-1.5.8.jar
+  - mkdir -p $HOME/.sbt/launchers/1.6.2/
+  - curl -L -o $HOME/.sbt/launchers/1.6.2/sbt-launch.jar https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.6.2/sbt-launch-1.6.2.jar
 
 script:
   - sbt clean coverage test coverageAggregate
