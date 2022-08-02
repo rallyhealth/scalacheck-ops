@@ -9,7 +9,10 @@ class GenFromConfigSpec extends AnyFreeSpec {
 
   type MethodCall[A] = Gen[A] => Any
 
-  def generatesUniqueRandomValues(methodName: String, methodCall: MethodCall[UUID]): Unit = {
+  def generatesUniqueRandomValues(
+    methodName: String,
+    methodCall: MethodCall[UUID]
+  ): Unit = {
     s"gen.$methodName should return different values each time it is called" in {
       val gen = Gen.uuid
       val uuid1 = methodCall(gen)
@@ -18,7 +21,10 @@ class GenFromConfigSpec extends AnyFreeSpec {
     }
   }
 
-  def generatesTheSameValueWhenCalledTwice(methodName: String, methodCall: MethodCall[UUID]): Unit = {
+  def generatesTheSameValueWhenCalledTwice(
+    methodName: String,
+    methodCall: MethodCall[UUID]
+  ): Unit = {
     s"gen.$methodName should return the same value when calling twice" in {
       val gen = Gen.uuid
       val uuid1 = methodCall(gen)

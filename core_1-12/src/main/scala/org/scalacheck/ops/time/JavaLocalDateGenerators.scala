@@ -16,26 +16,38 @@ sealed trait JavaLocalDateGenerators extends AbstractTimeGenerators {
 
   override protected[time] def now(implicit params: Clock): LocalDate = LocalDate.now()
 
-  override def between(start: LocalDate, end: LocalDate)
-    (implicit params: Clock): Gen[LocalDate] = {
+  override def between(
+    start: LocalDate,
+    end: LocalDate
+  )(implicit
+    params: Clock
+  ): Gen[LocalDate] = {
     for {
       epochDay <- Gen.choose(start.toEpochDay, end.toEpochDay)
     } yield LocalDate.ofEpochDay(epochDay)
   }
 
-  override protected[time] def addToCeil(instant: LocalDate, duration: TemporalAmount)
-    (implicit params: Clock): LocalDate = {
-    try instant plus duration
+  override protected[time] def addToCeil(
+    instant: LocalDate,
+    duration: TemporalAmount
+  )(implicit
+    params: Clock
+  ): LocalDate = {
+    try instant.plus(duration)
     catch {
-      case dte: DateTimeException if dte.getMessage startsWith "Invalid value for Year" => LocalDate.MAX
+      case dte: DateTimeException if dte.getMessage.startsWith("Invalid value for Year") => LocalDate.MAX
     }
   }
 
-  override protected[time] def subtractToFloor(instant: LocalDate, duration: TemporalAmount)
-    (implicit params: Clock): LocalDate = {
-    try instant minus duration
+  override protected[time] def subtractToFloor(
+    instant: LocalDate,
+    duration: TemporalAmount
+  )(implicit
+    params: Clock
+  ): LocalDate = {
+    try instant.minus(duration)
     catch {
-      case dte: DateTimeException if dte.getMessage startsWith "Invalid value for Year" => LocalDate.MIN
+      case dte: DateTimeException if dte.getMessage.startsWith("Invalid value for Year") => LocalDate.MIN
     }
   }
 }

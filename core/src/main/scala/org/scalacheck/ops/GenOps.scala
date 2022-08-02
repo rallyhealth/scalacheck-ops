@@ -2,8 +2,8 @@ package org.scalacheck.ops
 
 import org.scalacheck.{Arbitrary, Gen}
 
-import scala.collection.{BitSet, mutable}
-import scala.reflect.{ClassTag, classTag}
+import scala.collection.{mutable, BitSet}
+import scala.reflect.{classTag, ClassTag}
 
 object GenOps {
 
@@ -13,11 +13,16 @@ object GenOps {
   def bits(size: Int): Gen[BitSet] = Gen.listOfN(size, binary).map(BitSet(_: _*))
   def bits: Gen[BitSet] = Gen.sized(bits)
 
-  def collect[T, U](gen: Gen[T], retryUntilMatch: Boolean = false)(pf: PartialFunction[T, U]): Gen[U] = {
+  def collect[T, U](
+    gen: Gen[T],
+    retryUntilMatch: Boolean = false
+  )(
+    pf: PartialFunction[T, U]
+  ): Gen[U] = {
     {
       if (retryUntilMatch) gen.retryUntil(pf.isDefinedAt)
       else gen.suchThat(pf.isDefinedAt)
-    } map pf
+    }.map(pf)
   }
 
   def enumValue[E <: Enumeration](enumuration: E): Gen[enumuration.Value] =
@@ -38,7 +43,11 @@ object GenOps {
   }
 
   // TODO: Switch this to TypeName in the next major version
-  def setOfN[T: ClassTag](size: Int, maxFailures: Int, tGen: Gen[T]): Gen[Set[T]] = {
+  def setOfN[T : ClassTag](
+    size: Int,
+    maxFailures: Int,
+    tGen: Gen[T]
+  ): Gen[Set[T]] = {
     for {
       _ <- Gen.const(tGen)
     } yield {
@@ -46,38 +55,38 @@ object GenOps {
       var total = 0
       val set = mutable.Set.empty[T]
       val iter = new GenFromConfig(tGen, GenConfig.default, classTag[T].runtimeClass.getName).iterator
-      while(failures < maxFailures && total < size) {
+      while (failures < maxFailures && total < size)
         if (set.add(iter.next())) {
           total += 1
-        }
-        else {
+        } else {
           failures += 1
         }
-      }
       if (failures >= maxFailures) {
         throw new IllegalArgumentException(
           s"Gen[Set[${classTag[T].runtimeClass}]] of size $size exceeded maximum failed attempts ($maxFailures) " +
-          s"after generating a set of size $total"
+            s"after generating a set of size $total"
         )
       }
       set.toSet[T]
     }
   }
-  def setOfN[T: ClassTag](size: Int, tGen: Gen[T]): Gen[Set[T]] = setOfN(size, 50, tGen)
+
+  def setOfN[T : ClassTag](
+    size: Int,
+    tGen: Gen[T]
+  ): Gen[Set[T]] = setOfN(size, 50, tGen)
 
   def setOf[T](implicit arbT: Arbitrary[T]): Gen[Set[T]] = Gen.listOf(arbT.arbitrary).map(_.toSet[T])
 }
 
-/**
- * Mixin for some helpful implicits when dealing with ScalaCheck generator monads.
- *
- * Allows for better mixing of property checks with normal single take test cases
- * with randomized values.
- */
+/** Mixin for some helpful implicits when dealing with ScalaCheck generator monads.
+  *
+  * Allows for better mixing of property checks with normal single take test cases
+  * with randomized values.
+  */
 class GenOps[T](val gen: Gen[T]) extends AnyVal {
 
-  /**
-   * Flattens a generator of generators into a single generator.
-   */
-  def flatten[U](implicit ev: T <:< Gen[U]): Gen[U] = gen flatMap ev
+  /** Flattens a generator of generators into a single generator.
+    */
+  def flatten[U](implicit ev: T <:< Gen[U]): Gen[U] = gen.flatMap(ev)
 }

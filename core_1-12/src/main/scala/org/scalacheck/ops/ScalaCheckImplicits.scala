@@ -16,6 +16,6 @@ trait ScalaCheckImplicits
 
   implicit def genObjectToGenOps(gen: Gen.type): GenOps.type = GenOps
 
-  implicit def genToGenOrThrow[T: ClassTag](generator: Gen[T]): GenOrThrow[T] = new GenOrThrow[T](generator)
+  implicit def genToGenOrThrow[T : ClassTag](generator: Gen[T]): GenOrThrow[T] = new GenOrThrow[T](generator)
 
 }

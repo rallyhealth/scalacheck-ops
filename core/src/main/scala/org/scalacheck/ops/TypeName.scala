@@ -6,17 +6,15 @@ import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 
 @implicitNotFound(
-  // Splitting the $ and {T} to avoid a false missing interpolator compiler warning
-  // see https://stackoverflow.com/questions/39401213/disable-false-warning-possible-missing-interpolator
-  "Could not grab the type name of $" + "{T} at compile-time... except for printing this error message (go figure). " +
-    "This means that neither a ClassTag nor izumi.reflect.Tag could not be summoned for this type.")
+  "Could not grab the type name of $" + "{T} at compile-time... except for printing this error message (go figure). " + "This means that neither a ClassTag nor izumi.reflect.Tag could not be summoned for this type."
+)
 final class TypeName[T] private (val typeName: String)
 
 object TypeName extends LowPriorityTypeName {
 
-  def fromIzumiTag[T: Tag]: TypeName[T] = new TypeName[T](Tag[T].tag.longName)
+  def fromIzumiTag[T : Tag]: TypeName[T] = new TypeName[T](Tag[T].tag.longName)
 
-  def fromClassTag[T: ClassTag]: TypeName[T] = new TypeName[T](implicitly[ClassTag[T]].runtimeClass.getName)
+  def fromClassTag[T : ClassTag]: TypeName[T] = new TypeName[T](implicitly[ClassTag[T]].runtimeClass.getName)
 }
 
 sealed trait LowPriorityTypeName extends LowerPriorityTypeName {

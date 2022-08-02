@@ -15,8 +15,12 @@ private[time] trait FromLong {
 
   protected[time] def asLong(datetime: InstantType)(implicit params: ParamsType): Long
 
-  override def between(start: InstantType, end: InstantType)
-    (implicit dateTimeParams: ParamsType = defaultParams): Gen[InstantType] = {
+  override def between(
+    start: InstantType,
+    end: InstantType
+  )(implicit
+    dateTimeParams: ParamsType = defaultParams
+  ): Gen[InstantType] = {
     for {
       scalar <- Gen.choose(asLong(start), asLong(end))
     } yield asInstant(scalar)

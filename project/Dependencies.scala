@@ -77,4 +77,3 @@ object Dependencies {
   def for3Use2(m: ModuleID) = m.cross(CrossVersion.for3Use2_13)
 
 }
-

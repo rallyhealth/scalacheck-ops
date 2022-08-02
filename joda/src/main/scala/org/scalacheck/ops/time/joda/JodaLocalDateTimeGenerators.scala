@@ -3,7 +3,8 @@ package org.scalacheck.ops.time.joda
 import org.joda.time.{LocalDateTime, ReadableDuration}
 import org.scalacheck.ops.time.joda.ChronologyOps._
 
-sealed trait JodaLocalDateTimeGenerators extends JodaAbstractDateTimeGenerators
+sealed trait JodaLocalDateTimeGenerators
+  extends JodaAbstractDateTimeGenerators
   with UTCTimeZoneDefault
   with ISOChronologyDefault {
   override type InstantType = LocalDateTime
@@ -11,17 +12,25 @@ sealed trait JodaLocalDateTimeGenerators extends JodaAbstractDateTimeGenerators
   override protected[time] def asInstant(millis: Long)(implicit params: JodaTimeParams): LocalDateTime =
     new LocalDateTime(millis, params.chronology)
 
-  override protected[time] def addToCeil(instant: LocalDateTime, duration: ReadableDuration)
-    (implicit params: JodaTimeParams): LocalDateTime = {
-    try instant plus duration
+  override protected[time] def addToCeil(
+    instant: LocalDateTime,
+    duration: ReadableDuration
+  )(implicit
+    params: JodaTimeParams
+  ): LocalDateTime = {
+    try instant.plus(duration)
     catch {
       case tooLarge: ArithmeticException => params.chronology.maxLocalDateTime
     }
   }
 
-  override protected[time] def subtractToFloor(instant: LocalDateTime, duration: ReadableDuration)
-    (implicit params: JodaTimeParams): LocalDateTime = {
-    try instant minus duration
+  override protected[time] def subtractToFloor(
+    instant: LocalDateTime,
+    duration: ReadableDuration
+  )(implicit
+    params: JodaTimeParams
+  ): LocalDateTime = {
+    try instant.minus(duration)
     catch {
       case tooSmall: ArithmeticException => params.chronology.minLocalDateTime
     }

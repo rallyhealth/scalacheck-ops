@@ -5,6 +5,7 @@ import java.time.{Clock, Duration, Instant}
 import org.scalacheck.Gen
 
 object JavaInstantGenerators extends JavaInstantGenerators
+
 trait JavaInstantGenerators extends AbstractTimeGenerators {
   override type InstantType = Instant
   override type DurationType = Duration
@@ -18,15 +19,19 @@ trait JavaInstantGenerators extends AbstractTimeGenerators {
 
   import JavaLocalTimeGenerators.MAX_NANOS
 
-  override def between(start: Instant, end: Instant)(implicit params: Clock): Gen[Instant] = {
+  override def between(
+    start: Instant,
+    end: Instant
+  )(implicit
+    params: Clock
+  ): Gen[Instant] = {
     val startSeconds = start.getEpochSecond
     val endSeconds = end.getEpochSecond
     if (startSeconds == endSeconds) {
       for {
         nanos <- Gen.choose(start.getNano, end.getNano)
       } yield Instant.ofEpochSecond(startSeconds, nanos)
-    }
-    else {
+    } else {
       for {
         seconds <- Gen.choose(startSeconds, endSeconds)
         nanos <- seconds match {
@@ -44,8 +49,10 @@ trait JavaInstantGenerators extends AbstractTimeGenerators {
   override protected[time] def addToCeil(
     instant: Instant,
     duration: Duration
-  )(implicit params: Clock): Instant = {
-    try instant plus duration
+  )(implicit
+    params: Clock
+  ): Instant = {
+    try instant.plus(duration)
     catch {
       case ex: ArithmeticException => Instant.MAX
     }
@@ -54,8 +61,10 @@ trait JavaInstantGenerators extends AbstractTimeGenerators {
   override protected[time] def subtractToFloor(
     instant: Instant,
     duration: Duration
-  )(implicit params: Clock): Instant = {
-    try instant minus duration
+  )(implicit
+    params: Clock
+  ): Instant = {
+    try instant.minus(duration)
     catch {
       case ex: ArithmeticException => Instant.MIN
     }

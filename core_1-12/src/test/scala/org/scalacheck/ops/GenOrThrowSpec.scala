@@ -6,13 +6,14 @@ import org.scalacheck.Gen
 import org.scalatest.FreeSpec
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class GenOrThrowSpec extends FreeSpec
-  with GeneratorDrivenPropertyChecks
-  with ScalaCheckImplicits {
+class GenOrThrowSpec extends FreeSpec with GeneratorDrivenPropertyChecks with ScalaCheckImplicits {
 
   type MethodCall[A] = Gen[A] => Any
 
-  def generatesUniqueRandomValues(methodName: String, methodCall: MethodCall[UUID]): Unit = {
+  def generatesUniqueRandomValues(
+    methodName: String,
+    methodCall: MethodCall[UUID]
+  ): Unit = {
     s"gen.$methodName should return different values each time it is called" in {
       val gen = Gen.uuid
       val uuid1 = methodCall(gen)

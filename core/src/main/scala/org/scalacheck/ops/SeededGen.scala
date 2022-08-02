@@ -5,8 +5,7 @@ import org.scalacheck.Gen
 
 import scala.language.implicitConversions
 
-/**
-  * Used instead of a [[Gen]] to require the caller to provide a rallyId that is used to deterministically
+/** Used instead of a [[Gen]] to require the caller to provide a rallyId that is used to deterministically
   * alter the underlying seed of the resulting generator.
   *
   * If you use a SeededGen, the resulting generator will always generate the same results for the same seed.
@@ -75,15 +74,13 @@ final class SeededGen[S, T <: SeededGen.Tag, V](
     genFn(seed.taggedWith[T]).pureApply(c.params, mixedSeed, c.retries)
   }
 
-  /**
-    * Produce a new seeded gen maps over the underlying generator with access to the seed.
+  /** Produce a new seeded gen maps over the underlying generator with access to the seed.
     */
   @inline def andThenWithSeed[X](fn: S @@ T => Gen[V] => Gen[X]): SeededGen[S, T, X] = {
     new SeededGen[S, T, X](seed => fn(seed)(gen(seed)))
   }
 
-  /**
-    * Produce a new seeded gen maps over the underlying generator without accessing the seed.
+  /** Produce a new seeded gen maps over the underlying generator without accessing the seed.
     */
   @inline def andThen[X](fn: Gen[V] => Gen[X]): SeededGen[S, T, X] = {
     andThenWithSeed(_ => fn)
@@ -92,8 +89,7 @@ final class SeededGen[S, T <: SeededGen.Tag, V](
 
 object SeededGen {
 
-  /**
-    * Extend this marker trait with either your seed class or another marker type tag.
+  /** Extend this marker trait with either your seed class or another marker type tag.
     *
     * This is required to avoid defining an implicit conversion on any primitive types
     * (in the case where you decide to use a primitive type seed). See [[toGen]].
@@ -104,8 +100,7 @@ object SeededGen {
 
   type GenFn[-S, T <: Tag, V] = S @@ T => Gen[V]
 
-  /**
-    * Begin building a [[SeededGen]] by providing the type of seed.
+  /** Begin building a [[SeededGen]] by providing the type of seed.
     */
   def seededWith[S : SeedExtractor]: SeededBuilder[S] = new SeededBuilder
 
@@ -113,8 +108,7 @@ object SeededGen {
     def taggedWith[T <: Tag]: FinalBuilder[S, T] = new FinalBuilder
   }
 
-  /**
-    * Begin building a [[SeededGen]] by providing the [[Tag]] type.
+  /** Begin building a [[SeededGen]] by providing the [[Tag]] type.
     */
   def taggedWith[T <: Tag]: TaggedBuilder[T] = new TaggedBuilder
 
@@ -124,16 +118,14 @@ object SeededGen {
 
   final class FinalBuilder[S : SeedExtractor, T <: Tag] private[SeededGen] {
 
-    /**
-      * Builds the [[SeededGen]] from the built up type arguments and implicits and the given function.
+    /** Builds the [[SeededGen]] from the built up type arguments and implicits and the given function.
       */
     def build[V](genFn: GenFn[S, T, V]): SeededGen[S, T, V] = {
       new SeededGen[S, T, V](genFn)
     }
   }
 
-  /**
-    * Extend this class in the companion object of a type or type tag that you would like
+  /** Extend this class in the companion object of a type or type tag that you would like
     * to use as a seed.
     *
     * {{{
@@ -156,8 +148,7 @@ object SeededGen {
     def gen[V](genFn: GenFn[S, Tag, V]): Gen[V] = new SeededGen(genFn)
   }
 
-  /**
-    * Similar to [[Companion]], but used when you don't want to define the [[Companion#Tag]] on the companion
+  /** Similar to [[Companion]], but used when you don't want to define the [[Companion#Tag]] on the companion
     * object of the model that you are using as a seed.
     *
     * Instead you can define a separate tag class and use this as the companion object for that tag type.
@@ -176,13 +167,11 @@ object SeededGen {
     *     val example: UserIdSeeded.Gen[String] = UserIdSeeded.gen(implicit userId => Gen.string)
     * }}}
     */
-  abstract class TagCompanion[S, T <: Tag](implicit extractor: SeedExtractor[S])
-    extends Companion[S](extractor) {
+  abstract class TagCompanion[S, T <: Tag](implicit extractor: SeedExtractor[S]) extends Companion[S](extractor) {
     override type Tag = T
   }
 
-  /**
-    * Implicitly converts a [[SeededGen]] into a regular [[Gen]] if there is the appropriate implicit seed in scope.
+  /** Implicitly converts a [[SeededGen]] into a regular [[Gen]] if there is the appropriate implicit seed in scope.
     *
     * This implicit conversion makes it possible to flatMap over [[SeededGen]]s the same way you do regular
     * [[Gen]]s, but it introduces the need to tag the seed type to avoid an implicit conversion on primitive types.

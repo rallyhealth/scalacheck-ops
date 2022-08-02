@@ -2,14 +2,12 @@ package org.scalacheck.ops
 
 import java.util.UUID
 
-/**
-  * A typeclass representing how convert the given type of seed value into a long
+/** A typeclass representing how convert the given type of seed value into a long
   * so that it can be mixed in with the underlying random number generator [[org.scalacheck.rng.Seed]].
   */
 trait SeedExtractor[-V] {
 
-  /**
-    * Extract a consistent and non-conflicting hash code from the given input.
+  /** Extract a consistent and non-conflicting hash code from the given input.
     */
   def seed(input: V): Long
 }
@@ -31,8 +29,7 @@ object SeedExtractor extends DefaultSeedExtractors {
 
 trait DefaultSeedExtractors {
 
-  /**
-    * The [[toString]] method is a good default for almost all types because it is either
+  /** The [[toString]] method is a good default for almost all types because it is either
     * going to be unique per instance of an object with no overriding definition of it
     * (i.e. not a case class) OR it will be something like a tuple / case class which
     * overrides the definition in such a way that two equal objects will have the same
@@ -44,20 +41,18 @@ trait DefaultSeedExtractors {
     override def seed(input: S): Long = SeedExtractor.string.seed(input.toString)
   }
 
-
-  /**
-    * Uses the most significant digits of the UUID as the seed.
+  /** Uses the most significant digits of the UUID as the seed.
     */
   implicit val uuid: SeedExtractor[UUID] = new SeedExtractor[UUID] {
     override def seed(input: UUID): Long = input.getMostSignificantBits
   }
 
-  /**
-    * Extract a deterministic and collision-resistant number from the given string.
+  /** Extract a deterministic and collision-resistant number from the given string.
     *
     * Creates a name-based UUID and extracts the most significant digits of the MD5 hash.
     */
   implicit val string: SeedExtractor[String] = new SeedExtractor[String] {
+
     override def seed(input: String): Long = {
       uuid.seed(UUID.nameUUIDFromBytes(input.getBytes()))
     }

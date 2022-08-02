@@ -6,12 +6,14 @@ import org.scalacheck.rng.Seed
 import org.scalatest.freespec.AnyFreeSpec
 
 // TODO: Remove this after GenOrThrow is removed in the next major version
-class GenOrThrowSpec extends AnyFreeSpec
-  with ScalaCheckImplicits {
+class GenOrThrowSpec extends AnyFreeSpec with ScalaCheckImplicits {
 
   type MethodCall[A] = Gen[A] => Any
 
-  def generatesUniqueRandomValues(methodName: String, methodCall: MethodCall[UUID]): Unit = {
+  def generatesUniqueRandomValues(
+    methodName: String,
+    methodCall: MethodCall[UUID]
+  ): Unit = {
     s"gen.$methodName should return different values each time it is called" in {
       val gen = Gen.uuid
       val uuid1 = methodCall(gen)
@@ -20,7 +22,10 @@ class GenOrThrowSpec extends AnyFreeSpec
     }
   }
 
-  def generatesTheSameValueWhenCalledTwice(methodName: String, methodCall: MethodCall[UUID]): Unit = {
+  def generatesTheSameValueWhenCalledTwice(
+    methodName: String,
+    methodCall: MethodCall[UUID]
+  ): Unit = {
     s"gen.$methodName should return the same value when calling twice" in {
       val gen = Gen.uuid
       val uuid1 = methodCall(gen)
@@ -84,7 +89,10 @@ class GenOrThrowSpec extends AnyFreeSpec
     minRetryLimit = 100
   )
 
-  generatesTheSameValueWhenCalledTwice("getOrThrow (given the same Seed)", gen => new GenOrThrow(gen).getOrThrow(Seed(0)))
+  generatesTheSameValueWhenCalledTwice(
+    "getOrThrow (given the same Seed)",
+    gen => new GenOrThrow(gen).getOrThrow(Seed(0))
+  )
 
   generatesTheSameValueWhenCalledTwice("getOrThrowPure", gen => new GenOrThrow(gen).getOrThrowPure)
   throwsAnErrorWhenFiltered(

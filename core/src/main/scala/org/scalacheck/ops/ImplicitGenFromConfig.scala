@@ -6,7 +6,12 @@ trait ImplicitGenFromConfig {
 
   import scala.language.implicitConversions
 
-  implicit def genFromConfigOps[T](gen: Gen[T])(implicit gc: GenConfig, tn: TypeName[T]): GenFromConfig[T] =
+  implicit def genFromConfigOps[T](
+    gen: Gen[T]
+  )(implicit
+    gc: GenConfig,
+    tn: TypeName[T]
+  ): GenFromConfig[T] =
     new GenFromConfig[T](gen, gc, tn.typeName)
 
   implicit def genFromConfigBuilder[T](gen: Gen[T]): GenFromConfigBuilder[T] = new GenFromConfigBuilder[T](gen)

@@ -12,7 +12,7 @@ trait ImplicitJodaTimeGenerators {
 
   implicit val arbDateTimeZone: Arbitrary[DateTimeZone] = {
     val ids = DateTimeZone.getAvailableIDs.asScala.toSeq
-    val zones = ids map DateTimeZone.forID
+    val zones = ids.map(DateTimeZone.forID)
     Arbitrary(oneOf(zones))
   }
 
@@ -34,12 +34,18 @@ trait ImplicitJodaTimeGenerators {
     }
   }
 
-  implicit def arbDateTime(implicit params: JodaTimeParams = JodaDateTimeGenerators.defaultParams): Arbitrary[DateTime] = {
+  implicit def arbDateTime(
+    implicit
+    params: JodaTimeParams = JodaDateTimeGenerators.defaultParams
+  ): Arbitrary[DateTime] = {
     val maxMillis = params.chronology.maxMillis
     Arbitrary(chooseNum(0L, maxMillis).flatMap(new DateTime(_, params.chronology)))
   }
 
-  implicit def arbLocalDateTime(implicit params: JodaTimeParams = JodaLocalDateTimeGenerators.defaultParams): Arbitrary[LocalDateTime] = {
+  implicit def arbLocalDateTime(
+    implicit
+    params: JodaTimeParams = JodaLocalDateTimeGenerators.defaultParams
+  ): Arbitrary[LocalDateTime] = {
     val maxMillis = params.chronology.maxMillis
     Arbitrary(chooseNum(0L, maxMillis).flatMap(new LocalDateTime(_, params.chronology)))
   }
