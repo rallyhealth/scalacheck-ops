@@ -6,12 +6,26 @@ private[time] trait AbstractTimeGenerators extends GenericTimeGenerators {
 
   protected[time] def now(implicit params: ParamsType): InstantType
 
-  protected[time] def addToCeil(instant: InstantType, duration: DurationType)(implicit params: ParamsType): InstantType
+  protected[time] def addToCeil(
+    instant: InstantType,
+    duration: DurationType
+  )(implicit
+    params: ParamsType
+  ): InstantType
 
-  protected[time] def subtractToFloor(instant: InstantType, duration: DurationType)(implicit params: ParamsType): InstantType
+  protected[time] def subtractToFloor(
+    instant: InstantType,
+    duration: DurationType
+  )(implicit
+    params: ParamsType
+  ): InstantType
 
-  override def before(when: InstantType, maxRange: DurationType = defaultRange)
-    (implicit params: ParamsType = defaultParams): Gen[InstantType] = {
+  override def before(
+    when: InstantType,
+    maxRange: DurationType = defaultRange
+  )(implicit
+    params: ParamsType = defaultParams
+  ): Gen[InstantType] = {
     between(subtractToFloor(when, maxRange), when)
   }
 
@@ -19,13 +33,20 @@ private[time] trait AbstractTimeGenerators extends GenericTimeGenerators {
     before(now)
   }
 
-  override def beforeNowWithin(maxRange: DurationType)
-    (implicit params: ParamsType = defaultParams): Gen[InstantType] = {
+  override def beforeNowWithin(
+    maxRange: DurationType
+  )(implicit
+    params: ParamsType = defaultParams
+  ): Gen[InstantType] = {
     before(now, maxRange)
   }
 
-  override def after(when: InstantType, maxRange: DurationType = defaultRange)
-    (implicit params: ParamsType = defaultParams): Gen[InstantType] = {
+  override def after(
+    when: InstantType,
+    maxRange: DurationType = defaultRange
+  )(implicit
+    params: ParamsType = defaultParams
+  ): Gen[InstantType] = {
     between(when, addToCeil(when, maxRange))
   }
 
@@ -33,13 +54,16 @@ private[time] trait AbstractTimeGenerators extends GenericTimeGenerators {
     after(now)
   }
 
-  override def afterNowWithin(maxRange: DurationType)
-    (implicit params: ParamsType = defaultParams): Gen[InstantType] = {
+  override def afterNowWithin(maxRange: DurationType)(implicit params: ParamsType = defaultParams): Gen[InstantType] = {
     after(now, maxRange)
   }
 
-  override def around(when: InstantType, plusOrMinus: DurationType)
-    (implicit params: ParamsType = defaultParams): Gen[InstantType] = {
+  override def around(
+    when: InstantType,
+    plusOrMinus: DurationType
+  )(implicit
+    params: ParamsType = defaultParams
+  ): Gen[InstantType] = {
     between(subtractToFloor(when, plusOrMinus), addToCeil(when, plusOrMinus))
   }
 
@@ -47,8 +71,11 @@ private[time] trait AbstractTimeGenerators extends GenericTimeGenerators {
     around(now, defaultRange)
   }
 
-  override def aroundNowWithin(plusOrMinus: DurationType)
-    (implicit params: ParamsType = defaultParams): Gen[InstantType] = {
+  override def aroundNowWithin(
+    plusOrMinus: DurationType
+  )(implicit
+    params: ParamsType = defaultParams
+  ): Gen[InstantType] = {
     around(now, plusOrMinus)
   }
 

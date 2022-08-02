@@ -20,6 +20,6 @@ trait ScalaCheckImplicits
 
   // No longer an implicit, but leaving this here for binary compatibility
   @deprecated("Use implicit conversion to GenFromConfig instead.", "2.7.0")
-  def genToGenOrThrow[T: ClassTag](generator: Gen[T]): GenOrThrow[T] = new GenOrThrow[T](generator)
+  def genToGenOrThrow[T : ClassTag](generator: Gen[T]): GenOrThrow[T] = new GenOrThrow[T](generator)
 
 }

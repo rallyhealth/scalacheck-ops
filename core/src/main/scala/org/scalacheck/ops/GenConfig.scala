@@ -25,7 +25,11 @@ final class GenConfig private (
 
 object GenConfig {
 
-  def apply(params: Parameters, retries: Int, fallbackSeed: Seed): GenConfig = {
+  def apply(
+    params: Parameters,
+    retries: Int,
+    fallbackSeed: Seed
+  ): GenConfig = {
     new GenConfig(
       fallbackSeed,
       params,
@@ -33,15 +37,25 @@ object GenConfig {
     )
   }
 
-  def apply(params: Parameters, retries: Int): GenConfig = GenConfig(params, retries, default.seed)
+  def apply(
+    params: Parameters,
+    retries: Int
+  ): GenConfig = GenConfig(params, retries, default.seed)
 
   def apply(params: Parameters): GenConfig = GenConfig(params, default.retries, default.seed)
 
-  def apply(seed: Seed, maxSize: Int, retries: Int): GenConfig = {
+  def apply(
+    seed: Seed,
+    maxSize: Int,
+    retries: Int
+  ): GenConfig = {
     new GenConfig(seed, Gen.Parameters.default.withSize(maxSize), retries)
   }
 
-  def apply(seed: Seed, maxSize: Int): GenConfig = {
+  def apply(
+    seed: Seed,
+    maxSize: Int
+  ): GenConfig = {
     GenConfig(seed, maxSize, default.retries)
   }
 

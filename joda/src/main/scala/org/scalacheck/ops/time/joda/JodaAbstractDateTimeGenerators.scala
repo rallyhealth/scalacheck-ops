@@ -15,9 +15,8 @@ private[joda] trait JodaAbstractDateTimeGenerators extends AbstractTimeGenerator
 
   def defaultChronology(implicit dateTimeZone: DateTimeZone): Chronology
 
-  override val defaultParams: JodaTimeParams = {
+  override val defaultParams: JodaTimeParams =
     new JodaTimeParams(defaultChronology(defaultDateTimeZone), defaultDateTimeZone)
-  }
 
   override protected[time] def asDuration(millis: Long): ReadableDuration = org.joda.time.Duration.millis(millis)
 

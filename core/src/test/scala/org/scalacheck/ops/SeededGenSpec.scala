@@ -132,6 +132,7 @@ class SeededGenSpec extends AnyFreeSpec {
   }
 
   private case class UserId(value: String)
+
   private object UserId extends SeededGen.Companion[UserId](SeedExtractor.from(_.value)) {
     sealed abstract class Tag extends SeededGen.Tag
   }

@@ -1,4 +1,5 @@
 package org.scalacheck.ops
+
 package time
 
 import org.scalacheck.Gen

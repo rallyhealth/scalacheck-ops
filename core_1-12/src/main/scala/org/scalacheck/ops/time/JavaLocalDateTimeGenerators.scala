@@ -20,8 +20,14 @@ sealed trait JavaLocalDateTimeGenerators extends AbstractTimeGenerators {
 
   import JavaLocalTimeGenerators.MAX_NANOS
 
-  override def between(start: LocalDateTime, end: LocalDateTime)(implicit params: Clock): Gen[LocalDateTime] = {
-    @inline def secondsOf(instant: LocalDateTime): Long = instant.toEpochSecond(params.getZone.getRules.getOffset(instant))
+  override def between(
+    start: LocalDateTime,
+    end: LocalDateTime
+  )(implicit
+    params: Clock
+  ): Gen[LocalDateTime] = {
+    @inline def secondsOf(instant: LocalDateTime): Long =
+      instant.toEpochSecond(params.getZone.getRules.getOffset(instant))
     val startSeconds = secondsOf(start)
     val endSeconds = secondsOf(end)
     if (startSeconds == endSeconds) {
@@ -39,29 +45,31 @@ sealed trait JavaLocalDateTimeGenerators extends AbstractTimeGenerators {
           case _ =>
             Gen.chooseNum(0, MAX_NANOS)
         }
-      } yield {
-        LocalDateTime.ofEpochSecond(seconds, nanos, defaultZoneOffset)
-      }
+      } yield LocalDateTime.ofEpochSecond(seconds, nanos, defaultZoneOffset)
     }
   }
 
   override protected[time] def addToCeil(
     instant: LocalDateTime,
     duration: TemporalAmount
-  )(implicit params: Clock): LocalDateTime = {
-    try instant plus duration
+  )(implicit
+    params: Clock
+  ): LocalDateTime = {
+    try instant.plus(duration)
     catch {
-      case dte: DateTimeException if dte.getMessage startsWith "Invalid value for Year" => LocalDateTime.MAX
+      case dte: DateTimeException if dte.getMessage.startsWith("Invalid value for Year") => LocalDateTime.MAX
     }
   }
 
   override protected[time] def subtractToFloor(
     instant: LocalDateTime,
     duration: TemporalAmount
-  )(implicit params: Clock): LocalDateTime = {
-    try instant minus duration
+  )(implicit
+    params: Clock
+  ): LocalDateTime = {
+    try instant.minus(duration)
     catch {
-      case dte: DateTimeException if dte.getMessage startsWith "Invalid value for Year" => LocalDateTime.MIN
+      case dte: DateTimeException if dte.getMessage.startsWith("Invalid value for Year") => LocalDateTime.MIN
     }
   }
 }

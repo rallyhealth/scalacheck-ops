@@ -10,7 +10,9 @@ import scala.reflect.ClassTag
 
 private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: AbstractTimeGenerators](
   protected val gen: Generators
-)(implicit classTag: ClassTag[Generators]) extends FlatSpec {
+)(implicit
+  classTag: ClassTag[Generators]
+) extends FlatSpec {
 
   protected val genClassName: String = classTag.runtimeClass.getSimpleName.stripSuffix("$")
   protected def arbInstantType: Arbitrary[gen.InstantType]
@@ -23,7 +25,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
   private implicit def localParams: gen.ParamsType = gen.defaultParams
   private implicit def localOrderingInstantType: Ordering[gen.InstantType] = orderingInstantType
 
-  behavior of s"$genClassName.before"
+  behavior.of(s"$genClassName.before")
 
   it should "not generate errors" in {
     forAll() { start: gen.InstantType =>
@@ -41,7 +43,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
     }
   }
 
-  behavior of s"$genClassName.after"
+  behavior.of(s"$genClassName.after")
 
   it should "not generate errors" in {
     forAll() { start: gen.InstantType =>
@@ -59,7 +61,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
     }
   }
 
-  behavior of s"$genClassName.around"
+  behavior.of(s"$genClassName.around")
 
   it should "not generate errors" in {
     forAll() { start: gen.InstantType =>
@@ -74,7 +76,7 @@ private[time] abstract class GenericDateTimeGeneratorsSpec[Generators <: Abstrac
       forAll(gen.around(start, gen.defaultRange)) { around =>
         around should (
           be >= gen.subtractToFloor(start, gen.defaultRange) and
-          be <= gen.addToCeil(start, gen.defaultRange)
+            be <= gen.addToCeil(start, gen.defaultRange)
         )
       }
     }

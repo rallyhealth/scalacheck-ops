@@ -11,8 +11,7 @@ trait ArbitraryAsGen {
   implicit def arbitraryGen[T](implicit arb: Arbitrary[T]): Gen[T] = arb.arbitrary
   // $COVERAGE-ON$
 
-  /**
-    * Converts a [[Gen]] to an [[Arbitrary]] so that you can pass a [[Gen]] anywhere
+  /** Converts a [[Gen]] to an [[Arbitrary]] so that you can pass a [[Gen]] anywhere
     * that requires an [[Arbitrary]].
     *
     * This seems like a good default:

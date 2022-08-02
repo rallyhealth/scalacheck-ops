@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks._
 
 import java.util.UUID
-import scala.reflect.{ClassTag, classTag}
+import scala.reflect.{classTag, ClassTag}
 
 class SeedExtractorSpec extends AnyFreeSpec {
   import SeedExtractorSpec._
@@ -20,10 +20,9 @@ class SeedExtractorSpec extends AnyFreeSpec {
     values.view
       .map(v => (extractor.seed(v), v))
       .groupBy(_._1)
-      .collect(Function.unlift {
-        case (s, vs) =>
-          val vSet = vs.map(_._2).toSet
-          if (vSet.size > 1) Some(s -> vSet) else None
+      .collect(Function.unlift { case (s, vs) =>
+        val vSet = vs.map(_._2).toSet
+        if (vSet.size > 1) Some(s -> vSet) else None
       })
   }
 
@@ -41,7 +40,10 @@ class SeedExtractorSpec extends AnyFreeSpec {
     itShouldExtractAConsistentAndUniqueSeedUsing[A]("", implicitly)
   }
 
-  private def itShouldExtractAConsistentAndUniqueSeedUsing[A : Arbitrary : ClassTag](suffix: String, extractor: SeedExtractor[A]): Unit = {
+  private def itShouldExtractAConsistentAndUniqueSeedUsing[A : Arbitrary : ClassTag](
+    suffix: String,
+    extractor: SeedExtractor[A]
+  ): Unit = {
     val typeName = classTag[A].runtimeClass.getSimpleName
 
     s"$it[$typeName]$suffix should extract a consistent seed" in {
@@ -78,7 +80,7 @@ object SeedExtractorSpec {
     string: String
   )
 
-  implicit private val arbExamples: Arbitrary[Examples] = {
+  private implicit val arbExamples: Arbitrary[Examples] = {
     for {
       int <- arbitrary[Int]
       long <- arbitrary[Long]

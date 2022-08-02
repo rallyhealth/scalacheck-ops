@@ -19,18 +19,27 @@ sealed trait JodaLocalDateGenerators extends AbstractTimeGenerators {
   override protected[time] def addToCeil(
     instant: LocalDate,
     duration: ReadablePeriod
-  )(implicit params: Chronology): LocalDate = {
-    instant plus duration
+  )(implicit
+    params: Chronology
+  ): LocalDate = {
+    instant.plus(duration)
   }
 
   override protected[time] def subtractToFloor(
     instant: LocalDate,
     duration: ReadablePeriod
-  )(implicit params: Chronology): LocalDate = {
-    instant minus duration
+  )(implicit
+    params: Chronology
+  ): LocalDate = {
+    instant.minus(duration)
   }
 
-  override def between(start: LocalDate, end: LocalDate)(implicit params: Chronology): Gen[LocalDate] = {
+  override def between(
+    start: LocalDate,
+    end: LocalDate
+  )(implicit
+    params: Chronology
+  ): Gen[LocalDate] = {
     val startYear = start.getYear
     val startMonthOfYear = start.getMonthOfYear
     val endYear = end.getYear
