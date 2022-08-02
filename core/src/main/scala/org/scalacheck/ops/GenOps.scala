@@ -1,5 +1,6 @@
 package org.scalacheck.ops
 
+import org.scalacheck.util.Buildable
 import org.scalacheck.{Arbitrary, Gen}
 
 import scala.collection.{mutable, BitSet}
@@ -77,6 +78,15 @@ object GenOps {
   ): Gen[Set[T]] = setOfN(size, 50, tGen)
 
   def setOf[T](implicit arbT: Arbitrary[T]): Gen[Set[T]] = Gen.listOf(arbT.arbitrary).map(_.toSet[T])
+
+  def vectorOf[T](tGen: Gen[T]): Gen[Vector[T]] = Gen.containerOf[Vector, T](tGen)
+
+  def vectorOfN[T](
+    size: Int,
+    tGen: Gen[T]
+  ): Gen[Vector[T]] = Gen.containerOfN[Vector, T](size, tGen)
+
+  def of[C[_]]: GenOfPartiallyApplied[C] = new GenOfPartiallyApplied[C]
 }
 
 /** Mixin for some helpful implicits when dealing with ScalaCheck generator monads.
@@ -89,4 +99,23 @@ class GenOps[T](val gen: Gen[T]) extends AnyVal {
   /** Flattens a generator of generators into a single generator.
     */
   def flatten[U](implicit ev: T <:< Gen[U]): Gen[U] = gen.flatMap(ev)
+}
+
+class GenOfPartiallyApplied[C[_]](private val dummy: Boolean = true) extends AnyVal {
+
+  def apply[T](
+    tGen: Gen[T]
+  )(implicit
+    buildable: Buildable[T, C[T]],
+    iterable: C[T] => Iterable[T]
+  ): Gen[C[T]] = Gen.containerOf[C, T](tGen)
+
+  def apply[T](
+    size: Int,
+    tGen: Gen[T]
+  )(implicit
+    buildable: Buildable[T, C[T]],
+    iterable: C[T] => Iterable[T]
+  ): Gen[C[T]] = Gen.containerOfN[C, T](size, tGen)
+
 }
