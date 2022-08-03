@@ -12,23 +12,6 @@ class GenOpsSpec extends AnyFlatSpec {
 
   private def genDigits: Gen[Int] = Gen.choose(0, 100)
 
-  behavior.of("Gen.set")
-
-  it should "generate samples less than its sample size" in {
-    forAll(Gen.setOf(Gen.choose(0, 1))) { setOfDigits =>
-      assert(setOfDigits.size <= 2)
-    }
-  }
-
-  it should "generate the same samples when called twice with the same seed" in {
-    val gen = Gen.setOf(Gen.choose(0, 1))
-    val seed = Seed(1)
-    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
-    val a = gen.head
-    val b = gen.head
-    assert(a == b)
-  }
-
   behavior.of("Gen.collect")
 
   it should "use suchThat when retryUntilMatch is false" in {
@@ -58,6 +41,84 @@ class GenOpsSpec extends AnyFlatSpec {
     }
   }
 
+  behavior.of("Gen.of[Stream]")
+
+  it should "generate samples less than the default size" in {
+    forAll(Gen.of[Stream](Gen.choose(0, 1))) { setOfDigits =>
+      assert(setOfDigits.size <= Gen.Parameters.default.size)
+    }
+  }
+
+  it should "generate the same samples when called twice with the same seed" in {
+    val gen = Gen.of[Stream](Gen.choose(0, 1))
+    val seed = Seed(1)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
+  it should "be able to generate a certain size" in {
+    val n = 10
+    forAll(Gen.of[Stream](n, genDigits)) { digits =>
+      assertResult(n)(digits.size)
+    }
+  }
+
+  it should "generate the same samples when called twice with the same size and seed" in {
+    val n = 10
+    val gen = Gen.of[Stream](n, genDigits)
+    val seed = Seed(n)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
+  behavior.of("Gen.of[Set]")
+
+  it should "generate samples less than its sample size" in {
+    forAll(Gen.of[Set](Gen.choose(0, 1))) { digits =>
+      assert(digits.size <= 2)
+    }
+  }
+
+  it should "generate the same samples when called twice with the same seed" in {
+    val gen = Gen.of[Set](Gen.choose(0, 1))
+    val seed = Seed(1)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
+  it should "generate the same samples when called twice with the same size and seed" in {
+    val n = 10
+    val gen = Gen.of[Set](n, genDigits)
+    val seed = Seed(n)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
+  behavior.of("Gen.set")
+
+  it should "generate samples less than its sample size" in {
+    forAll(Gen.setOf(Gen.choose(0, 1))) { digits =>
+      assert(digits.size <= 2)
+    }
+  }
+
+  it should "generate the same samples when called twice with the same seed" in {
+    val gen = Gen.setOf(Gen.choose(0, 1))
+    val seed = Seed(1)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
   behavior.of("Gen.setOfN")
 
   it should "be able to generate a certain size" in {
@@ -67,7 +128,7 @@ class GenOpsSpec extends AnyFlatSpec {
     }
   }
 
-  it should "generate the same samples when called twice with the same seed" in {
+  it should "generate the same samples when called twice with the same size and seed" in {
     val n = 10
     val gen = Gen.setOfN(n, genDigits)
     val seed = Seed(n)
@@ -76,6 +137,44 @@ class GenOpsSpec extends AnyFlatSpec {
     val b = gen.head
     assert(a == b)
   }
+
+  behavior.of("Gen.vectorOf")
+
+  it should "generate samples less than the default size" in {
+    forAll(Gen.vectorOf(Gen.choose(0, 1))) { digits =>
+      assert(digits.size <= Gen.Parameters.default.size)
+    }
+  }
+
+  it should "generate the same samples when called twice with the same seed" in {
+    val gen = Gen.vectorOf(Gen.choose(0, 1))
+    val seed = Seed(1)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
+  behavior.of("Gen.vectorOfN")
+
+  it should "be able to generate a certain size" in {
+    val n = 10
+    forAll(Gen.vectorOfN(n, genDigits)) { digits =>
+      assertResult(n)(digits.size)
+    }
+  }
+
+  it should "generate the same samples when called twice with the same size and seed" in {
+    val n = 10
+    val gen = Gen.vectorOfN(n, genDigits)
+    val seed = Seed(n)
+    implicit val gc: GenConfig = GenConfig.default.withSeed(seed)
+    val a = gen.head
+    val b = gen.head
+    assert(a == b)
+  }
+
+  behavior.of("Gen[Iterator]")
 
   private val genOnesIter: Gen[Iterator[Int]] =
     Gen.const(Gen.oneOf(0, 1)).flatMap(_.filter(Set(1)).iterator)

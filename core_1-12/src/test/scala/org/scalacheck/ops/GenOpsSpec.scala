@@ -10,14 +10,6 @@ class GenOpsSpec extends FlatSpec with Matchers with ScalaCheckImplicits {
 
   private def genDigits: Gen[Int] = Gen.choose(0, 100)
 
-  behavior.of("Gen.set")
-
-  it should "generate samples less than its sample size" in {
-    forAll(Gen.setOf(Gen.choose(0, 1))) { setOfDigits =>
-      assert(setOfDigits.size <= 2)
-    }
-  }
-
   behavior.of("Gen.collect")
 
   it should "use suchThat when retryUntilMatch is false" in {
@@ -47,6 +39,29 @@ class GenOpsSpec extends FlatSpec with Matchers with ScalaCheckImplicits {
     }
   }
 
+  behavior.of("Gen.of[Stream]")
+
+  it should "generate samples less than the default size" in {
+    forAll(Gen.of[Stream](Gen.choose(0, 1))) { digits =>
+      assert(digits.size <= Gen.Parameters.default.size)
+    }
+  }
+
+  it should "be able to generate a certain size" in {
+    val n = 10
+    forAll(Gen.of[Stream](n, genDigits)) { digits =>
+      assertResult(n)(digits.size)
+    }
+  }
+
+  behavior.of("Gen.set")
+
+  it should "generate samples less than its sample size" in {
+    forAll(Gen.setOf(Gen.choose(0, 1))) { digits =>
+      assert(digits.size <= 2)
+    }
+  }
+
   behavior.of("Gen.setOfN")
 
   it should "be able to generate a certain size" in {
@@ -55,6 +70,25 @@ class GenOpsSpec extends FlatSpec with Matchers with ScalaCheckImplicits {
       assertResult(n)(digits.size)
     }
   }
+
+  behavior.of("Gen.vectorOf")
+
+  it should "generate samples less than the default size" in {
+    forAll(Gen.vectorOf(Gen.choose(0, 1))) { digits =>
+      assert(digits.size <= Gen.Parameters.default.size)
+    }
+  }
+
+  behavior.of("Gen.vectorOfN")
+
+  it should "be able to generate a certain size" in {
+    val n = 10
+    forAll(Gen.vectorOfN(n, genDigits)) { digits =>
+      assertResult(n)(digits.size)
+    }
+  }
+
+  behavior.of("Gen[Iterator]")
 
   private val genOnesIter: Gen[Iterator[Int]] =
     Gen.const(Gen.oneOf(0, 1)).flatMap(_.filter(Set(1)).toUnboundedIterator)
