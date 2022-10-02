@@ -58,7 +58,7 @@ jobs:
         run: sbt ++${{ matrix.scala }} test
 
       - name: Compress target directories
-        run: tar cf targets.tar joda/target/1-16-jvm-2.13 joda/target/1-16-jvm-3 core/target/1-13-jvm-2.11 core/target/1-15-jvm-2.13 joda/target/1-13-jvm-2.11 joda/target/1-13-jvm-2.12 core/target/1-13-jvm-2.12 core/target/1-15-jvm-2.12 joda/target/1-12-jvm-2.11 joda/target/1-15-jvm-3 joda/target/1-15-jvm-2.13 core/target/1-16-jvm-3 joda/target/1-14-jvm-2.13 target core/target/1-15-jvm-3 joda/target/1-14-jvm-2.12 core/target/1-14-jvm-2.11 core/target/1-16-jvm-2.13 joda/target/1-16-jvm-2.12 joda/target/1-15-jvm-2.12 core/target/1-16-jvm-2.12 core/target/1-14-jvm-2.12 joda/target/1-14-jvm-2.11 core/target/1-12-jvm-2.11 core/target/1-14-jvm-2.13 project/target
+        run: tar cf targets.tar joda/target/1-16-jvm-2.13 joda/target/1-16-jvm-3 core/target/1-13-jvm-2.11 core/target/1-15-jvm-2.13 core/target/1-16-js-3 joda/target/1-13-jvm-2.11 joda/target/1-13-jvm-2.12 core/target/1-16-native-2.13 core/target/1-16-native-3 core/target/1-13-jvm-2.12 core/target/1-15-jvm-2.12 joda/target/1-12-jvm-2.11 core/target/1-15-js-2.12 joda/target/1-15-jvm-3 joda/target/1-15-jvm-2.13 core/target/1-16-jvm-3 core/target/1-15-js-2.13 joda/target/1-14-jvm-2.13 target core/target/1-15-jvm-3 core/target/1-15-js-3 joda/target/1-14-jvm-2.12 core/target/1-16-js-2.12 core/target/1-15-native-3 core/target/1-14-jvm-2.11 core/target/1-16-jvm-2.13 joda/target/1-16-jvm-2.12 joda/target/1-15-jvm-2.12 core/target/1-16-js-2.13 core/target/1-16-jvm-2.12 core/target/1-14-jvm-2.12 joda/target/1-14-jvm-2.11 core/target/1-12-jvm-2.11 core/target/1-14-jvm-2.13 core/target/1-15-native-2.13 project/target
 
       - name: Upload target directories
         uses: actions/upload-artifact@v2

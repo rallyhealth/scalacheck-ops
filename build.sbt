@@ -138,6 +138,38 @@ lazy val `core` = projectMatrix
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
   )
+  .jsPlatform(
+    scalaVersions = Seq(Scala_2_12, Scala_2_13, Scala_3),
+    axisValues = Seq(ScalaCheckAxis.v1_15),
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
+    )
+  )
+  .jsPlatform(
+    scalaVersions = Seq(Scala_2_12, Scala_2_13, Scala_3),
+    axisValues = Seq(ScalaCheckAxis.v1_16),
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
+    )
+  )
+  .nativePlatform(
+    scalaVersions = Seq(Scala_2_13, Scala_3),
+    axisValues = Seq(ScalaCheckAxis.v1_15),
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
+    )
+  )
+  .nativePlatform(
+    scalaVersions = Seq(Scala_2_13, Scala_3),
+    axisValues = Seq(ScalaCheckAxis.v1_16),
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
+    )
+  )
 
 lazy val `joda` = projectMatrix
   .settings(commonSettings(subProject = Some("joda")))
