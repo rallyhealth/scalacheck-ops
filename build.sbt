@@ -31,7 +31,12 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   Seq(
     name := artifact.value,
 
-    mimaPreviousArtifacts := Set(organization.value %% artifact.value % mimaPreviousVersion.value),
+    mimaPreviousArtifacts := {
+      if (ScalaCheckAxis.current.value.scalaCheckVersion == ScalaCheckAxis.v1_16.scalaCheckVersion)
+        Set.empty
+      else
+        Set(organization.value %% artifact.value % mimaPreviousVersion.value)
+    },
 
     scalacOptions ++= Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
@@ -110,6 +115,14 @@ lazy val `core` = projectMatrix
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
   )
+  .customRow(
+    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions,
+    axisValues = Seq(ScalaCheckAxis.v1_16, VirtualAxis.jvm),
+    settings = Seq(
+      libraryDependencies +=
+        ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
+    )
+  )
 
 lazy val `joda` = projectMatrix
   .settings(commonSettings(subProject = Some("joda")))
@@ -139,5 +152,10 @@ lazy val `joda` = projectMatrix
   .customRow(
     scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15, VirtualAxis.jvm),
+    settings = Nil
+  )
+  .customRow(
+    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions,
+    axisValues = Seq(ScalaCheckAxis.v1_16, VirtualAxis.jvm),
     settings = Nil
   )
