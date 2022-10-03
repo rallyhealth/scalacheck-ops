@@ -24,10 +24,24 @@ mimaFailOnNoPrevious := false
 // don't publish the aggregate root project
 publish / skip := true
 
+// SBT CI Release Plugin
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
+ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(
+    List("ci-release"),
+    env = Map(
+      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+    )
+  )
+)
+
 def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   val artifact = ScalaCheckAxis.current(_.artifact(subProject))
   val mimaPreviousVersion = scalaBinaryVersion(v => if (v == "3") "2.8.0" else "2.6.0")
-
   Seq(
     name := artifact.value,
 
@@ -48,11 +62,12 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
       "-Ywarn-dead-code"
     )),
 
+    // Allow publishing ScalaDoc by disabling link warnings
+    Compile / doc / scalacOptions += "--no-link-warnings",
+    Test / doc / scalacOptions += "--no-link-warnings",
+
     // show full stack traces in test failures
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
-
-    // Don't publish the test artifacts, nobody should depend on these
-    Test / publishArtifact := false,
 
     // Disable coverage for Scala 2.11 -- sbt-scoverage no longer supports it
     coverageEnabled := (if (scalaBinaryVersion.value == "2.11") false else coverageEnabled.value)
@@ -78,7 +93,7 @@ lazy val `core` = projectMatrix
       newtype, // Test-only
       ScalaCheckAxis.current.value.scalaTest // Test-only
     ) ++ (scalaVersion.value match {
-      case Scala_2_11 | Scala_2_12 => Seq(
+      case CrossVersion.PartialVersion("2", "11" | "12", _*) => Seq(
         compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
       )
       case _ => Nil
