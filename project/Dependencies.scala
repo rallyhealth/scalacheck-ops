@@ -18,10 +18,13 @@ object Dependencies {
   // ScalaTest and always pull in the appropriate ScalaTestPlus artifact for ScalaCheck >= 1.14
   final private val ScalaTest_3_0 = "3.0.5"
   final private val ScalaTest_3_2 = "3.2.9"
+  final private val scalaTest_3_2_14 = "3.2.14"
 
-  private def scalaTestPlusScalaCheckVersion(scalaVer: String) = CrossVersion.partialVersion(scalaVer) match {
-    case Some((3, _)) => "3.2.10.0"
-    case _ => "3.2.2.0"
+  private def scalaTestPlusScalaCheckVersion(scalaVer: String, scalaCheckVersion: String) =
+    (CrossVersion.partialVersion(scalaVer), scalaCheckVersion) match {
+      case (_, ScalaCheckAxis.v1_16.scalaCheckVersion) => "3.2.14.0"
+      case (Some((3, _)),_) => "3.2.10.0"
+      case _ => "3.2.2.0"
   }
 
   final private val IzumiReflectVersion = "1.1.2"
@@ -57,7 +60,7 @@ object Dependencies {
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
     def scalaTestPlusScalaCheck(scalaVer: String): ModuleID =
-      "org.scalatestplus" %% s"scalacheck-$id" % scalaTestPlusScalaCheckVersion(scalaVer) % Test
+      "org.scalatestplus" %% s"scalacheck-$id" % scalaTestPlusScalaCheckVersion(scalaVer, scalaCheckVersion) % Test
   }
 
   object ScalaCheckAxis extends CurrentAxis[ScalaCheckAxis] {
@@ -65,6 +68,7 @@ object Dependencies {
     val v1_13 = ScalaCheckAxis("1-13", "1.13.5", ScalaTest_3_0, Seq(Scala_2_11, Scala_2_12))
     val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2, Seq(Scala_2_11, Scala_2_12, Scala_2_13))
     val v1_15 = ScalaCheckAxis("1-15", "1.15.4", ScalaTest_3_2, Seq(Scala_2_12, Scala_2_13, Scala_3))
+    val v1_16 = ScalaCheckAxis("1-16", "1.16.0", scalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
   }
 
   abstract class CurrentAxis[T: ClassTag] {
