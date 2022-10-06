@@ -1,9 +1,9 @@
 [![Build Status](https://img.shields.io/travis/com/rallyhealth/scalacheck-ops)](https://app.travis-ci.com/github/rallyhealth/scalacheck-ops)
 [![CodeCov](https://img.shields.io/codecov/c/github/rallyhealth/scalacheck-ops)](https://codecov.io/gh/rallyhealth/scalacheck-ops)
 
-| scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 | scalacheck-ops_1-15 |
-| :-----------------: | :-----------------: | :-----------------: | :-----------------: |
-| ![Download for ScalaCheck 1.12 & Scala 2.11](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-12_2.11/badge.svg?style=flat) | ![Download for ScalaCheck 1.13 & Scala 2.12](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-13_2.12/badge.svg?style=flat) | ![Download for ScalaCheck 1.14 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-14_2.13/badge.svg?style=flat) | ![Download for ScalaCheck 1.15 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-15_2.13/badge.svg?style=flat) |
+| scalacheck-ops_1-12 | scalacheck-ops_1-13 | scalacheck-ops_1-14 | scalacheck-ops_1-15 | scalacheck-ops_1-16 |
+| :-----------------: | :-----------------: | :-----------------: | :-----------------: | :-----------------: |
+| ![Download for ScalaCheck 1.12 & Scala 2.11](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-12_2.11/badge.svg?style=flat) | ![Download for ScalaCheck 1.13 & Scala 2.12](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-13_2.12/badge.svg?style=flat) | ![Download for ScalaCheck 1.14 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-14_2.13/badge.svg?style=flat) | ![Download for ScalaCheck 1.15 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-15_2.13/badge.svg?style=flat) | ![Download for ScalaCheck 1.16 & Scala 2.13](https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-16_2.13/badge.svg?style=flat) |
 
 # Summary
 
@@ -30,14 +30,15 @@ library expects the java.time standard library module.
 included in the artifact name. Prior to this change, `scalacheck-ops` with
 no version suffix would pull in ScalaCheck version 1.12.6.
 
-| Artifact Name       | Version Limit  | ScalaCheck | Supported JDK | Supported Scala  |
-| :-----------------: | :------------: | :--------: | :-----------: | :--------------: |
-| scalacheck-ops_1-15 | x >= 2.5.2     |     1.15.4 | 8             | 2.12, 2.13, 3    |
-| scalacheck-ops_1-14 | x >= 2.0       |     1.14.3 | 8             | 2.11, 2.12, 2.13 |
-| scalacheck-ops_1-13 | x >= 2.0       |     1.13.5 | 8             | 2.11, 2.12       |
-| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |     1.13.4 | 6 - 8         | 2.10 - 2.11      |
-| scalacheck-ops_1-12 | x >= 2.0       |     1.12.6 | 8             | 2.11             |
-| scalacheck-ops      | x < 2.0        |     1.12.6 | 6 - 8         | 2.10 - 2.11      |
+|    Artifact Name    | Version Limit  | ScalaCheck | Supported JDK |  Supported Scala   | Supported Scala.js | Supported Native |
+|:-------------------:| :------------: |:----------:| :-----------: |:------------------:|:------------------:| :--------------: |
+| scalacheck-ops_1-16 | x >= 2.5.2     |   1.16.0   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
+| scalacheck-ops_1-15 | x >= 2.5.2     |   1.15.4   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
+| scalacheck-ops_1-14 | x >= 2.0       |   1.14.3   | 8             | 2.11, 2.12, 2.13   |        N/A         | N/A              |
+| scalacheck-ops_1-13 | x >= 2.0       |   1.13.5   | 8             |     2.11, 2.12     |        N/A         | N/A              |
+| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |   1.13.4   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
+| scalacheck-ops_1-12 | x >= 2.0       |   1.12.6   | 8             |        2.11        |        N/A         | N/A              |
+|   scalacheck-ops    | x < 2.0        |   1.12.6   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
 
 The same source code is compiled against specific versions of Scala and ScalaCheck.
 We use separate artifacts to avoid causing issues with transitive dependencies on
