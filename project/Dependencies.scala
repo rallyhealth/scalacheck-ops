@@ -5,7 +5,6 @@ import scala.reflect.ClassTag
 
 object Dependencies {
 
-  final val Scala_2_11 = "2.11.12"
   final val Scala_2_12 = "2.12.12"
   final val Scala_2_13 = "2.13.6"
   final val Scala_3 = "3.1.1"
@@ -64,9 +63,8 @@ object Dependencies {
   }
 
   object ScalaCheckAxis extends CurrentAxis[ScalaCheckAxis] {
-    val v1_12 = ScalaCheckAxis("1-12", "1.12.6", ScalaTest_2_2, Seq(Scala_2_11))
-    val v1_13 = ScalaCheckAxis("1-13", "1.13.5", ScalaTest_3_0, Seq(Scala_2_11, Scala_2_12))
-    val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2, Seq(Scala_2_11, Scala_2_12, Scala_2_13))
+    val v1_13 = ScalaCheckAxis("1-13", "1.13.5", ScalaTest_3_0, Seq(Scala_2_12))
+    val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2, Seq(Scala_2_12, Scala_2_13))
     val v1_15 = ScalaCheckAxis("1-15", "1.15.4", ScalaTest_3_2, Seq(Scala_2_12, Scala_2_13, Scala_3))
     val v1_16 = ScalaCheckAxis("1-16", "1.16.0", scalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
   }
