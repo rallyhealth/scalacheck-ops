@@ -70,4 +70,12 @@ trait ImplicitJavaTimeGenerators {
       } yield ZonedDateTime.ofInstant(instant, zoneId)
     }
 
+  implicit lazy val arbOffsetDateTime: Arbitrary[OffsetDateTime] = {
+    Arbitrary {
+      for {
+        zoneId <- arbZoneId.arbitrary
+        instant <- arbInstant.arbitrary
+      } yield OffsetDateTime.ofInstant(instant, zoneId)
+    }
+  }
 }
