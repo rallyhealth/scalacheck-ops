@@ -9,27 +9,30 @@ object Dependencies {
   final val Scala_2_13 = "2.13.6"
   final val Scala_3 = "3.1.1"
 
-  final private val ScalaTest_2_2 = "2.2.6"
+  private final val ScalaTest_2_2 = "2.2.6"
 
   // Newer versions of ScalaTest separate the scalatestplus %% scalacheck-1-X dependencies,
   // but do not support ScalaCheck 1.13.x
   // Once we no longer support ScalaCheck 1.13.x, we can upgrade to the latest version of
   // ScalaTest and always pull in the appropriate ScalaTestPlus artifact for ScalaCheck >= 1.14
-  final private val ScalaTest_3_0 = "3.0.5"
-  final private val ScalaTest_3_2 = "3.2.9"
-  final private val scalaTest_3_2_14 = "3.2.14"
+  private final val ScalaTest_3_0 = "3.0.5"
+  private final val ScalaTest_3_2 = "3.2.9"
+  private final val scalaTest_3_2_14 = "3.2.14"
 
-  private def scalaTestPlusScalaCheckVersion(scalaVer: String, scalaCheckVersion: String) =
+  private def scalaTestPlusScalaCheckVersion(
+    scalaVer: String,
+    scalaCheckVersion: String
+  ) =
     (CrossVersion.partialVersion(scalaVer), scalaCheckVersion) match {
       case (_, ScalaCheckAxis.v1_16.scalaCheckVersion) => "3.2.14.0"
-      case (Some((3, _)),_) => "3.2.10.0"
+      case (Some((3, _)), _) => "3.2.10.0"
       case _ => "3.2.2.0"
-  }
+    }
 
-  final private val IzumiReflectVersion = "1.1.2"
-  final private val JodaTimeVersion = "2.10.10"
-  final private val NewtypeVersion = "0.4.4"
-  final private val TaggingVersion = "2.3.2"
+  private final val IzumiReflectVersion = "1.1.2"
+  private final val JodaTimeVersion = "2.10.10"
+  private final val NewtypeVersion = "0.4.4"
+  private final val TaggingVersion = "2.3.2"
 
   val izumiReflect: ModuleID = "dev.zio" %% "izumi-reflect" % IzumiReflectVersion
   val newtype: ModuleID = for3Use2("io.estatico" %% "newtype" % NewtypeVersion) % Test
@@ -69,7 +72,7 @@ object Dependencies {
     val v1_16 = ScalaCheckAxis("1-16", "1.16.0", scalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
   }
 
-  abstract class CurrentAxis[T: ClassTag] {
+  abstract class CurrentAxis[T : ClassTag] {
 
     def current: Def.Initialize[T] = Def.setting {
       virtualAxes.value.collectFirst { case a: T => a }.get
