@@ -4,7 +4,10 @@ import sbt.Test
 
 // Aggregate root project settings only
 name := "scalacheck-ops-root"
-scalaVersion := Scala_2_13
+
+// Set the default version for Scala projects
+// This is used by the sbt-ci-release plugin when picking the version of Scala to publish with
+ThisBuild / scalaVersion := Scala_2_13
 
 ThisBuild / organization := "com.rallyhealth"
 ThisBuild / organizationName := "Rally Health"
@@ -27,6 +30,29 @@ mimaFailOnNoPrevious := false
 
 // don't publish the aggregate root project
 publish / skip := true
+
+// SBT CI Release Plugin
+inThisBuild(
+  Seq(
+    githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11"), JavaSpec.temurin("17")),
+    githubWorkflowScalaVersions := Seq(Scala_2_12, Scala_2_13, Scala_3),
+    githubWorkflowTargetTags ++= Seq("v*"),
+    githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v"))),
+    githubWorkflowPublish := Seq(
+      WorkflowStep.Sbt(
+        List("ci-release"),
+        env = Map(
+          "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+          "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+          "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+          "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+        )
+      )
+    ),
+    // Remove the ++ from the preambles since we use sbt-projectmatrix
+    githubWorkflowBuildSbtStepPreamble := Seq(),
+  )
+)
 
 def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   val artifact = ScalaCheckAxis.current(_.artifact(subProject))
@@ -104,6 +130,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1_13.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_13.scalaVersions,
       Test / sourceDirectory := (file("core-1-13-test") / "src" / "test").getAbsoluteFile
     )
   )
@@ -111,6 +138,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1_14.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_14.scalaVersions,
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -119,6 +147,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15, VirtualAxis.jvm),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_15.scalaVersions,
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -127,6 +156,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1, VirtualAxis.jvm),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1.scalaVersions,
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -135,6 +165,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_15.scalaVersions,
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -143,6 +174,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1.scalaVersions,
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -151,6 +183,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1_15.scalaVersions.filterNot(_ == Scala_2_12),
     axisValues = Seq(ScalaCheckAxis.v1_15),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_15.scalaVersions.filterNot(_ == Scala_2_12),
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -159,6 +192,7 @@ lazy val core = projectMatrix
     scalaVersions = ScalaCheckAxis.v1.scalaVersions.filterNot(_ == Scala_2_12),
     axisValues = Seq(ScalaCheckAxis.v1),
     settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1.scalaVersions.filterNot(_ == Scala_2_12),
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
     )
@@ -177,20 +211,28 @@ lazy val joda = projectMatrix
   .customRow(
     scalaVersions = ScalaCheckAxis.v1_13.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_13, VirtualAxis.jvm),
-    settings = Nil
+    settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_13.scalaVersions
+    )
   )
   .customRow(
     scalaVersions = ScalaCheckAxis.v1_14.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_14, VirtualAxis.jvm),
-    settings = Nil
+    settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_14.scalaVersions
+    )
   )
   .customRow(
     scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15, VirtualAxis.jvm),
-    settings = Nil
+    settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1_15.scalaVersions
+    )
   )
   .customRow(
     scalaVersions = ScalaCheckAxis.v1.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1, VirtualAxis.jvm),
-    settings = Nil
+    settings = Seq(
+      crossScalaVersions := ScalaCheckAxis.v1.scalaVersions
+    )
   )
