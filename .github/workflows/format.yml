@@ -1,26 +1,16 @@
-name: Scalafmt
-
-permissions: read-all
-
+name: Format
 on:
   pull_request:
     branches: ['**']
 
 jobs:
   build:
-    name: Code is formatted
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    name: pre-commit
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - uses: coursier/setup-action@v1
+      - uses: pre-commit/action@v3.0.0
         with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Check project is formatted
-        uses: jrouly/scalafmt-native-action@v1
-        with:
-          version: '3.5.9'
+          extra_args: --all-files

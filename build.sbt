@@ -30,29 +30,31 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   val mimaPreviousVersion = scalaBinaryVersion(v => if (v == "3") "2.8.0" else "2.6.0")
   Seq(
     name := artifact.value,
-
     mimaPreviousArtifacts := {
       if (ScalaCheckAxis.current.value.scalaCheckVersion == ScalaCheckAxis.v1_16.scalaCheckVersion)
         Set.empty
       else
         Set(organization.value %% artifact.value % mimaPreviousVersion.value)
     },
-
     mimaBinaryIssueFilters ++= Seq(
       ProblemFilters.exclude[ReversedMissingMethodProblem](
         "org.scalacheck.ops.time.ImplicitJavaTimeGenerators.arbOffsetDateTime"
       )
     ),
-
     scalacOptions ++= Seq(
       // "-Xfatal-warnings", // some methods in Scala 2.13 are deprecated, but I don't want to maintain to copies of source
       "-deprecation:false",
       "-feature",
-      "-encoding", "UTF-8"
-    ) ++ (if (scalaBinaryVersion.value == "3") Nil else Seq(
-      "-Xlint",
-      "-Ywarn-dead-code"
-    )),
+      "-encoding",
+      "UTF-8"
+    ) ++ {
+      if (scalaBinaryVersion.value == "3") Nil
+      else
+        Seq(
+          "-Xlint",
+          "-Ywarn-dead-code"
+        )
+    },
 
     // Allow publishing ScalaDoc by disabling link warnings
     Compile / doc / scalacOptions += "--no-link-warnings",
@@ -69,12 +71,10 @@ lazy val core = projectMatrix
     // default locations, overridden in custom rows where needed
     Compile / sourceDirectory := (file("core") / "src" / "main").getAbsoluteFile,
     Test / sourceDirectory := (file("core") / "src" / "test").getAbsoluteFile,
-
     scalacOptions ++= (scalaVersion.value match {
       case Scala_2_13 => Seq("-Ymacro-annotations")
       case _ => Nil
     }),
-
     libraryDependencies ++= Seq(
       izumiReflect,
       tagging,
@@ -82,9 +82,10 @@ lazy val core = projectMatrix
       newtype, // Test-only
       ScalaCheckAxis.current.value.scalaTest // Test-only
     ) ++ (scalaVersion.value match {
-      case CrossVersion.PartialVersion("2", "12", _*) => Seq(
-        compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
-      )
+      case CrossVersion.PartialVersion("2", "12", _*) =>
+        Seq(
+          compilerPlugin(("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.full))
+        )
       case _ => Nil
     })
   )
