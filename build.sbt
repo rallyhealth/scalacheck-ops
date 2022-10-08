@@ -25,21 +25,6 @@ mimaFailOnNoPrevious := false
 // don't publish the aggregate root project
 publish / skip := true
 
-// SBT CI Release Plugin
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
-ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
-ThisBuild / githubWorkflowPublish := Seq(
-  WorkflowStep.Sbt(
-    List("ci-release"),
-    env = Map(
-      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
-      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
-    )
-  )
-)
-
 def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   val artifact = ScalaCheckAxis.current(_.artifact(subProject))
   val mimaPreviousVersion = scalaBinaryVersion(v => if (v == "3") "2.8.0" else "2.6.0")
@@ -78,7 +63,7 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   )
 }
 
-lazy val `core` = projectMatrix
+lazy val core = projectMatrix
   .settings(commonSettings(subProject = None))
   .settings(
     // default locations, overridden in custom rows where needed
@@ -135,7 +120,7 @@ lazy val `core` = projectMatrix
     )
   )
   .jsPlatform(
-    scalaVersions = Seq(Scala_2_12, Scala_2_13, Scala_3),
+    scalaVersions = ScalaCheckAxis.v1_15.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_15),
     settings = Seq(
       libraryDependencies +=
@@ -143,7 +128,7 @@ lazy val `core` = projectMatrix
     )
   )
   .jsPlatform(
-    scalaVersions = Seq(Scala_2_12, Scala_2_13, Scala_3),
+    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions,
     axisValues = Seq(ScalaCheckAxis.v1_16),
     settings = Seq(
       libraryDependencies +=
@@ -151,7 +136,7 @@ lazy val `core` = projectMatrix
     )
   )
   .nativePlatform(
-    scalaVersions = Seq(Scala_2_13, Scala_3),
+    scalaVersions = ScalaCheckAxis.v1_15.scalaVersions.filterNot(_ == Scala_2_12),
     axisValues = Seq(ScalaCheckAxis.v1_15),
     settings = Seq(
       libraryDependencies +=
@@ -159,7 +144,7 @@ lazy val `core` = projectMatrix
     )
   )
   .nativePlatform(
-    scalaVersions = Seq(Scala_2_13, Scala_3),
+    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions.filterNot(_ == Scala_2_12),
     axisValues = Seq(ScalaCheckAxis.v1_16),
     settings = Seq(
       libraryDependencies +=
@@ -167,9 +152,9 @@ lazy val `core` = projectMatrix
     )
   )
 
-lazy val `joda` = projectMatrix
+lazy val joda = projectMatrix
   .settings(commonSettings(subProject = Some("joda")))
-  .dependsOn(`core` % "compile;test->test")
+  .dependsOn(core % "compile;test->test")
   .settings(
     Compile / sourceDirectory := file(s"joda/src/main").getAbsoluteFile,
     Test / sourceDirectory := file(s"joda/src/test").getAbsoluteFile,
