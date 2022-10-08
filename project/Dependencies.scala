@@ -9,25 +9,13 @@ object Dependencies {
   final val Scala_2_13 = "2.13.6"
   final val Scala_3 = "3.1.1"
 
-  private final val ScalaTest_2_2 = "2.2.6"
-
   // Newer versions of ScalaTest separate the scalatestplus %% scalacheck-1-X dependencies,
   // but do not support ScalaCheck 1.13.x
   // Once we no longer support ScalaCheck 1.13.x, we can upgrade to the latest version of
   // ScalaTest and always pull in the appropriate ScalaTestPlus artifact for ScalaCheck >= 1.14
   private final val ScalaTest_3_0 = "3.0.5"
-  private final val ScalaTest_3_2 = "3.2.9"
-  private final val scalaTest_3_2_14 = "3.2.14"
-
-  private def scalaTestPlusScalaCheckVersion(
-    scalaVer: String,
-    scalaCheckVersion: String
-  ) =
-    (CrossVersion.partialVersion(scalaVer), scalaCheckVersion) match {
-      case (_, ScalaCheckAxis.v1_16.scalaCheckVersion) => "3.2.14.0"
-      case (Some((3, _)), _) => "3.2.10.0"
-      case _ => "3.2.2.0"
-    }
+  private final val ScalaTest_3_2_9 = "3.2.9"
+  private final val ScalaTest_3_2_14 = "3.2.14"
 
   private final val IzumiReflectVersion = "1.1.2"
   private final val JodaTimeVersion = "2.10.10"
@@ -61,15 +49,22 @@ object Dependencies {
     def scalaTest: ModuleID =
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 
-    def scalaTestPlusScalaCheck(scalaVer: String): ModuleID =
-      "org.scalatestplus" %% s"scalacheck-$id" % scalaTestPlusScalaCheckVersion(scalaVer, scalaCheckVersion) % Test
+    def scalaTestPlusScalaCheck(scalaVer: String): ModuleID = {
+      val version = (CrossVersion.partialVersion(scalaVer), CrossVersion.partialVersion(scalaCheckVersion)) match {
+        case (_, Some((1, 16 | 17))) => "3.2.14.0"
+        case (Some((3, _)), _) => "3.2.10.0"
+        case _ => "3.2.2.0"
+      }
+      "org.scalatestplus" %% s"scalacheck-$id" % version % Test
+    }
   }
 
   object ScalaCheckAxis extends CurrentAxis[ScalaCheckAxis] {
     val v1_13 = ScalaCheckAxis("1-13", "1.13.5", ScalaTest_3_0, Seq(Scala_2_12))
-    val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2, Seq(Scala_2_12, Scala_2_13))
-    val v1_15 = ScalaCheckAxis("1-15", "1.15.4", ScalaTest_3_2, Seq(Scala_2_12, Scala_2_13, Scala_3))
-    val v1_16 = ScalaCheckAxis("1-16", "1.16.0", scalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
+    val v1_14 = ScalaCheckAxis("1-14", "1.14.3", ScalaTest_3_2_9, Seq(Scala_2_12, Scala_2_13))
+    val v1_15 = ScalaCheckAxis("1-15", "1.15.4", ScalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
+    val v1_16 = ScalaCheckAxis("1-16", "1.16.0", ScalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
+    val v1_17 = ScalaCheckAxis("1-17", "1.17.0", ScalaTest_3_2_14, Seq(Scala_2_12, Scala_2_13, Scala_3))
   }
 
   abstract class CurrentAxis[T : ClassTag] {
