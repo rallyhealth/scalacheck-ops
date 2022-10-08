@@ -31,10 +31,12 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
   Seq(
     name := artifact.value,
     mimaPreviousArtifacts := {
-      if (ScalaCheckAxis.current.value.scalaCheckVersion == ScalaCheckAxis.v1_16.scalaCheckVersion)
-        Set.empty
-      else
-        Set(organization.value %% artifact.value % mimaPreviousVersion.value)
+      val scVersion = ScalaCheckAxis.current.value.scalaCheckVersion
+      CrossVersion.partialVersion(scVersion) match {
+        case Some((1, x)) if x > 15 => Set.empty
+        case _ =>
+          Set(organization.value %% artifact.value % mimaPreviousVersion.value)
+      }
     },
     mimaBinaryIssueFilters ++= Seq(
       ProblemFilters.exclude[ReversedMissingMethodProblem](
@@ -113,8 +115,8 @@ lazy val core = projectMatrix
     )
   )
   .customRow(
-    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions,
-    axisValues = Seq(ScalaCheckAxis.v1_16, VirtualAxis.jvm),
+    scalaVersions = ScalaCheckAxis.v1.scalaVersions,
+    axisValues = Seq(ScalaCheckAxis.v1, VirtualAxis.jvm),
     settings = Seq(
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
@@ -129,8 +131,8 @@ lazy val core = projectMatrix
     )
   )
   .jsPlatform(
-    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions,
-    axisValues = Seq(ScalaCheckAxis.v1_16),
+    scalaVersions = ScalaCheckAxis.v1.scalaVersions,
+    axisValues = Seq(ScalaCheckAxis.v1),
     settings = Seq(
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
@@ -145,8 +147,8 @@ lazy val core = projectMatrix
     )
   )
   .nativePlatform(
-    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions.filterNot(_ == Scala_2_12),
-    axisValues = Seq(ScalaCheckAxis.v1_16),
+    scalaVersions = ScalaCheckAxis.v1.scalaVersions.filterNot(_ == Scala_2_12),
+    axisValues = Seq(ScalaCheckAxis.v1),
     settings = Seq(
       libraryDependencies +=
         ScalaCheckAxis.current.value.scalaTestPlusScalaCheck(scalaVersion.value)
@@ -179,7 +181,7 @@ lazy val joda = projectMatrix
     settings = Nil
   )
   .customRow(
-    scalaVersions = ScalaCheckAxis.v1_16.scalaVersions,
-    axisValues = Seq(ScalaCheckAxis.v1_16, VirtualAxis.jvm),
+    scalaVersions = ScalaCheckAxis.v1.scalaVersions,
+    axisValues = Seq(ScalaCheckAxis.v1, VirtualAxis.jvm),
     settings = Nil
   )
