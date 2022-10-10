@@ -26,19 +26,21 @@ under `"com.rallyhealth"`
 **NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.11 as this
 library expects the java.time standard library module.
 
+**NOTE** Version 2.11.x and above **requires** Scala >=2.12
+
 **NOTE** As of `scalacheck-ops` >=2.0, the version of scalacheck is always
 included in the artifact name. Prior to this change, `scalacheck-ops` with
 no version suffix would pull in ScalaCheck version 1.12.6.
 
 |    Artifact Name    | Version Limit  | ScalaCheck | Supported JDK |  Supported Scala   | Supported Scala.js | Supported Native |
 |:-------------------:| :------------: |:----------:| :-----------: |:------------------:|:------------------:| :--------------: |
-| scalacheck-ops_1-16 | x >= 2.5.2     |   1.16.0   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
-| scalacheck-ops_1-15 | x >= 2.5.2     |   1.15.4   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
-| scalacheck-ops_1-14 | x >= 2.0       |   1.14.3   | 8             | 2.11, 2.12, 2.13   |        N/A         | N/A              |
-| scalacheck-ops_1-13 | x >= 2.0       |   1.13.5   | 8             |     2.11, 2.12     |        N/A         | N/A              |
-| scalacheck-ops_1-13 | 1.5 <= x < 2.0 |   1.13.4   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
-| scalacheck-ops_1-12 | x >= 2.0       |   1.12.6   | 8             |        2.11        |        N/A         | N/A              |
-|   scalacheck-ops    | x < 2.0        |   1.12.6   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
+| scalacheck-ops_1-16 | x >= 2.5.2      |   1.16.0   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
+| scalacheck-ops_1-15 | x >= 2.5.2      |   1.15.4   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
+| scalacheck-ops_1-14 | x >= 2.0        |   1.14.3   | 8             | 2.11, 2.12, 2.13   |        N/A         | N/A              |
+| scalacheck-ops_1-13 | x >= 2.0        |   1.13.5   | 8             |     2.11, 2.12     |        N/A         | N/A              |
+| scalacheck-ops_1-13 | 1.5 <= x < 2.0  |   1.13.4   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
+| scalacheck-ops_1-12 | 2.0 <= x < 2.11 |   1.12.6   | 8             |        2.11        |        N/A         | N/A              |
+|   scalacheck-ops    | x < 2.0         |   1.12.6   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
 
 The same source code is compiled against specific versions of Scala and ScalaCheck.
 We use separate artifacts to avoid causing issues with transitive dependencies on

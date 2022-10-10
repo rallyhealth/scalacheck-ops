@@ -75,9 +75,6 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
 
     // show full stack traces in test failures
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
-
-    // Disable coverage for Scala 2.11 -- sbt-scoverage no longer supports it
-    coverageEnabled := (if (scalaBinaryVersion.value == "2.11") false else coverageEnabled.value)
   )
 }
 
@@ -100,19 +97,11 @@ lazy val `core` = projectMatrix
       newtype, // Test-only
       ScalaCheckAxis.current.value.scalaTest // Test-only
     ) ++ (scalaVersion.value match {
-      case CrossVersion.PartialVersion("2", "11" | "12", _*) => Seq(
+      case CrossVersion.PartialVersion("2", "12", _*) => Seq(
         compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
       )
       case _ => Nil
     })
-  )
-  .customRow(
-    scalaVersions = ScalaCheckAxis.v1_12.scalaVersions,
-    axisValues = Seq(ScalaCheckAxis.v1_12, VirtualAxis.jvm),
-    settings = Seq(
-      Compile / sourceDirectory := (file("core_1-12") / "src" / "main").getAbsoluteFile,
-      Test / sourceDirectory := (file("core_1-12") / "src" / "test").getAbsoluteFile
-    )
   )
   .customRow(
     scalaVersions = ScalaCheckAxis.v1_13.scalaVersions,
@@ -187,11 +176,6 @@ lazy val `joda` = projectMatrix
 
     // don't include dependencies that come from scalacheck-ops core project
     libraryDependencies += jodaTime
-  )
-  .customRow(
-    scalaVersions = ScalaCheckAxis.v1_12.scalaVersions,
-    axisValues = Seq(ScalaCheckAxis.v1_12, VirtualAxis.jvm),
-    settings = Nil
   )
   .customRow(
     scalaVersions = ScalaCheckAxis.v1_13.scalaVersions,
