@@ -53,16 +53,26 @@ def commonSettings(subProject: Option[String]): Seq[Setting[_]] = {
       "UTF-8"
     ) ++ {
       if (scalaBinaryVersion.value == "3") Nil
-      else
+      else {
+        val scVersion = scalaVersion.value
         Seq(
           "-Xlint",
           "-Ywarn-dead-code"
-        )
+        ) ++ {
+          scVersion match {
+            case Scala_2_13 =>
+              Seq(
+                "-Ymacro-annotations",
+              )
+            case _ => Nil
+          }
+        }
+      }
     },
 
     // Allow publishing ScalaDoc by disabling link warnings
-    Compile / doc / scalacOptions += "--no-link-warnings",
-    Test / doc / scalacOptions += "--no-link-warnings",
+    Compile / doc / scalacOptions += "-no-link-warnings",
+    Test / doc / scalacOptions += "-no-link-warnings",
 
     // show full stack traces in test failures
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF"),
@@ -75,10 +85,6 @@ lazy val core = projectMatrix
     // default locations, overridden in custom rows where needed
     Compile / sourceDirectory := (file("core") / "src" / "main").getAbsoluteFile,
     Test / sourceDirectory := (file("core") / "src" / "test").getAbsoluteFile,
-    scalacOptions ++= (scalaVersion.value match {
-      case Scala_2_13 => Seq("-Ymacro-annotations")
-      case _ => Nil
-    }),
     libraryDependencies ++= Seq(
       izumiReflect,
       tagging,
