@@ -52,23 +52,23 @@ jobs:
           core/target/1-15-jvm-3 \
           core/target/1-15-native-2.13 \
           core/target/1-15-native-3 \
-          core/target/1-16-js-2.12 \
-          core/target/1-16-js-2.13 \
-          core/target/1-16-js-3 \
-          core/target/1-16-jvm-2.12 \
-          core/target/1-16-jvm-2.13 \
-          core/target/1-16-jvm-3 \
-          core/target/1-16-native-2.13 \
-          core/target/1-16-native-3 \
+          core/target/1-js-2.12 \
+          core/target/1-js-2.13 \
+          core/target/1-js-3 \
+          core/target/1-jvm-2.12 \
+          core/target/1-jvm-2.13 \
+          core/target/1-jvm-3 \
+          core/target/1-native-2.13 \
+          core/target/1-native-3 \
           joda/target/1-13-jvm-2.12 \
           joda/target/1-14-jvm-2.12 \
           joda/target/1-14-jvm-2.13 \
           joda/target/1-15-jvm-2.12 \
           joda/target/1-15-jvm-2.13 \
           joda/target/1-15-jvm-3 \
-          joda/target/1-16-jvm-2.12 \
-          joda/target/1-16-jvm-2.13 \
-          joda/target/1-16-jvm-3 \
+          joda/target/1-jvm-2.12 \
+          joda/target/1-jvm-2.13 \
+          joda/target/1-jvm-3 \
           project/target \
           target
 
