@@ -5,9 +5,9 @@ import scala.reflect.ClassTag
 
 object Dependencies {
 
-  final val Scala_2_12 = "2.12.12"
-  final val Scala_2_13 = "2.13.6"
-  final val Scala_3 = "3.1.1"
+  final val Scala_2_12 = "2.12.17"
+  final val Scala_2_13 = "2.13.10"
+  final val Scala_3 = "3.2.0"
 
   // Newer versions of ScalaTest separate the scalatestplus %% scalacheck-1-X dependencies,
   // but do not support ScalaCheck 1.13.x
@@ -17,15 +17,12 @@ object Dependencies {
   private final val ScalaTest_3_2_9 = "3.2.9"
   private final val ScalaTest_3_2_14 = "3.2.14"
 
-  private final val IzumiReflectVersion = "1.1.2"
-  private final val JodaTimeVersion = "2.10.10"
-  private final val NewtypeVersion = "0.4.4"
-  private final val TaggingVersion = "2.3.2"
-
-  val izumiReflect: ModuleID = "dev.zio" %% "izumi-reflect" % IzumiReflectVersion
-  val newtype: ModuleID = for3Use2("io.estatico" %% "newtype" % NewtypeVersion) % Test
-  val jodaTime: ModuleID = "joda-time" % "joda-time" % JodaTimeVersion
-  val tagging: ModuleID = "com.softwaremill.common" %% "tagging" % TaggingVersion
+  // TODO: Upgrade to 2.x in next major version
+  // Or use the strategy outlined in https://blog.7mind.io/no-more-orphans.html
+  val izumiReflect: ModuleID = "dev.zio" %% "izumi-reflect" % "1.1.3"
+  val newtype: ModuleID = for3Use2("io.estatico" %% "newtype" % "0.4.4") % Test
+  val jodaTime: ModuleID = "joda-time" % "joda-time" % "2.11.2"
+  val tagging: ModuleID = "com.softwaremill.common" %% "tagging" % "2.3.3"
 
   case class ScalaCheckAxis(
     id: String,
