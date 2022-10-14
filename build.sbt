@@ -11,6 +11,7 @@ ThisBuild / organizationName := "Rally Health"
 ThisBuild / scmInfo := Some(
   ScmInfo(url("https://github.com/rallyhealth/scalacheck-ops"), "scm:git:git@github.com:rallyhealth/scalacheck-ops.git")
 )
+ThisBuild / homepage := Some(url("https://github.com/rallyhealth/scalacheck-ops"))
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 
