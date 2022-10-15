@@ -23,21 +23,18 @@ with scalacheck-ops.
 **NOTE** Version 1.x lives under the `"me.jeffmay"` organization. Version 2.x lives
 under `"com.rallyhealth"`
 
-**NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.11 as this
-library expects the java.time standard library module.
+**NOTE** The artifact name in version 2.x and above changes from `scalacheck-ops` to include the version of scalacheck in the suffix of the artifact name. (i.e. `scalacheck-ops_$major-$minor`. Prior to this change, `scalacheck-ops` with no version suffix would pull in ScalaCheck version 1.12.6.
 
-**NOTE** Version 2.11.x and above **requires** Scala >=2.12
+**NOTE** Version 2.x and above **requires** JDK >=8 and Scala >=2.11 as this library expects the java.time standard library module.
 
-**NOTE** As of `scalacheck-ops` >=2.0, the version of scalacheck is always
-included in the artifact name. Prior to this change, `scalacheck-ops` with
-no version suffix would pull in ScalaCheck version 1.12.6.
+**NOTE** Version 2.11.x and above **requires** Scala >=2.12 and is only tested against JDK 11 and 17.
 
-|    Artifact Name    | Version Limit  | ScalaCheck | Supported JDK |  Supported Scala   | Supported Scala.js | Supported Native |
-|:-------------------:| :------------: |:----------:| :-----------: |:------------------:|:------------------:| :--------------: |
-| scalacheck-ops_1-16 | x >= 2.5.2      |   1.16.0   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
-| scalacheck-ops_1-15 | x >= 2.5.2      |   1.15.4   | 8             |   2.12, 2.13, 3    |         1          | 0.4              |
-| scalacheck-ops_1-14 | x >= 2.0        |   1.14.3   | 8             | 2.11, 2.12, 2.13   |        N/A         | N/A              |
-| scalacheck-ops_1-13 | x >= 2.0        |   1.13.5   | 8             |     2.11, 2.12     |        N/A         | N/A              |
+|    Artifact Name    | Version Limit   | ScalaCheck | Supported JDK |  Supported Scala   | Supported Scala.js | Supported Native |
+|:-------------------:| :-------------: |:----------:| :-----------: |:------------------:|:------------------:| :--------------: |
+| scalacheck-ops_1    | x >= 2.11       |   1.17.0   | 11, 17        |   2.12, 2.13, 3.2  |         1          | 0.4              |
+| scalacheck-ops_1-15 | x >= 2.5.2      |   1.15.4   | 11, 17        |   2.12, 2.13, 3.2  |         1          | 0.4              |
+| scalacheck-ops_1-14 | x >= 2.0        |   1.14.3   | 11, 17        |   2.12, 2.13       |        N/A         | N/A              |
+| scalacheck-ops_1-13 | x >= 2.0        |   1.13.5   | 11, 17        |     2.11, 2.12     |        N/A         | N/A              |
 | scalacheck-ops_1-13 | 1.5 <= x < 2.0  |   1.13.4   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
 | scalacheck-ops_1-12 | 2.0 <= x < 2.11 |   1.12.6   | 8             |        2.11        |        N/A         | N/A              |
 |   scalacheck-ops    | x < 2.0         |   1.12.6   | 6 - 8         |    2.10 - 2.11     |        N/A         | N/A              |
