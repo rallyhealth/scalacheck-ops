@@ -1,0 +1,37 @@
+name: Scala Steward
+on:
+  schedule:
+    # This workflow will launch every day at 4am
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      update_pull_requests:
+        description: Update Scala Steward generated PRs
+        required: true
+        type: choice
+        options:
+          - always
+          - on-conflicts
+          - never
+        default: always
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Commit Title
+        shell: bash
+        env:
+          UPDATE_PULL_REQUEST: ${{ github.event.inputs.update_pull_requests || 'on-conflicts' }}
+        run: |
+          # Add commits.message config to ~/.scala-steward.conf
+          echo "
+            commits.message = \"⬆️ \${artifactName} \${currentVersion} to \${nextVersion}\"
+            updatePullRequests = \"$UPDATE_PULL_REQUEST\"
+          " | sed 's/^ *//' > ~/.scala-steward.conf
+          cat ~/.scala-steward.conf
+      - name: Launch Scala Steward
+        uses: scala-steward-org/scala-steward-action@v2
+        with:
+          author-email: scala-steward@rallyhealth.com
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-config: /home/runner/.scala-steward.conf
