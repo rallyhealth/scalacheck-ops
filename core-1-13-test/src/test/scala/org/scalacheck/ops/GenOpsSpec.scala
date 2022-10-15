@@ -3,7 +3,7 @@ package org.scalacheck.ops
 import org.scalacheck.Gen
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks._
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks._
 
 import scala.util.Try
 

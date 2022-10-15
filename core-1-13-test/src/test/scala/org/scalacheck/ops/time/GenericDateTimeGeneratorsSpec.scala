@@ -4,7 +4,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.ops._
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks._
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks._
 
 import scala.reflect.ClassTag
 
