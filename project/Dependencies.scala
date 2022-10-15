@@ -13,7 +13,7 @@ object Dependencies {
   // but do not support ScalaCheck 1.13.x
   // Once we no longer support ScalaCheck 1.13.x, we can upgrade to the latest version of
   // ScalaTest and always pull in the appropriate ScalaTestPlus artifact for ScalaCheck >= 1.14
-  private final val ScalaTest_3_0 = "3.0.5"
+  private final val ScalaTest_3_0 = "3.0.9"
   private final val ScalaTest_3_2_9 = "3.2.9"
   private final val ScalaTest_3_2_14 = "3.2.14"
 
