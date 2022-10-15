@@ -1,9 +1,9 @@
 [![Build Status](https://img.shields.io/travis/com/rallyhealth/scalacheck-ops)](https://app.travis-ci.com/github/rallyhealth/scalacheck-ops)
 [![CodeCov](https://img.shields.io/codecov/c/github/rallyhealth/scalacheck-ops)](https://codecov.io/gh/rallyhealth/scalacheck-ops)
 
-|                   scalacheck-ops_1-12                    |                   scalacheck-ops_1-13                    |                   scalacheck-ops_1-14                    |                   scalacheck-ops_1-15                    |                   scalacheck-ops_1-16                    |
+|                   scalacheck-ops_1-12                    |                   scalacheck-ops_1-13                    |                   scalacheck-ops_1-14                    |                   scalacheck-ops_1-15                    |                   scalacheck-ops_1                    |
 |:--------------------------------------------------------:|:--------------------------------------------------------:|:--------------------------------------------------------:|:--------------------------------------------------------:|:--------------------------------------------------------:|
-| [![Download for ScalaCheck 1.12][1_12-image]][1_12-link] | [![Download for ScalaCheck 1.13][1_13-image]][1_13-link] | [![Download for ScalaCheck 1.14][1_14-image]][1_14-link] | [![Download for ScalaCheck 1.15][1_15-image]][1_15-link] | [![Download for ScalaCheck 1.16][1_16-image]][1_16-link] |
+| [![Download for ScalaCheck 1.12][1_12-image]][1_12-link] | [![Download for ScalaCheck 1.13][1_13-image]][1_13-link] | [![Download for ScalaCheck 1.14][1_14-image]][1_14-link] | [![Download for ScalaCheck 1.15][1_15-image]][1_15-link] | [![Download for ScalaCheck >= 1.16][1_x-image]][1_x-link] |
 
 # Summary
 
@@ -190,10 +190,10 @@ Gen.enumValue(Colors) // Gen[Colors.Value]
 [1_13-image]: https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-13_2.11/badge.svg?style=flat
 [1_14-image]: https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-14_2.13/badge.svg?style=flat
 [1_15-image]: https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-15_2.13/badge.svg?style=flat
-[1_16-image]: https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1-16_2.13/badge.svg?style=flat
+[1_x-image]: https://maven-badges.herokuapp.com/maven-central/com.rallyhealth/scalacheck-ops_1_2.13/badge.svg?style=flat
 
-[1_12-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-12*
-[1_13-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-13*
-[1_14-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-14*
-[1_15-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-15*
-[1_16-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-16*
+[1_12-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-12_*
+[1_13-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-13_*
+[1_14-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-14_*
+[1_15-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1-15_*
+[1_x-link]: https://search.maven.org/search?q=g:com.rallyhealth%20AND%20a:scalacheck-ops_1_*
