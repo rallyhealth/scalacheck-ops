@@ -21,7 +21,7 @@ object Dependencies {
   // Or use the strategy outlined in https://blog.7mind.io/no-more-orphans.html
   val izumiReflect: ModuleID = "dev.zio" %% "izumi-reflect" % "1.1.3"
   val newtype: ModuleID = for3Use2("io.estatico" %% "newtype" % "0.4.4") % Test
-  val jodaTime: ModuleID = "joda-time" % "joda-time" % "2.11.2"
+  val jodaTime: ModuleID = "joda-time" % "joda-time" % "2.12.0"
   val tagging: ModuleID = "com.softwaremill.common" %% "tagging" % "2.3.3"
 
   case class ScalaCheckAxis(
