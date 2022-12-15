@@ -1,0 +1,10 @@
+ScalaCheck-Ops
+Copyright 2022 Optum
+
+Project Description:
+====================
+A library that provides ScalaCheck implicits and helper methods.
+
+Author(s):
+Jeff May
+
