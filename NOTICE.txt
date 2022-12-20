@@ -7,4 +7,3 @@ A library that provides ScalaCheck implicits and helper methods.
 
 Author(s):
 Jeff May
-
