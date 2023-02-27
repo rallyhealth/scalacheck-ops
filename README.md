@@ -78,31 +78,36 @@ import org.scalacheck.Gen
 import org.scalacheck.ops._
 
 val genEvens = Gen.choose(1, 10).suchThat(_ % 2 == 0)
-val exampleEven = genEvens.getOrThrow
+val exampleEven = genEvens.head
 ```
 
-By default, `.getOrThrow` will make 100 attempts to get a value out of
-the generator before giving up. You can lower or raise this amount with:
+By default, `.head` will make 100 attempts to get a value out of the
+generator before giving up. The generated result will always be the
+same value, based on `Seed` in the `GenConfig` in scope. You can
+customize the number of attempts, the seed, and the `Gen.Parameters`
+by defining your own implicit `GenConfig`.
+
+Alternatively, if you don't want a pure result, but rather a random one
+every time you run the code (at the risk of making your tests more flaky)
+you can use the `.nextRandom()` method. Generally, it is better to run
+multiple test iterations with the same initial seed to create a test
+that will reliably fail. However, if running dozens of iterations of a
+given test is too expensive and you would rather catch bugs at the risk
+of having a flaky test, then you can generate a single random sample
+each time.
 ```scala
-val exampleEven = genEvens.getOrThrow(10)
+val exampleEven = genEvens.nextRandom()
 ```
 
 In addition to getting a single value, you can convert a `Gen` into an
-`Iterator` or `Iterable`:
+`Iterator`:
 ```scala
-val evens = genEvens.toIterable
+val evens = genEvens.iterator
 ```
 
 By default, this iterable attempts a max of 100 times for each sample
-before giving up and throwing an exception. This is the safer default,
-however, if you are willing to risk an infinite loop (because you are
-not worried about your filters blocking indefinitely), you can use:
-```scala
-val evens = genEvens.toUnboundedIterator
-```
-
-But if your filters are lenient enough, then this should almost always
-be the same as calling `.toIterator` but the choice is yours.
+before giving up and throwing an exception. This is to avoid an
+infinite loop.
 
 ## Generating Sets
 
