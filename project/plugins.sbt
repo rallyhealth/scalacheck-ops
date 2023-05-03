@@ -1,4 +1,4 @@
-addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.10")
+addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.12")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
 addSbtPlugin("org.typelevel" % "sbt-typelevel-github-actions" % "0.4.16")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.1")
